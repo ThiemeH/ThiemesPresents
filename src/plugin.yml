@@ -1,0 +1,8 @@
+name: ThiemesPresents
+main: nl.thieme.tp.NewHaven
+authors: [Thieme]
+description: Present wraps for everyone!
+commands:
+  givepresent:
+    aliases: [givep]
+    description: Give a present wrap
