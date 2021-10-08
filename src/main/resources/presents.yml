@@ -1,9 +1,10 @@
+# Add as many different presents as you like!
+# Make sure to follow the syntax, but feel free to remove tags you don't need!
 
-
-YELLOW_PRESENT:
+CYAN_PRESENT:
   HEAD_URL: "59f0743576bba4a2622480548970b721543d2c457955e8dd5c4f9ddb6a56b95c"
   HEAD_OPEN_URL: "8a843d4427ac478e1bd6f1d61fe224c7f2c2df7df685cf9c68c71568ed1b63"
-  ITEM_NAME: "&cRed Present"
+  ITEM_NAME: "&3Cyan Present"
   LORE:
     - "&aNice Present"
     - "&6&lYay"
@@ -14,5 +15,5 @@ YELLOW_PRESENT:
       - xox
     INGREDIENTS:
       x: PAPER
-      y: YELLOW_DYE
+      y: CYAN_DYE
       o: STRING

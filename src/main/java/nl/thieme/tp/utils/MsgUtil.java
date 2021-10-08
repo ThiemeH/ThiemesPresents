@@ -7,7 +7,7 @@ public class MsgUtil {
 
 
     public static void sendMessage(CommandSender s, MessageConfig.MessageKey key) {
-        s.sendMessage(replaceColors(MessageConfig.MessageKey.PREFIX.get() + key.get()));
+        if(key.get().length() > 0) s.sendMessage(replaceColors(MessageConfig.MessageKey.PREFIX.get() + key.get()));
     }
 
     public static String replaceColors(String s) {

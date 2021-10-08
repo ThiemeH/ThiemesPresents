@@ -1,8 +1,8 @@
 package nl.thieme.tp.events;
 
-import nl.thieme.tp.Main;
 import nl.thieme.tp.configs.MainConfig;
 import nl.thieme.tp.models.PresentNBT;
+import nl.thieme.tp.utils.InvUtil;
 import nl.thieme.tp.utils.PresentUtil;
 import org.bukkit.Material;
 import org.bukkit.event.EventHandler;
@@ -10,7 +10,6 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.persistence.PersistentDataType;
 
 public class InteractEvent implements Listener {
 
@@ -28,9 +27,9 @@ public class InteractEvent implements Listener {
             e.getPlayer().sendMessage("Signing now!");
 
         } else if (isRightClick(e.getAction())) { // Right click for wrapping and opening
-
+            e.setCancelled(true);
             if (!nbt.hasPresent()) {
-                PresentUtil.wrap(is, new ItemStack(Material.STICK), e.getPlayer());
+                InvUtil.openPresentPickInventory(e.getPlayer());
             } else {
                 PresentUtil.open(is, e.getPlayer());
             }

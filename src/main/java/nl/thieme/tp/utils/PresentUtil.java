@@ -1,7 +1,9 @@
 package nl.thieme.tp.utils;
 
 import nl.thieme.tp.Main;
+import nl.thieme.tp.configs.MessageConfig;
 import nl.thieme.tp.models.PresentNBT;
+import org.bukkit.Bukkit;
 import org.bukkit.NamespacedKey;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
@@ -10,6 +12,7 @@ import org.bukkit.persistence.PersistentDataType;
 import org.yaml.snakeyaml.external.biz.base64Coder.Base64Coder;
 
 import java.io.*;
+import java.util.List;
 
 public class PresentUtil {
 
@@ -44,6 +47,10 @@ public class PresentUtil {
         return !is.hasItemMeta() ? false : is.getItemMeta().getPersistentDataContainer().has(presentNBTKey, PersistentDataType.STRING);
     }
 
+    private static boolean isPresentItemStackWithNBT(ItemStack is) {
+        return isPresentItemStack(is) && getPresentNBT(is) != null;
+    }
+
     public static ItemMeta setPresentMeta(ItemMeta im, PresentNBT nbt) {
         String nbtData = presentNBTToString(nbt);
         im.getPersistentDataContainer().set(presentNBTKey, PersistentDataType.STRING, nbtData);
@@ -63,16 +70,34 @@ public class PresentUtil {
 
 
     public static void open(ItemStack is, Player p) {
-        PresentNBT presentNBT = getPresentNBT(is);
-        p.getInventory().addItem(presentNBT.getPresent());
-        presentNBT.setPresent(null);
-        is.setAmount(0);
+        if(!isPresentItemStackWithNBT(is)) return;
+        ItemStack present = getPresentNBT(is).getPresent().clone();
+        p.getInventory().remove(is);
+        p.getInventory().addItem(present);
     }
 
     public static void wrap(ItemStack is, ItemStack present, Player p) {
+        if(!p.getInventory().contains(present)) return; // item removed from inventory
+
+        p.getInventory().remove(present);
+        p.closeInventory();
+
+        if(!isPresentItemStackWithNBT(is)) return; // if hotbar changed
         PresentNBT presentNBT = getPresentNBT(is);
         presentNBT.setPresent(present);
+
         if(presentNBT.closed_head != null) is.setItemMeta(HeadUtil.setHeadUrl(presentNBT.closed_head, is.getItemMeta()));
+        String loreAdd = MessageConfig.MessageKey.SIGN_FROM.get();
+
+        if(loreAdd.length() > 0) is.setItemMeta(addLore(is.getItemMeta(), loreAdd.replaceAll("%FROM%", p.getName())));
+
         is.setItemMeta(setPresentMeta(is.getItemMeta(), presentNBT));
+    }
+
+    private static ItemMeta addLore(ItemMeta im, String line) {
+        List<String> lore = im.getLore();
+        lore.add(MsgUtil.replaceColors(line));
+        im.setLore(lore);
+        return im;
     }
 }

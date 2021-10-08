@@ -2,9 +2,7 @@ package nl.thieme.tp;
 
 import com.earth2me.essentials.Essentials;
 import nl.thieme.tp.commands.TPCmd;
-import nl.thieme.tp.events.BlockPlaceEvent;
-import nl.thieme.tp.events.InteractEvent;
-import nl.thieme.tp.events.InvClickEvent;
+import nl.thieme.tp.events.*;
 import nl.thieme.tp.managers.ConfigManager;
 import nl.thieme.tp.models.Present;
 import nl.thieme.tp.resolvers.PresentItemResolver;
@@ -63,6 +61,8 @@ public class Main extends JavaPlugin {
 
     private void registerEvents() {
         Bukkit.getPluginManager().registerEvents(new InvClickEvent(), this);
+        Bukkit.getPluginManager().registerEvents(new InvCloseEvent(), this);
+        Bukkit.getPluginManager().registerEvents(new InvOpenEvent(), this);
         Bukkit.getPluginManager().registerEvents(new InteractEvent(), this);
         Bukkit.getPluginManager().registerEvents(new BlockPlaceEvent(), this);
     }

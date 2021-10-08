@@ -5,6 +5,8 @@ import nl.thieme.tp.configs.MainConfig;
 import nl.thieme.tp.configs.MessageConfig;
 import nl.thieme.tp.configs.PresentConfig;
 import nl.thieme.tp.models.FileConfig;
+import nl.thieme.tp.models.Present;
+import nl.thieme.tp.models.PresentInventory;
 
 import java.util.ArrayList;
 
@@ -18,6 +20,7 @@ public class ConfigManager {
         mainConfig = new MainConfig("config");
         presentConfig = new PresentConfig("presents");
         messageConfig = new MessageConfig("messages");
+        PresentInventory.initConfigItemStacks();
     }
 
     public static PresentConfig getPresentConfig() {

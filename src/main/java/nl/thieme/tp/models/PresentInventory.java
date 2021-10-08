@@ -1,23 +1,100 @@
 package nl.thieme.tp.models;
 
+import nl.thieme.tp.configs.MainConfig;
+import nl.thieme.tp.configs.MessageConfig;
+import org.apache.logging.log4j.message.Message;
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
+import org.bukkit.entity.HumanEntity;
+import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.inventory.Inventory;
+import org.bukkit.inventory.ItemFlag;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
 
-public class PresentInventory {
+import java.util.ArrayList;
+import java.util.List;
 
-    private Inventory inventory;
+public abstract class PresentInventory {
 
-    public PresentInventory(InventoryType type) {
-        inventory = Bukkit.createInventory(null, type);
+    private static ItemStack blockedSlotItemStack;
+    public static ItemStack confirmSlotItemStack;
+    public static ItemStack pendingSlotItemStack;
+    protected Inventory inventory;
+    protected HumanEntity whoOpened;
+
+    public static List<Integer> blockedSlots = new ArrayList<>();
+    public static Integer toBeWrappedSlot;
+    public static Integer confirmSlot;
+
+
+    public PresentInventory(InventoryType type, HumanEntity p) {
+        inventory = Bukkit.createInventory(null, type, MessageConfig.MessageKey.PICK_PRESENT_TITLE.get());
+        whoOpened = p;
     }
+
+    public PresentInventory(int size, HumanEntity p) {
+        inventory = Bukkit.createInventory(null, size, MessageConfig.MessageKey.PICK_PRESENT_TITLE.get());
+        whoOpened = p;
+    }
+
+
+    public static void initConfigItemStacks() {
+        // Blocked Item Stack
+        blockedSlotItemStack = new ItemStack(MainConfig.ConfigKey.BLOCKED_SLOT_MATERIAL.getMaterial());
+        ItemMeta im = blockedSlotItemStack.getItemMeta();
+        im.setDisplayName(ChatColor.DARK_GRAY + "");
+        im.addItemFlags(ItemFlag.HIDE_ATTRIBUTES);
+        blockedSlotItemStack.setItemMeta(im);
+
+        // Pending Item Stack
+        pendingSlotItemStack = new ItemStack(MainConfig.ConfigKey.PENDING_MATERIAL.getMaterial());
+        ItemMeta pim = pendingSlotItemStack.getItemMeta();
+        pim.setDisplayName(MessageConfig.MessageKey.CHOOSE_ITEM.get());
+        pendingSlotItemStack.setItemMeta(pim);
+
+        // Confirm Item Stack
+        confirmSlotItemStack = new ItemStack(MainConfig.ConfigKey.CONFIRM_MATERIAL.getMaterial());
+        ItemMeta cim = confirmSlotItemStack.getItemMeta();
+        cim.setDisplayName(MessageConfig.MessageKey.CLICK_CONFIRM.get());
+        confirmSlotItemStack.setItemMeta(cim);
+    }
+
+    public void initializeInventoryItems() {
+        List<Integer> blocked = blockedSlots();
+        if(blocked != null) {
+            // Remove reserved slots
+            blocked.remove(Integer.valueOf(confirmSlot()));
+            blocked.remove(Integer.valueOf(itemToBeWrappedSlot()));
+
+            // Set blocked slots
+            for(int i : blocked) {
+                inventory.setItem(i, blockedSlotItemStack);
+            }
+        }
+        if(confirmSlot() != -1) inventory.setItem(confirmSlot(), pendingSlotItemStack);
+        if(itemToBeWrappedSlot() != -1) inventory.setItem(itemToBeWrappedSlot(), null);
+
+        // For inventory click
+        toBeWrappedSlot = itemToBeWrappedSlot();
+        confirmSlot = confirmSlot();
+        blockedSlots = blocked;
+    }
+
+    public List<Integer> blockedSlots() { return null; }
 
     public int confirmSlot() {
         return -1;
     }
 
+    public int itemToBeWrappedSlot() {
+        return -1;
+    }
+
 
     public Inventory getInventory() {
+        initializeInventoryItems();
         return inventory;
     }
 

@@ -4,34 +4,30 @@ import net.ess3.api.IItemDb;
 import nl.thieme.tp.models.Present;
 import org.bukkit.inventory.ItemStack;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
+import java.util.*;
 
 public class PresentItemResolver implements IItemDb.ItemResolver {
 
-    private final List<Present> presents;
-    private final List<String> names = new ArrayList<>();
+    private final HashMap<String, Present> namePresentMap = new HashMap<>();
 
     public PresentItemResolver(List<Present> presentList) {
-        this.presents = presentList;
         for(Present present : presentList) {
-            names.add(present.getName());
+            namePresentMap.put(present.getName().toLowerCase(), present);
         }
     }
 
     @Override
     public ItemStack apply(String name) {
-        return presents.get(0);
+        name = name.toLowerCase();
+        if(namePresentMap.keySet().contains(name)) {
+            return namePresentMap.get(name);
+        }
+        return null;
     }
 
     @Override
     public Collection<String> getNames() {
-        return names;
+        return namePresentMap.keySet();
     }
 
-    @Override
-    public String serialize(ItemStack stack) {
-        return null;
-    }
 }

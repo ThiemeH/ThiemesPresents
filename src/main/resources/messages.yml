@@ -4,3 +4,12 @@ reloading: "Reloading..."
 done-reloading: "Done reloading!"
 
 no-anvil-rename: "&cYou are not allowed to rename a present in an anvil!"
+
+pick-present-title: "Pick an item to be wrapped!"
+
+click-to-confirm: "&aClick to confirm!"
+choose-an-item: "&6Choose an item to wrap!"
+
+
+lore-from: "&fF&lROM&f: &a%FROM%"
+lore-to: "TO: "

@@ -1,9 +1,25 @@
 
+# Presents can be signed (= custom text in lore)
+can-sign: true
+
+# Pick present inventory type
+# WORKBENCH or REGULAR
+pick-present-inventory-type: REGULAR
+
+# Blocked Slot Item
+blocked-slot-material: GRAY_STAINED_GLASS_PANE
+# Material when waiting for item to be selected
+pending-material: ORANGE_CONCRETE
+# Material for click to confirm
+confirm-material: LIME_CONCRETE
 
 
+# Allow storage items (shulker boxes, chests) to be  wrapped
 allow-wrapping-storage-items: false
+# How many storage items can be wrapped inside a wrapped storage item
 storage-item-wrapping-limit: 2
+
+# Presents can get a different name in anvil
 can-rename-in-anvil: false
 
-
-can-sign: true
+sign-character-limit: 200
