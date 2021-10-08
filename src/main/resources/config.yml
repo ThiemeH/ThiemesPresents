@@ -1,0 +1,9 @@
+
+
+
+allow-wrapping-storage-items: false
+storage-item-wrapping-limit: 2
+can-rename-in-anvil: false
+
+
+can-sign: true

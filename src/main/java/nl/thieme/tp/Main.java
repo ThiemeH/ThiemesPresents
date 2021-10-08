@@ -1,8 +1,10 @@
 package nl.thieme.tp;
 
 import com.earth2me.essentials.Essentials;
-import net.ess3.api.IItemDb;
-import nl.thieme.tp.configs.PresentConfig;
+import nl.thieme.tp.commands.TPCmd;
+import nl.thieme.tp.events.BlockPlaceEvent;
+import nl.thieme.tp.events.InteractEvent;
+import nl.thieme.tp.events.InvClickEvent;
 import nl.thieme.tp.managers.ConfigManager;
 import nl.thieme.tp.models.Present;
 import nl.thieme.tp.resolvers.PresentItemResolver;
@@ -11,28 +13,34 @@ import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.PluginDescriptionFile;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import java.io.File;
 import java.util.logging.Logger;
 
 public class Main extends JavaPlugin {
 
     public static Main INSTANCE;
     public static Logger LOGGER;
-    public static boolean DEBUG = true;
+    public static boolean DEBUG = false;
     public static final String SERVER_VERSION = Bukkit.getBukkitVersion().split("-")[0];
     private PluginDescriptionFile pluginFile;
     private final String presentItemResolver = "PresentResolver";
     private Plugin essentials;
+    public static final String pluginId = "thiemespresents";
 
     public void onEnable() {
         INSTANCE = this;
         pluginFile = getDescription();
-        LOGGER = Logger.getLogger(pluginFile.getName());
-        if(DEBUG) LOGGER.info("Found server version: " + SERVER_VERSION);
+        LOGGER = getLogger();
+        if(getDataFolder().exists() && new File(getDataFolder(), "debug").exists()) DEBUG = true;
 
+        if(DEBUG) LOGGER.info("Found server version: " + SERVER_VERSION);
         loading(pluginFile.getFullName());
-        if(DEBUG) LOGGER.info("Loading configs...");
+        if(DEBUG) loading("configs");
         new ConfigManager();
-        if(DEBUG) LOGGER.info("Done loading configs!");
+        if(DEBUG) doneLoading("configs");
+
+        registerEvents();
+        registerCommands();
 
         addItemsToEssentials();
         doneLoading("");
@@ -46,11 +54,24 @@ public class Main extends JavaPlugin {
                 e.printStackTrace();
             }
         }
-        for(Present present : ConfigManager.getPresentConfig().getPresents()) {
-            present.removeRecipe();
+        if(ConfigManager.getPresentConfig() != null) {
+            for (Present present : ConfigManager.getPresentConfig().getPresents()) {
+                present.removeRecipe();
+            }
         }
     }
 
+    private void registerEvents() {
+        Bukkit.getPluginManager().registerEvents(new InvClickEvent(), this);
+        Bukkit.getPluginManager().registerEvents(new InteractEvent(), this);
+        Bukkit.getPluginManager().registerEvents(new BlockPlaceEvent(), this);
+    }
+
+    private void registerCommands() {
+        TPCmd tpCommand = new TPCmd();
+        getCommand(pluginId).setExecutor(tpCommand);
+        getCommand(pluginId).setTabCompleter(tpCommand);
+    }
 
     private void addItemsToEssentials() {
         if(getServer().getPluginManager().getPlugin("Essentials")==null) {

@@ -3,12 +3,11 @@ package nl.thieme.tp.configs;
 import nl.thieme.tp.Main;
 import nl.thieme.tp.models.FileConfig;
 import nl.thieme.tp.models.Present;
-import org.bukkit.Bukkit;
+import nl.thieme.tp.utils.MsgUtil;
 import org.bukkit.configuration.ConfigurationSection;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 
 public class PresentConfig extends FileConfig {
 
@@ -17,6 +16,7 @@ public class PresentConfig extends FileConfig {
     private final String loreKey = "LORE";
     private final String itemNameKey = "ITEM_NAME";
     private final String headUrlKey = "HEAD_URL";
+    private final String openHeadUrlKey = "HEAD_OPEN_URL";
     private final String recipeKey = "RECIPE";
     private final String shapeKey = "SHAPE";
     private final String ingredientsKey = "INGREDIENTS";
@@ -33,8 +33,9 @@ public class PresentConfig extends FileConfig {
             Present present = new Present(root);
 
             // Load properties
-            if(base.contains(headUrlKey)) present.setHeadUrl(base.getString(headUrlKey));
-            if(base.contains(itemNameKey)) present.setDisplayName(base.getString(itemNameKey).replaceAll("&", "§"));
+            if(base.contains(headUrlKey)) present.setClosedHeadUrl(base.getString(headUrlKey));
+            if(base.contains(openHeadUrlKey)) present.setOpenHeadUrl(base.getString(openHeadUrlKey));
+            if(base.contains(itemNameKey)) present.setDisplayName(MsgUtil.replaceColors(base.getString(itemNameKey)));
             if(base.contains(loreKey)) present.setLore(base.getStringList(loreKey));
             if(base.contains(recipeKey)) loadRecipe(present, base.getConfigurationSection(recipeKey)); // recipe last
 

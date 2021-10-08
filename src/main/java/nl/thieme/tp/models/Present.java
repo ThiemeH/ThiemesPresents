@@ -1,32 +1,38 @@
 package nl.thieme.tp.models;
 
-import com.mojang.authlib.GameProfile;
-import com.mojang.authlib.properties.Property;
 import nl.thieme.tp.Main;
+import nl.thieme.tp.utils.HeadUtil;
+import nl.thieme.tp.utils.MsgUtil;
+import nl.thieme.tp.utils.PresentUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
+import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.ShapedRecipe;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.SkullMeta;
+import org.bukkit.persistence.PersistentDataType;
 
-import java.lang.reflect.Field;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.UUID;
+
+import static nl.thieme.tp.utils.HeadUtil.setHeadUrl;
 
 public class Present extends ItemStack {
 
-    private final String minecraft_head_url_base = "https://textures.minecraft.net/texture/";
     private ShapedRecipe recipe;
     private NamespacedKey namespacedKey;
     private final String name;
+    private PresentNBT presentNBT;
 
     public Present(String name) {
         super(Material.PLAYER_HEAD);
         this.name = name.toLowerCase();
         namespacedKey = NamespacedKey.minecraft(this.name);
+        presentNBT = new PresentNBT();
+        updatePresentNBT();
     }
 
     public void setRecipe(String[] shape, HashMap<Character, String> ingredients) {
@@ -49,21 +55,10 @@ public class Present extends ItemStack {
         Bukkit.removeRecipe(namespacedKey);
     }
 
-    public void setHeadUrl(String endpoint) {
-        String url = minecraft_head_url_base + endpoint;
-        if(!(getItemMeta() instanceof SkullMeta)) return;
-        SkullMeta meta = (SkullMeta) getItemMeta();
-        GameProfile profile = new GameProfile(UUID.randomUUID(), null);
-        profile.getProperties().put("textures", new Property("textures", url));
-        Field profileField;
-        try {
-            profileField = meta.getClass().getDeclaredField("profile");
-            profileField.setAccessible(true);
-            profileField.set(meta, profile);
-        } catch (NoSuchFieldException | IllegalArgumentException | IllegalAccessException ignored) {
-
-        }
-        setItemMeta(meta);
+    public void setClosedHeadUrl(String endpoint) {
+        presentNBT.closed_head = endpoint;
+        updatePresentNBT();
+        setItemMeta(setHeadUrl(endpoint, getItemMeta()));
     }
 
     public void setDisplayName(String name) {
@@ -74,11 +69,30 @@ public class Present extends ItemStack {
 
     public void setLore(List<String> list) {
         ItemMeta im = getItemMeta();
-        im.setLore(list);
+        List<String> result = new ArrayList<>();
+        for (String s : list) {
+            result.add(MsgUtil.replaceColors(s));
+        }
+        im.setLore(result);
         setItemMeta(im);
     }
 
     public String getName() {
         return name;
     }
+
+    private void updatePresentNBT() {
+        ItemMeta im = getItemMeta();
+        im.getPersistentDataContainer().set(PresentUtil.presentNBTKey, PersistentDataType.STRING,PresentUtil.presentNBTToString(presentNBT));
+        setItemMeta(im);
+    }
+
+    public void setOpenHeadUrl(String endpoint) {
+        presentNBT.open_head = endpoint; // open is optional
+        updatePresentNBT();
+        setItemMeta(setHeadUrl(endpoint, getItemMeta()));
+    }
+
+
+
 }

@@ -7,6 +7,6 @@ softdepend:
   - Essentials
 description: Present wraps for everyone!
 commands:
-  givepresent:
-    aliases: [givep]
-    description: Give a present wrap
+  thiemespresents:
+    description: Main command
+    aliases: [present, presents]

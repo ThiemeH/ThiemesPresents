@@ -9,8 +9,8 @@ import java.io.IOException;
 
 public class FileConfig {
 
-    private String name;
-    private File file;
+    private final String name;
+    private final File file;
     protected YamlConfiguration config;
 
     public FileConfig(String name) {
@@ -21,7 +21,7 @@ public class FileConfig {
     }
 
     private void getOrCreateConfig() {
-        if(Main.INSTANCE.DEBUG && file.exists()) file.delete();
+        if(Main.INSTANCE.DEBUG && file.exists()) file.delete(); // keep getting newest configs on debug
         if (!file.exists()) {
             if(!file.getParentFile().exists()) file.getParentFile().mkdirs();
             Main.INSTANCE.saveResource(name, false);
