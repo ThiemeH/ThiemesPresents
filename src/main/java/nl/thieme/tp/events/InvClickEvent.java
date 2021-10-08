@@ -2,13 +2,10 @@ package nl.thieme.tp.events;
 
 import nl.thieme.tp.configs.MainConfig;
 import nl.thieme.tp.configs.MessageConfig;
-import nl.thieme.tp.models.Present;
 import nl.thieme.tp.models.PresentInventory;
 import nl.thieme.tp.utils.InvUtil;
 import nl.thieme.tp.utils.MsgUtil;
 import nl.thieme.tp.utils.PresentUtil;
-import org.bukkit.Bukkit;
-import org.bukkit.Material;
 import org.bukkit.entity.HumanEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -18,9 +15,6 @@ import org.bukkit.inventory.AnvilInventory;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
-
-import java.util.HashMap;
-import java.util.UUID;
 
 public class InvClickEvent implements Listener {
 
@@ -47,14 +41,14 @@ public class InvClickEvent implements Listener {
         Inventory inv = e.getInventory();
 
         // Cancel presents
-        if(curItem != null && PresentUtil.isPresentItemStack(curItem)) return;
+        if (curItem != null && PresentUtil.isPresentItemStack(curItem)) return;
 
         // Return air click if no item is selected
-        if(curItem == null && inv.getItem(PresentInventory.toBeWrappedSlot) == null) {
+        if (curItem == null && inv.getItem(PresentInventory.toBeWrappedSlot) == null) {
             return;
         } else {
-            if(e.getSlot() == PresentInventory.confirmSlot) {
-                if(e.getWhoClicked() instanceof Player) {
+            if (e.getSlot() == PresentInventory.confirmSlot) {
+                if (e.getWhoClicked() instanceof Player) {
                     Player p = (Player) e.getWhoClicked();
                     PresentUtil.wrap(p.getInventory().getItemInMainHand(), inv.getItem(PresentInventory.toBeWrappedSlot), p);
                 }
@@ -68,7 +62,7 @@ public class InvClickEvent implements Listener {
 
     private void updateSelected(Inventory inv, ItemStack is, HumanEntity he, int slot) {
         InvUtil.refreshInventory(inv, he);
-        if(inv.getItem(PresentInventory.toBeWrappedSlot) == null || (is != null && slot != PresentInventory.toBeWrappedSlot)) {
+        if (inv.getItem(PresentInventory.toBeWrappedSlot) == null || (is != null && slot != PresentInventory.toBeWrappedSlot)) {
             select(inv, is, slot);
         } else {
             unselect(inv);
@@ -86,7 +80,6 @@ public class InvClickEvent implements Listener {
         inv.setItem(PresentInventory.toBeWrappedSlot, is);
         inv.setItem(slot, null);
     }
-
 
 
     private boolean isAnvilScreenWithPresent(Inventory inv, ItemStack is) {

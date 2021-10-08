@@ -1,17 +1,14 @@
 package nl.thieme.tp.models;
 
 import nl.thieme.tp.Main;
-import nl.thieme.tp.utils.HeadUtil;
 import nl.thieme.tp.utils.MsgUtil;
 import nl.thieme.tp.utils.PresentUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
-import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.ShapedRecipe;
 import org.bukkit.inventory.meta.ItemMeta;
-import org.bukkit.inventory.meta.SkullMeta;
 import org.bukkit.persistence.PersistentDataType;
 
 import java.util.ArrayList;
@@ -22,10 +19,10 @@ import static nl.thieme.tp.utils.HeadUtil.setHeadUrl;
 
 public class Present extends ItemStack {
 
-    private ShapedRecipe recipe;
-    private NamespacedKey namespacedKey;
     private final String name;
-    private PresentNBT presentNBT;
+    private ShapedRecipe recipe;
+    private final NamespacedKey namespacedKey;
+    private final PresentNBT presentNBT;
 
     public Present(String name) {
         super(Material.PLAYER_HEAD);
@@ -38,10 +35,10 @@ public class Present extends ItemStack {
     public void setRecipe(String[] shape, HashMap<Character, String> ingredients) {
         recipe = new ShapedRecipe(namespacedKey, this);
         recipe.shape(shape);
-        for(Character key : ingredients.keySet()) {
+        for (Character key : ingredients.keySet()) {
             String ing = ingredients.get(key);
             Material m = Material.getMaterial(ing);
-            if(m == null) {
+            if (m == null) {
                 Main.LOGGER.warning(ing + " IS NOT A VALID MATERIAL! RECIPE DISABLED");
                 return;
             }
@@ -83,7 +80,7 @@ public class Present extends ItemStack {
 
     private void updatePresentNBT() {
         ItemMeta im = getItemMeta();
-        im.getPersistentDataContainer().set(PresentUtil.presentNBTKey, PersistentDataType.STRING,PresentUtil.presentNBTToString(presentNBT));
+        im.getPersistentDataContainer().set(PresentUtil.presentNBTKey, PersistentDataType.STRING, PresentUtil.presentNBTToString(presentNBT));
         setItemMeta(im);
     }
 
@@ -92,7 +89,6 @@ public class Present extends ItemStack {
         updatePresentNBT();
         setItemMeta(setHeadUrl(endpoint, getItemMeta()));
     }
-
 
 
 }

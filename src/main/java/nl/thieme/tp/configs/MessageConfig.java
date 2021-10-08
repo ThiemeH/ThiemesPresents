@@ -25,7 +25,7 @@ public class MessageConfig extends FileConfig {
         SIGN_TO("lore-to"),
         DONE_RELOADING("done-reloading");
 
-        private String key;
+        private final String key;
 
         MessageKey(String s) {
             this.key = s;

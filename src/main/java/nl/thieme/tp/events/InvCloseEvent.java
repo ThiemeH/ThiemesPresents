@@ -9,7 +9,7 @@ public class InvCloseEvent implements Listener {
 
     @EventHandler
     public void onInvClose(InventoryCloseEvent e) {
-        if(InvUtil.isPresentInventory(e.getView())) {
+        if (InvUtil.isPresentInventory(e.getView())) {
             InvUtil.removeBackup(e.getPlayer().getUniqueId());
         }
     }

@@ -2,11 +2,9 @@ package nl.thieme.tp.models;
 
 import nl.thieme.tp.configs.MainConfig;
 import nl.thieme.tp.configs.MessageConfig;
-import org.apache.logging.log4j.message.Message;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.HumanEntity;
-import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemFlag;
@@ -18,15 +16,14 @@ import java.util.List;
 
 public abstract class PresentInventory {
 
-    private static ItemStack blockedSlotItemStack;
     public static ItemStack confirmSlotItemStack;
     public static ItemStack pendingSlotItemStack;
-    protected Inventory inventory;
-    protected HumanEntity whoOpened;
-
     public static List<Integer> blockedSlots = new ArrayList<>();
     public static Integer toBeWrappedSlot;
     public static Integer confirmSlot;
+    private static ItemStack blockedSlotItemStack;
+    protected Inventory inventory;
+    protected HumanEntity whoOpened;
 
 
     public PresentInventory(InventoryType type, HumanEntity p) {
@@ -63,18 +60,18 @@ public abstract class PresentInventory {
 
     public void initializeInventoryItems() {
         List<Integer> blocked = blockedSlots();
-        if(blocked != null) {
+        if (blocked != null) {
             // Remove reserved slots
             blocked.remove(Integer.valueOf(confirmSlot()));
             blocked.remove(Integer.valueOf(itemToBeWrappedSlot()));
 
             // Set blocked slots
-            for(int i : blocked) {
+            for (int i : blocked) {
                 inventory.setItem(i, blockedSlotItemStack);
             }
         }
-        if(confirmSlot() != -1) inventory.setItem(confirmSlot(), pendingSlotItemStack);
-        if(itemToBeWrappedSlot() != -1) inventory.setItem(itemToBeWrappedSlot(), null);
+        if (confirmSlot() != -1) inventory.setItem(confirmSlot(), pendingSlotItemStack);
+        if (itemToBeWrappedSlot() != -1) inventory.setItem(itemToBeWrappedSlot(), null);
 
         // For inventory click
         toBeWrappedSlot = itemToBeWrappedSlot();
@@ -82,7 +79,9 @@ public abstract class PresentInventory {
         blockedSlots = blocked;
     }
 
-    public List<Integer> blockedSlots() { return null; }
+    public List<Integer> blockedSlots() {
+        return null;
+    }
 
     public int confirmSlot() {
         return -1;

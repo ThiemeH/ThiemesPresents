@@ -9,7 +9,7 @@ import java.util.List;
 
 public class PickPresentRegularInv extends PresentInventory {
 
-    private int size = 9 * 5;
+    private final int size = 9 * 5;
 
     public PickPresentRegularInv(HumanEntity p) {
         super(9 * 5, p);
@@ -17,7 +17,7 @@ public class PickPresentRegularInv extends PresentInventory {
 
     @Override
     public void initializeInventoryItems() {
-        for(int i = 0; i < 36; i++) {
+        for (int i = 0; i < 36; i++) {
             inventory.setItem(InvUtil.getSlotThiemeWay(i), whoOpened.getInventory().getContents()[i]);
         }
         super.initializeInventoryItems();
@@ -25,7 +25,7 @@ public class PickPresentRegularInv extends PresentInventory {
 
     @Override
     public int confirmSlot() {
-        return size -1;
+        return size - 1;
     }
 
     @Override
@@ -36,8 +36,8 @@ public class PickPresentRegularInv extends PresentInventory {
     @Override
     public List<Integer> blockedSlots() {
         List<Integer> list = new ArrayList<>();
-        for(int i = 0; i < 9; i++) {
-            list.add(size-(i+1));
+        for (int i = 0; i < 9; i++) {
+            list.add(size - (i + 1));
         }
         return list;
     }

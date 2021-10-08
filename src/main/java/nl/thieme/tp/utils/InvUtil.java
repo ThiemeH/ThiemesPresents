@@ -6,21 +6,18 @@ import nl.thieme.tp.inventories.PickPresentInvType;
 import nl.thieme.tp.inventories.PickPresentRegularInv;
 import nl.thieme.tp.inventories.PickPresentWBInv;
 import nl.thieme.tp.models.PresentInventory;
-import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.HumanEntity;
-import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.InventoryView;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.PlayerInventory;
 
 import java.util.HashMap;
 import java.util.UUID;
 
 public class InvUtil {
 
-    private static HashMap<UUID, ItemStack[]> backupInventory = new HashMap<>();
+    private static final HashMap<UUID, ItemStack[]> backupInventory = new HashMap<>();
 
     public static int getSlotThiemeWay(int i) {
         if (i < 9) {
@@ -49,7 +46,7 @@ public class InvUtil {
     private static void resetInventory(Inventory inventory, ItemStack[] itemStacks) {
         for (int i = 0; i < itemStacks.length; i++) {
             // Only update empty slots, as full slots can't be moved
-            if(inventory.getItem(i) == null || inventory.getItem(i).getType() == Material.AIR) {
+            if (inventory.getItem(i) == null || inventory.getItem(i).getType() == Material.AIR) {
                 inventory.setItem(i, itemStacks[i]);
             }
         }
@@ -69,7 +66,7 @@ public class InvUtil {
     }
 
     public static void removeBackup(UUID uuid) {
-        if(hasBackup(uuid)) backupInventory.remove(uuid);
+        if (hasBackup(uuid)) backupInventory.remove(uuid);
     }
 
     public static boolean hasBackup(UUID uuid) {

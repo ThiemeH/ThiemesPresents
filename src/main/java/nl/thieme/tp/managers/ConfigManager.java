@@ -4,11 +4,7 @@ import nl.thieme.tp.Main;
 import nl.thieme.tp.configs.MainConfig;
 import nl.thieme.tp.configs.MessageConfig;
 import nl.thieme.tp.configs.PresentConfig;
-import nl.thieme.tp.models.FileConfig;
-import nl.thieme.tp.models.Present;
 import nl.thieme.tp.models.PresentInventory;
-
-import java.util.ArrayList;
 
 public class ConfigManager {
 
@@ -26,6 +22,7 @@ public class ConfigManager {
     public static PresentConfig getPresentConfig() {
         return presentConfig;
     }
+
     public static MessageConfig getMsgConfig() {
         return messageConfig;
     }

@@ -8,6 +8,6 @@ public class BlockPlaceEvent implements Listener {
 
     @EventHandler
     public void onBlockPlace(org.bukkit.event.block.BlockPlaceEvent e) {
-        if(PresentUtil.isPresentItemStack(e.getItemInHand())) e.setCancelled(true);
+        if (PresentUtil.isPresentItemStack(e.getItemInHand())) e.setCancelled(true);
     }
 }

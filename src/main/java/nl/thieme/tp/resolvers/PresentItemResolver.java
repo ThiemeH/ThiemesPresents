@@ -4,14 +4,16 @@ import net.ess3.api.IItemDb;
 import nl.thieme.tp.models.Present;
 import org.bukkit.inventory.ItemStack;
 
-import java.util.*;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.List;
 
 public class PresentItemResolver implements IItemDb.ItemResolver {
 
     private final HashMap<String, Present> namePresentMap = new HashMap<>();
 
     public PresentItemResolver(List<Present> presentList) {
-        for(Present present : presentList) {
+        for (Present present : presentList) {
             namePresentMap.put(present.getName().toLowerCase(), present);
         }
     }
@@ -19,7 +21,7 @@ public class PresentItemResolver implements IItemDb.ItemResolver {
     @Override
     public ItemStack apply(String name) {
         name = name.toLowerCase();
-        if(namePresentMap.keySet().contains(name)) {
+        if (namePresentMap.containsKey(name)) {
             return namePresentMap.get(name);
         }
         return null;

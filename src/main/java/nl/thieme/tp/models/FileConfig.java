@@ -21,9 +21,9 @@ public class FileConfig {
     }
 
     private void getOrCreateConfig() {
-        if(Main.INSTANCE.DEBUG && file.exists()) file.delete(); // keep getting newest configs on debug
+        if (Main.DEBUG && file.exists()) file.delete(); // keep getting newest configs on debug
         if (!file.exists()) {
-            if(!file.getParentFile().exists()) file.getParentFile().mkdirs();
+            if (!file.getParentFile().exists()) file.getParentFile().mkdirs();
             Main.INSTANCE.saveResource(name, false);
         }
         try {

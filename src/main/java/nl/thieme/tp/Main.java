@@ -16,26 +16,26 @@ import java.util.logging.Logger;
 
 public class Main extends JavaPlugin {
 
+    public static final String SERVER_VERSION = Bukkit.getBukkitVersion().split("-")[0];
+    public static final String pluginId = "thiemespresents";
     public static Main INSTANCE;
     public static Logger LOGGER;
     public static boolean DEBUG = false;
-    public static final String SERVER_VERSION = Bukkit.getBukkitVersion().split("-")[0];
-    private PluginDescriptionFile pluginFile;
     private final String presentItemResolver = "PresentResolver";
+    private PluginDescriptionFile pluginFile;
     private Plugin essentials;
-    public static final String pluginId = "thiemespresents";
 
     public void onEnable() {
         INSTANCE = this;
         pluginFile = getDescription();
         LOGGER = getLogger();
-        if(getDataFolder().exists() && new File(getDataFolder(), "debug").exists()) DEBUG = true;
+        if (getDataFolder().exists() && new File(getDataFolder(), "debug").exists()) DEBUG = true;
 
-        if(DEBUG) LOGGER.info("Found server version: " + SERVER_VERSION);
+        if (DEBUG) LOGGER.info("Found server version: " + SERVER_VERSION);
         loading(pluginFile.getFullName());
-        if(DEBUG) loading("configs");
+        if (DEBUG) loading("configs");
         new ConfigManager();
-        if(DEBUG) doneLoading("configs");
+        if (DEBUG) doneLoading("configs");
 
         registerEvents();
         registerCommands();
@@ -45,14 +45,14 @@ public class Main extends JavaPlugin {
     }
 
     public void onDisable() {
-        if(essentials != null) {
+        if (essentials != null) {
             try {
-                ((Essentials)essentials).getItemDb().unregisterResolver(this, presentItemResolver);
+                ((Essentials) essentials).getItemDb().unregisterResolver(this, presentItemResolver);
             } catch (Exception e) {
                 e.printStackTrace();
             }
         }
-        if(ConfigManager.getPresentConfig() != null) {
+        if (ConfigManager.getPresentConfig() != null) {
             for (Present present : ConfigManager.getPresentConfig().getPresents()) {
                 present.removeRecipe();
             }
@@ -74,15 +74,15 @@ public class Main extends JavaPlugin {
     }
 
     private void addItemsToEssentials() {
-        if(getServer().getPluginManager().getPlugin("Essentials")==null) {
-            if(DEBUG) LOGGER.info("Essentials not installed!");
+        if (getServer().getPluginManager().getPlugin("Essentials") == null) {
+            if (DEBUG) LOGGER.info("Essentials not installed!");
             return;
         }
-        if(DEBUG) LOGGER.info("Found essentials!");
+        if (DEBUG) LOGGER.info("Found essentials!");
         essentials = getServer().getPluginManager().getPlugin("Essentials");
         PresentItemResolver resolver = new PresentItemResolver(ConfigManager.getPresentConfig().getPresents());
         try {
-            ((Essentials)essentials).getItemDb().registerResolver(this, presentItemResolver, resolver);
+            ((Essentials) essentials).getItemDb().registerResolver(this, presentItemResolver, resolver);
         } catch (Exception e) {
             e.printStackTrace();
         }

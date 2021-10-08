@@ -9,8 +9,8 @@ public class InvOpenEvent implements Listener {
 
     @EventHandler
     public void onInventoryOpen(InventoryOpenEvent e) {
-        if(InvUtil.isPresentInventory(e.getView())) {
-            InvUtil.createBackup(e.getPlayer().getUniqueId(), e.getInventory().getContents());;
+        if (InvUtil.isPresentInventory(e.getView())) {
+            InvUtil.createBackup(e.getPlayer().getUniqueId(), e.getInventory().getContents());
         }
     }
 }

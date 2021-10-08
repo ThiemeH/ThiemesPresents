@@ -3,7 +3,6 @@ package nl.thieme.tp.utils;
 import nl.thieme.tp.Main;
 import nl.thieme.tp.configs.MessageConfig;
 import nl.thieme.tp.models.PresentNBT;
-import org.bukkit.Bukkit;
 import org.bukkit.NamespacedKey;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
@@ -44,7 +43,7 @@ public class PresentUtil {
     }
 
     public static boolean isPresentItemStack(ItemStack is) {
-        return !is.hasItemMeta() ? false : is.getItemMeta().getPersistentDataContainer().has(presentNBTKey, PersistentDataType.STRING);
+        return is.hasItemMeta() && is.getItemMeta().getPersistentDataContainer().has(presentNBTKey, PersistentDataType.STRING);
     }
 
     private static boolean isPresentItemStackWithNBT(ItemStack is) {
@@ -59,7 +58,7 @@ public class PresentUtil {
 
     public static PresentNBT getPresentNBT(ItemStack is) {
         String nbtData = is.getItemMeta().getPersistentDataContainer().get(presentNBTKey, PersistentDataType.STRING);
-        if(nbtData.length() == 0) return null;
+        if (nbtData.length() == 0) return null;
         try {
             return stringToPresentNBT(nbtData);
         } catch (IOException e) {
@@ -70,26 +69,27 @@ public class PresentUtil {
 
 
     public static void open(ItemStack is, Player p) {
-        if(!isPresentItemStackWithNBT(is)) return;
+        if (!isPresentItemStackWithNBT(is)) return;
         ItemStack present = getPresentNBT(is).getPresent().clone();
         p.getInventory().remove(is);
         p.getInventory().addItem(present);
     }
 
     public static void wrap(ItemStack is, ItemStack present, Player p) {
-        if(!p.getInventory().contains(present)) return; // item removed from inventory
+        if (!p.getInventory().contains(present)) return; // item removed from inventory
 
         p.getInventory().remove(present);
         p.closeInventory();
 
-        if(!isPresentItemStackWithNBT(is)) return; // if hotbar changed
+        if (!isPresentItemStackWithNBT(is)) return; // if hotbar changed
         PresentNBT presentNBT = getPresentNBT(is);
         presentNBT.setPresent(present);
 
-        if(presentNBT.closed_head != null) is.setItemMeta(HeadUtil.setHeadUrl(presentNBT.closed_head, is.getItemMeta()));
+        if (presentNBT.closed_head != null)
+            is.setItemMeta(HeadUtil.setHeadUrl(presentNBT.closed_head, is.getItemMeta()));
         String loreAdd = MessageConfig.MessageKey.SIGN_FROM.get();
 
-        if(loreAdd.length() > 0) is.setItemMeta(addLore(is.getItemMeta(), loreAdd.replaceAll("%FROM%", p.getName())));
+        if (loreAdd.length() > 0) is.setItemMeta(addLore(is.getItemMeta(), loreAdd.replaceAll("%FROM%", p.getName())));
 
         is.setItemMeta(setPresentMeta(is.getItemMeta(), presentNBT));
     }

@@ -22,13 +22,14 @@ public class MainConfig extends FileConfig {
         CAN_SIGN("can-sign"),
         ALLOW_STORAGE_WRAPPING("allow-wrapping-storage-items");
 
-        private String key;
-        private Material m; // Default
-        private YamlConfiguration config = ConfigManager.getConfig().config;
+        private final String key;
+        private final Material m; // Default
+        private final YamlConfiguration config = ConfigManager.getConfig().config;
 
         ConfigKey(String s) {
             this(s, null);
         }
+
         ConfigKey(String s, Material m) {
             this.key = s;
             this.m = m;

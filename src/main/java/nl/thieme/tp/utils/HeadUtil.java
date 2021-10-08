@@ -21,7 +21,7 @@ public class HeadUtil {
 
     public static SkullMeta setHeadUrl(String endpoint, ItemMeta im) {
         String url = minecraft_head_url_base + endpoint;
-        if(!(im instanceof SkullMeta)) return null;
+        if (!(im instanceof SkullMeta)) return null;
         SkullMeta headMeta = (SkullMeta) im;
 
         GameProfile profile = new GameProfile(UUID.randomUUID(), null);
