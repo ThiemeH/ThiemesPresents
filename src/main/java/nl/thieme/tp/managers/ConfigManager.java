@@ -6,13 +6,13 @@ import nl.thieme.tp.models.FileConfig;
 public class ConfigManager {
 
     private final String presentConfigName = "presents";
-    private PresentConfig presentConfig;
+    private static PresentConfig presentConfig;
 
     public ConfigManager() {
         presentConfig = new PresentConfig(presentConfigName);
     }
 
-    private FileConfig getPresentConfig() {
+    public static PresentConfig getPresentConfig() {
         return presentConfig;
     }
 

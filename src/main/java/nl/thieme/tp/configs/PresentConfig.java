@@ -3,6 +3,7 @@ package nl.thieme.tp.configs;
 import nl.thieme.tp.Main;
 import nl.thieme.tp.models.FileConfig;
 import nl.thieme.tp.models.Present;
+import org.bukkit.Bukkit;
 import org.bukkit.configuration.ConfigurationSection;
 
 import java.util.ArrayList;
@@ -13,6 +14,7 @@ public class PresentConfig extends FileConfig {
 
     private ArrayList<Present> presents = new ArrayList<>();
 
+    private final String loreKey = "LORE";
     private final String itemNameKey = "ITEM_NAME";
     private final String headUrlKey = "HEAD_URL";
     private final String recipeKey = "RECIPE";
@@ -31,10 +33,12 @@ public class PresentConfig extends FileConfig {
             Present present = new Present(root);
 
             // Load properties
-            if(base.contains(recipeKey)) loadRecipe(present, base.getConfigurationSection(recipeKey));
             if(base.contains(headUrlKey)) present.setHeadUrl(base.getString(headUrlKey));
             if(base.contains(itemNameKey)) present.setDisplayName(base.getString(itemNameKey).replaceAll("&", "§"));
+            if(base.contains(loreKey)) present.setLore(base.getStringList(loreKey));
+            if(base.contains(recipeKey)) loadRecipe(present, base.getConfigurationSection(recipeKey)); // recipe last
 
+            presents.add(present);
         }
     }
 
@@ -43,8 +47,7 @@ public class PresentConfig extends FileConfig {
             Main.LOGGER.warning("Recipe is missing either ingredients or shape");
             return;
         }
-
-        List<String> shape = section.getStringList(shapeKey);
+        String[] shape = section.getStringList(shapeKey).toArray(new String[0]);
         ConfigurationSection ingredientSection = section.getConfigurationSection(ingredientsKey);
         HashMap<Character, String> ingredientMap = new HashMap<>();
         for(String ingredient : ingredientSection.getKeys(false)) {
@@ -52,6 +55,10 @@ public class PresentConfig extends FileConfig {
         }
 
         present.setRecipe(shape, ingredientMap);
+    }
+
+    public ArrayList<Present> getPresents() {
+        return presents;
     }
 
 }
