@@ -1,0 +1,17 @@
+
+
+YELLOW_PRESENT:
+  HEAD_URL: "a3e58ea7f3113caecd2b3a6f27af53b9cc9cfed7b043ba334b5168f1391d9"
+  ITEM_NAME: "&cRed Present"
+  LORE:
+    - "Nice Present"
+    - "Yay" #to do -> placeholder
+  RECIPE:
+    SHAPE:
+      - xox
+      - oyo
+      - xox
+    INGREDIENTS:
+      x: PAPER
+      y: YELLOW_DYE
+      o: STRING

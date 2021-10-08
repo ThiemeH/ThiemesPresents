@@ -1,5 +1,6 @@
 name: ThiemesPresents
-main: nl.thieme.tp.NewHaven
+main: nl.thieme.tp.Main
+version: 1.0
 authors: [Thieme]
 description: Present wraps for everyone!
 commands:
