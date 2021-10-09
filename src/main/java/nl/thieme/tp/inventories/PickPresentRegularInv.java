@@ -1,7 +1,9 @@
 package nl.thieme.tp.inventories;
 
+import nl.thieme.tp.configs.MessageConfig;
 import nl.thieme.tp.models.PresentInventory;
 import nl.thieme.tp.utils.InvUtil;
+import org.bukkit.Bukkit;
 import org.bukkit.entity.HumanEntity;
 
 import java.util.ArrayList;
@@ -12,7 +14,7 @@ public class PickPresentRegularInv extends PresentInventory {
     private final int size = 9 * 5;
 
     public PickPresentRegularInv(HumanEntity p) {
-        super(9 * 5, p);
+        super(Bukkit.createInventory(null, 9 * 5, MessageConfig.MessageKey.PICK_PRESENT_TITLE.get()), p);
     }
 
     @Override

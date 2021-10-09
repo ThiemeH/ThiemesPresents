@@ -1,16 +1,15 @@
 package nl.thieme.tp.utils;
 
-import nl.thieme.tp.configs.MainConfig;
 import nl.thieme.tp.configs.MessageConfig;
-import nl.thieme.tp.inventories.PickPresentInvType;
 import nl.thieme.tp.inventories.PickPresentRegularInv;
-import nl.thieme.tp.inventories.PickPresentWBInv;
-import nl.thieme.tp.models.PresentInventory;
+import org.bukkit.Bukkit;
 import org.bukkit.Material;
+import org.bukkit.block.Container;
 import org.bukkit.entity.HumanEntity;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.InventoryView;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.BlockStateMeta;
 
 import java.util.HashMap;
 import java.util.UUID;
@@ -29,18 +28,8 @@ public class InvUtil {
     }
 
     public static void openPresentPickInventory(HumanEntity p) {
-        PresentInventory presentInventory;
-        PickPresentInvType type = PickPresentInvType.valueOf(MainConfig.ConfigKey.PICK_PRESENT_INV_TYPE.getString());
-        if (type == null) type = PickPresentInvType.REGULAR;
-        switch (type) {
-            case WORKBENCH:
-                presentInventory = new PickPresentWBInv(p);
-                break;
-            default:
-                presentInventory = new PickPresentRegularInv(p);
-        }
-        p.openInventory(presentInventory.getInventory());
-
+        // Later possible add multiple inventories
+        p.openInventory(new PickPresentRegularInv(p).getInventory());
     }
 
     private static void resetInventory(Inventory inventory, ItemStack[] itemStacks) {
@@ -77,4 +66,27 @@ public class InvUtil {
         backupInventory.put(uuid, inv);
     }
 
+
+    public static boolean isStorageItem(ItemStack is) {
+        if (is.getItemMeta() instanceof BlockStateMeta) {
+            BlockStateMeta bMeta = (BlockStateMeta) is.getItemMeta();
+            if (bMeta.getBlockState() instanceof Container) return true;
+        }
+        return false;
+    }
+
+    public static boolean isPresentPeekInventory(InventoryView view) {
+        return view.getTitle().equalsIgnoreCase(MessageConfig.MessageKey.PEEK_TITLE.get());
+    }
+
+    public static void removeAllBackups() {
+        for (UUID uuid : backupInventory.keySet()) {
+            if (Bukkit.getPlayer(uuid) == null) continue;
+            if (Bukkit.getPlayer(uuid).getOpenInventory() == null) continue;
+            InventoryView inv = Bukkit.getPlayer(uuid).getOpenInventory();
+            if (isPresentInventory(inv) || isPresentPeekInventory(inv)) {
+                Bukkit.getPlayer(uuid).closeInventory();
+            }
+        }
+    }
 }

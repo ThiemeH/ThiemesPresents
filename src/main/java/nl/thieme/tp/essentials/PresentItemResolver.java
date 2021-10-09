@@ -1,4 +1,4 @@
-package nl.thieme.tp.resolvers;
+package nl.thieme.tp.essentials;
 
 import net.ess3.api.IItemDb;
 import nl.thieme.tp.models.Present;

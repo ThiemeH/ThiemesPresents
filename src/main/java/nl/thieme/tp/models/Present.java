@@ -20,9 +20,9 @@ import static nl.thieme.tp.utils.HeadUtil.setHeadUrl;
 public class Present extends ItemStack {
 
     private final String name;
-    private ShapedRecipe recipe;
     private final NamespacedKey namespacedKey;
     private final PresentNBT presentNBT;
+    private ShapedRecipe recipe;
 
     public Present(String name) {
         super(Material.PLAYER_HEAD);

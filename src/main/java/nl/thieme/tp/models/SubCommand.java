@@ -1,6 +1,5 @@
 package nl.thieme.tp.models;
 
-import nl.thieme.tp.Main;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 
@@ -10,12 +9,13 @@ import java.util.List;
 
 public abstract class SubCommand {
 
-    public String infoMessage;
-    public List<String> aliases;
-    public String mainCommand;
-    private final String permission;
+    private String infoMessage;
+    private List<String> aliases;
+    private String mainCommand;
+    private TPermission permission;
 
-    public SubCommand(String s, String permission, String infoMessage, String... alias) {
+
+    public SubCommand(String s, TPermission permission, String infoMessage, String... alias) {
         this.mainCommand = s;
         this.infoMessage = infoMessage;
         this.permission = permission;
@@ -26,15 +26,23 @@ public abstract class SubCommand {
         return false;
     }
 
-    public boolean hasPermission(CommandSender p) {
-        return permission == null || p.hasPermission(Main.pluginId + permission);
-    }
-
     public List<String> getCommands() {
         List<String> copy = new ArrayList<>();
         if (aliases != null) copy.addAll(aliases);
         copy.add(mainCommand);
         return copy;
+    }
+
+    public TPermission getPermission() {
+        return permission;
+    }
+
+    public String getMainCommand() {
+        return mainCommand;
+    }
+
+    public String getDescription() {
+        return infoMessage;
     }
 
 

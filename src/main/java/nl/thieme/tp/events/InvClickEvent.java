@@ -27,21 +27,36 @@ public class InvClickEvent implements Listener {
             e.setCancelled(true);
             return;
         }
+        if (InvUtil.isPresentPeekInventory(e.getView())) {
+            e.setCancelled(true);
+            return;
+        }
+        MsgUtil.debugInfo(e.getEventName() + " 1");
         if (!InvUtil.isPresentInventory(e.getView())) return;
         e.setCancelled(true);
 
         // Cancel own inventory clicks
         if (e.getClickedInventory() instanceof PlayerInventory) return;
+        MsgUtil.debugInfo(e.getEventName() + " 2");
 
         // Cancel blocked slots
         if (PresentInventory.blockedSlots.contains(e.getSlot())) return;
-
+        MsgUtil.debugInfo(e.getEventName() + " 3");
 
         ItemStack curItem = e.getCurrentItem();
         Inventory inv = e.getInventory();
 
         // Cancel presents
-        if (curItem != null && PresentUtil.isPresentItemStack(curItem)) return;
+        if (curItem != null) {
+            if (PresentUtil.isPresentItemStack(curItem)) return;
+            if (!MainConfig.ConfigKey.ALLOW_STORAGE_WRAPPING.getBoolean()) {
+                if (InvUtil.isStorageItem(curItem)) {
+                    MsgUtil.sendMessage(e.getWhoClicked(), MessageConfig.MessageKey.NO_STORAGE_ITEM);
+                    return;
+                }
+            }
+        }
+        MsgUtil.debugInfo(e.getEventName() + " 4");
 
         // Return air click if no item is selected
         if (curItem == null && inv.getItem(PresentInventory.toBeWrappedSlot) == null) {
@@ -55,9 +70,8 @@ public class InvClickEvent implements Listener {
                 return;
             }
         }
-
+        MsgUtil.debugInfo(e.getEventName() + " 5");
         updateSelected(inv, curItem, e.getWhoClicked(), e.getSlot());
-        e.setCurrentItem(null);
     }
 
     private void updateSelected(Inventory inv, ItemStack is, HumanEntity he, int slot) {

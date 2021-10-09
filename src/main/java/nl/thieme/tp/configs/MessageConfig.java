@@ -29,7 +29,15 @@ public class MessageConfig extends FileConfig {
         SIGN_CANCEL("sign-cancel"),
         SIGN_SUCCESS("sign-success"),
         SIGN_LIMIT("sign-limit"),
-        DONE_RELOADING("done-reloading");
+        NO_STORAGE_ITEM("no-storage-wrapping"),
+        PEEK_TITLE("present-peek-title"),
+        NOT_A_PRESENT("not-a-present"),
+        NO_PRESENT("no-present-inside"),
+        DONE_RELOADING("done-reloading"),
+        NP_SIGN("no-permission-sign"),
+        NP_WRAP("no-permission-wrap"),
+        NP_OPEN("no-permission-open"),
+        NP_CMD("no-permission-command");
 
         private final String key;
 
@@ -38,7 +46,9 @@ public class MessageConfig extends FileConfig {
         }
 
         public String get() {
-            return MsgUtil.replaceColors(ConfigManager.getMsgConfig().get(key));
+            String msg = ConfigManager.getMsgConfig().get(key);
+            if(msg == null) return "";
+            return MsgUtil.replaceColors(msg);
         }
     }
 }

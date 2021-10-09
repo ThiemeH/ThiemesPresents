@@ -2,9 +2,6 @@
 # Presents can be signed (= custom text in lore)
 can-sign: true
 
-# Pick present inventory type
-# WORKBENCH or REGULAR
-pick-present-inventory-type: REGULAR
 
 # Blocked Slot Item
 blocked-slot-material: GRAY_STAINED_GLASS_PANE
@@ -22,6 +19,6 @@ storage-item-wrapping-limit: 2
 # Presents can get a different name in anvil
 can-rename-in-anvil: false
 
-sign-character-limit: 20
+sign-character-limit: 200
 
 signing-timeout-seconds: 30

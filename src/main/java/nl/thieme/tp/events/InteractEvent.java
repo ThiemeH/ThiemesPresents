@@ -25,8 +25,8 @@ public class InteractEvent implements Listener {
 
         if (isLeftClick(e.getAction()) && nbt.hasPresent()) { // Left click is only for writing messages
             if (nbt.isSigned || !MainConfig.ConfigKey.CAN_SIGN.getBoolean()) return; // Check if signed or can be signed
-            if(MessageConfig.MessageKey.SIGN_TO.get().length() == 0) return; // In case no signing config is found
-            ChatEvent.addForSigning(e.getPlayer(), is);
+            if (MessageConfig.MessageKey.SIGN_TO.get().length() == 0) return; // In case no signing config is found
+            if (!ChatEvent.isSignCooldown(e.getPlayer())) ChatEvent.addForSigning(e.getPlayer(), is);
 
         } else if (isRightClick(e.getAction())) { // Right click for wrapping and opening
             e.setCancelled(true);

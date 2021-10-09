@@ -1,9 +1,9 @@
 package nl.thieme.tp.utils;
 
-import jdk.javadoc.internal.doclets.formats.html.markup.Head;
 import nl.thieme.tp.Main;
 import nl.thieme.tp.configs.MessageConfig;
 import nl.thieme.tp.models.PresentNBT;
+import nl.thieme.tp.models.TPermission;
 import org.bukkit.NamespacedKey;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
@@ -12,7 +12,7 @@ import org.bukkit.persistence.PersistentDataType;
 import org.yaml.snakeyaml.external.biz.base64Coder.Base64Coder;
 
 import java.io.*;
-import java.util.List;
+
 
 public class PresentUtil {
 
@@ -76,11 +76,11 @@ public class PresentUtil {
     }
 
     private static void addPresentToInventory(ItemStack is, Player p, ItemStack present) {
-        if(p.getInventory().getItemInMainHand().equals(is)) {
+        if (p.getInventory().getItemInMainHand().equals(is)) {
             p.getInventory().setItemInMainHand(present);
         } else {
             int slot = p.getInventory().first(is);
-            if(slot != -1) {
+            if (slot != -1) {
                 p.getInventory().clear(slot); // remove by slot
                 p.getInventory().addItem(present);
             } else Main.LOGGER.warning("How did you even manage to get this error?!");
@@ -88,8 +88,9 @@ public class PresentUtil {
     }
 
     public static void wrap(ItemStack is, ItemStack present, Player p) {
-        if (!p.getInventory().contains(present)) return; // item removed from inventory
+        if(!TPermission.hasPermission(p, TPermission.NP_WRAP)) return;
 
+        if (!p.getInventory().contains(present)) return; // item removed from inventory
         p.getInventory().remove(present);
         p.closeInventory();
 
@@ -101,7 +102,8 @@ public class PresentUtil {
             is.setItemMeta(HeadUtil.setHeadUrl(presentNBT.closed_head, is.getItemMeta()));
         String loreAdd = MessageConfig.MessageKey.SIGN_FROM.get();
 
-        if (loreAdd.length() > 0) is.setItemMeta(HeadUtil.addLore(is.getItemMeta(), loreAdd.replaceAll(MsgUtil.fromKey, p.getName())));
+        if (loreAdd.length() > 0)
+            is.setItemMeta(HeadUtil.addLore(is.getItemMeta(), loreAdd.replaceAll(MsgUtil.fromKey, p.getName())));
 
         is.setItemMeta(setPresentMeta(is.getItemMeta(), presentNBT));
     }

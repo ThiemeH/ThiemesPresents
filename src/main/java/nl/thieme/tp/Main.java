@@ -1,14 +1,15 @@
 package nl.thieme.tp;
 
-import com.earth2me.essentials.Essentials;
 import nl.thieme.tp.commands.TPCmd;
+import nl.thieme.tp.essentials.EssentialResolverLoader;
 import nl.thieme.tp.events.*;
 import nl.thieme.tp.managers.ConfigManager;
 import nl.thieme.tp.models.Present;
-import nl.thieme.tp.resolvers.PresentItemResolver;
+import nl.thieme.tp.utils.InvUtil;
 import nl.thieme.tp.utils.MsgUtil;
+import nl.thieme.tp.models.TPermission;
 import org.bukkit.Bukkit;
-import org.bukkit.plugin.Plugin;
+import org.bukkit.permissions.Permission;
 import org.bukkit.plugin.PluginDescriptionFile;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -22,9 +23,8 @@ public class Main extends JavaPlugin {
     public static Main INSTANCE;
     public static Logger LOGGER;
     public static boolean DEBUG = false;
-    private final String presentItemResolver = "PresentResolver";
-    private PluginDescriptionFile pluginFile;
-    private Plugin essentials;
+    public static PluginDescriptionFile pluginFile;
+    private boolean hasEssentials = false;
 
     public void onEnable() {
         INSTANCE = this;
@@ -41,24 +41,30 @@ public class Main extends JavaPlugin {
 
         registerEvents();
         registerCommands();
+        registerPermissions();
 
-        addItemsToEssentials();
+        if (getServer().getPluginManager().getPlugin("Essentials") != null) hasEssentials = true;
+        if (hasEssentials) EssentialResolverLoader.addItemsToEssentials(this);
+
         doneLoading("");
     }
 
-    public void onDisable() {
-        if (essentials != null) {
-            try {
-                ((Essentials) essentials).getItemDb().unregisterResolver(this, presentItemResolver);
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
+    private void registerPermissions() {
+        for(TPermission tp : TPermission.values()) {
+            Permission perm = new Permission(tp.getPermission());
+            Bukkit.getPluginManager().addPermission(perm);
         }
+    }
+
+    public void onDisable() {
+        if (hasEssentials) EssentialResolverLoader.removeItems(this);
+        InvUtil.removeAllBackups();
         if (ConfigManager.getPresentConfig() != null) {
             for (Present present : ConfigManager.getPresentConfig().getPresents()) {
                 present.removeRecipe();
             }
         }
+
     }
 
     private void registerEvents() {
@@ -76,21 +82,6 @@ public class Main extends JavaPlugin {
         getCommand(pluginId).setTabCompleter(tpCommand);
     }
 
-    private void addItemsToEssentials() {
-        if (getServer().getPluginManager().getPlugin("Essentials") == null) {
-            if (DEBUG) LOGGER.info("Essentials not installed!");
-            return;
-        }
-        if (DEBUG) LOGGER.info("Found essentials!");
-        essentials = getServer().getPluginManager().getPlugin("Essentials");
-        PresentItemResolver resolver = new PresentItemResolver(ConfigManager.getPresentConfig().getPresents());
-        try {
-            ((Essentials) essentials).getItemDb().registerResolver(this, presentItemResolver, resolver);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-    }
 
     private void loading(String s) {
         LOGGER.info("Loading " + s + "...");

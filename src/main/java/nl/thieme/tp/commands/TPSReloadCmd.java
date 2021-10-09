@@ -4,12 +4,13 @@ import nl.thieme.tp.configs.MessageConfig;
 import nl.thieme.tp.managers.ConfigManager;
 import nl.thieme.tp.models.SubCommand;
 import nl.thieme.tp.utils.MsgUtil;
+import nl.thieme.tp.models.TPermission;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 
 public class TPSReloadCmd extends SubCommand {
 
-    public TPSReloadCmd(String s, String permission, String infoMessage, String... alias) {
+    public TPSReloadCmd(String s, TPermission permission, String infoMessage, String... alias) {
         super(s, permission, infoMessage, alias);
     }
 

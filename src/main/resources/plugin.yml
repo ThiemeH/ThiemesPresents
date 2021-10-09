@@ -2,9 +2,8 @@ name: ThiemesPresents
 main: nl.thieme.tp.Main
 version: 1.0
 api-version: 1.13
-authors: [Thieme]
-softdepend:
-  - Essentials
+authors: [ThiemeH]
+softdepend: [Essentials]
 description: Present wraps for everyone!
 commands:
   thiemespresents:

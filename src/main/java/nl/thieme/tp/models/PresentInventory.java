@@ -2,10 +2,8 @@ package nl.thieme.tp.models;
 
 import nl.thieme.tp.configs.MainConfig;
 import nl.thieme.tp.configs.MessageConfig;
-import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.HumanEntity;
-import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
@@ -21,21 +19,15 @@ public abstract class PresentInventory {
     public static List<Integer> blockedSlots = new ArrayList<>();
     public static Integer toBeWrappedSlot;
     public static Integer confirmSlot;
-    private static ItemStack blockedSlotItemStack;
+    public static ItemStack blockedSlotItemStack;
     protected Inventory inventory;
     protected HumanEntity whoOpened;
 
 
-    public PresentInventory(InventoryType type, HumanEntity p) {
-        inventory = Bukkit.createInventory(null, type, MessageConfig.MessageKey.PICK_PRESENT_TITLE.get());
+    public PresentInventory(Inventory inv, HumanEntity p) {
+        inventory = inv;
         whoOpened = p;
     }
-
-    public PresentInventory(int size, HumanEntity p) {
-        inventory = Bukkit.createInventory(null, size, MessageConfig.MessageKey.PICK_PRESENT_TITLE.get());
-        whoOpened = p;
-    }
-
 
     public static void initConfigItemStacks() {
         // Blocked Item Stack

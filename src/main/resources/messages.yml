@@ -10,6 +10,7 @@ pick-present-title: "Pick an item to be wrapped!"
 click-to-confirm: "&aClick to confirm!"
 choose-an-item: "&6Choose an item to wrap!"
 
+no-storage-wrapping: "&cYou're not allowed to wrap storage items!"
 
 lore-from: "&fF&lROM&f: &a%FROM%"
 lore-to: "TO: %TO%"
@@ -26,3 +27,12 @@ sign-limit: "Limit exceeded! Try again"
 
 cancel-keyword: "cancel"
 
+present-peek-title: "Peeking"
+not-a-present: "This isn't a present item!"
+no-present-inside: "There is no item inside this present"
+
+
+no-permission-sign: "&cYou don't have permission to sign a present!"
+no-permission-wrap: "&cYou don't have permission to wrap an item!"
+no-permission-open: "&cYou don't have permission to open a present!"
+no-permission-command: "&cYou don't have permission to execute this command!"

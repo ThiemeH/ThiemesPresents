@@ -15,7 +15,6 @@ public class MainConfig extends FileConfig {
     public enum ConfigKey {
         RENAME_ANVIL("can-rename-in-anvil"),
         STORAGE_WRAPPING_LIMIT("storage-item-wrapping-limit"),
-        PICK_PRESENT_INV_TYPE("pick-present-inventory-type"),
         PENDING_MATERIAL("pending-material", Material.ORANGE_CONCRETE),
         CONFIRM_MATERIAL("confirm-material", Material.LIME_CONCRETE),
         BLOCKED_SLOT_MATERIAL("blocked-slot-material", Material.GRAY_STAINED_GLASS_PANE),
@@ -45,7 +44,9 @@ public class MainConfig extends FileConfig {
             return config.getBoolean(key);
         }
 
-        public int getInt() {return config.getInt(key);}
+        public int getInt() {
+            return config.getInt(key);
+        }
 
         public Material getMaterial() {
             Material mat = Material.valueOf(getString());
