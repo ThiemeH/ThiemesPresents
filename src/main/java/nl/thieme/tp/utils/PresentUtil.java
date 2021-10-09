@@ -1,5 +1,6 @@
 package nl.thieme.tp.utils;
 
+import jdk.javadoc.internal.doclets.formats.html.markup.Head;
 import nl.thieme.tp.Main;
 import nl.thieme.tp.configs.MessageConfig;
 import nl.thieme.tp.models.PresentNBT;
@@ -71,8 +72,19 @@ public class PresentUtil {
     public static void open(ItemStack is, Player p) {
         if (!isPresentItemStackWithNBT(is)) return;
         ItemStack present = getPresentNBT(is).getPresent().clone();
-        p.getInventory().remove(is);
-        p.getInventory().addItem(present);
+        addPresentToInventory(is, p, present);
+    }
+
+    private static void addPresentToInventory(ItemStack is, Player p, ItemStack present) {
+        if(p.getInventory().getItemInMainHand().equals(is)) {
+            p.getInventory().setItemInMainHand(present);
+        } else {
+            int slot = p.getInventory().first(is);
+            if(slot != -1) {
+                p.getInventory().clear(slot); // remove by slot
+                p.getInventory().addItem(present);
+            } else Main.LOGGER.warning("How did you even manage to get this error?!");
+        }
     }
 
     public static void wrap(ItemStack is, ItemStack present, Player p) {
@@ -89,15 +101,9 @@ public class PresentUtil {
             is.setItemMeta(HeadUtil.setHeadUrl(presentNBT.closed_head, is.getItemMeta()));
         String loreAdd = MessageConfig.MessageKey.SIGN_FROM.get();
 
-        if (loreAdd.length() > 0) is.setItemMeta(addLore(is.getItemMeta(), loreAdd.replaceAll("%FROM%", p.getName())));
+        if (loreAdd.length() > 0) is.setItemMeta(HeadUtil.addLore(is.getItemMeta(), loreAdd.replaceAll(MsgUtil.fromKey, p.getName())));
 
         is.setItemMeta(setPresentMeta(is.getItemMeta(), presentNBT));
     }
 
-    private static ItemMeta addLore(ItemMeta im, String line) {
-        List<String> lore = im.getLore();
-        lore.add(MsgUtil.replaceColors(line));
-        im.setLore(lore);
-        return im;
-    }
 }

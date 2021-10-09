@@ -6,6 +6,7 @@ import nl.thieme.tp.events.*;
 import nl.thieme.tp.managers.ConfigManager;
 import nl.thieme.tp.models.Present;
 import nl.thieme.tp.resolvers.PresentItemResolver;
+import nl.thieme.tp.utils.MsgUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.PluginDescriptionFile;
@@ -35,6 +36,7 @@ public class Main extends JavaPlugin {
         loading(pluginFile.getFullName());
         if (DEBUG) loading("configs");
         new ConfigManager();
+        MsgUtil.loadVariables();
         if (DEBUG) doneLoading("configs");
 
         registerEvents();
@@ -60,6 +62,7 @@ public class Main extends JavaPlugin {
     }
 
     private void registerEvents() {
+        Bukkit.getPluginManager().registerEvents(new ChatEvent(), this);
         Bukkit.getPluginManager().registerEvents(new InvClickEvent(), this);
         Bukkit.getPluginManager().registerEvents(new InvCloseEvent(), this);
         Bukkit.getPluginManager().registerEvents(new InvOpenEvent(), this);

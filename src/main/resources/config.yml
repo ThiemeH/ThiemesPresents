@@ -22,4 +22,6 @@ storage-item-wrapping-limit: 2
 # Presents can get a different name in anvil
 can-rename-in-anvil: false
 
-sign-character-limit: 200
+sign-character-limit: 20
+
+signing-timeout-seconds: 30

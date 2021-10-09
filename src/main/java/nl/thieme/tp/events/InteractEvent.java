@@ -1,6 +1,7 @@
 package nl.thieme.tp.events;
 
 import nl.thieme.tp.configs.MainConfig;
+import nl.thieme.tp.configs.MessageConfig;
 import nl.thieme.tp.models.PresentNBT;
 import nl.thieme.tp.utils.InvUtil;
 import nl.thieme.tp.utils.PresentUtil;
@@ -24,7 +25,8 @@ public class InteractEvent implements Listener {
 
         if (isLeftClick(e.getAction()) && nbt.hasPresent()) { // Left click is only for writing messages
             if (nbt.isSigned || !MainConfig.ConfigKey.CAN_SIGN.getBoolean()) return; // Check if signed or can be signed
-            e.getPlayer().sendMessage("Signing now!");
+            if(MessageConfig.MessageKey.SIGN_TO.get().length() == 0) return; // In case no signing config is found
+            ChatEvent.addForSigning(e.getPlayer(), is);
 
         } else if (isRightClick(e.getAction())) { // Right click for wrapping and opening
             e.setCancelled(true);

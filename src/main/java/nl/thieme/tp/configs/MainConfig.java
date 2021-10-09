@@ -20,6 +20,8 @@ public class MainConfig extends FileConfig {
         CONFIRM_MATERIAL("confirm-material", Material.LIME_CONCRETE),
         BLOCKED_SLOT_MATERIAL("blocked-slot-material", Material.GRAY_STAINED_GLASS_PANE),
         CAN_SIGN("can-sign"),
+        TIMEOUT_SECONDS("signing-timeout-seconds"),
+        SIGN_CHARACTER_LIMIT("sign-character-limit"),
         ALLOW_STORAGE_WRAPPING("allow-wrapping-storage-items");
 
         private final String key;
@@ -42,6 +44,8 @@ public class MainConfig extends FileConfig {
         public boolean getBoolean() {
             return config.getBoolean(key);
         }
+
+        public int getInt() {return config.getInt(key);}
 
         public Material getMaterial() {
             Material mat = Material.valueOf(getString());

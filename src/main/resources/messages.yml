@@ -12,4 +12,17 @@ choose-an-item: "&6Choose an item to wrap!"
 
 
 lore-from: "&fF&lROM&f: &a%FROM%"
-lore-to: "TO: "
+lore-to: "TO: %TO%"
+
+# No prefix messages
+sign-now: "&c---------------\n
+You have %SECONDS% to sign!\n
+Type %KEYWORD% to cancel!\n
+--------------"
+sign-timeout: "Timed out!"
+sign-cancel: "Cancelled signign"
+sign-success: "Successfully signed!"
+sign-limit: "Limit exceeded! Try again"
+
+cancel-keyword: "cancel"
+

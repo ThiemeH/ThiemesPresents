@@ -23,6 +23,12 @@ public class MessageConfig extends FileConfig {
         CHOOSE_ITEM("choose-an-item"),
         SIGN_FROM("lore-from"),
         SIGN_TO("lore-to"),
+        SIGN_NOW("sign-now"),
+        SIGN_TIMEOUT("sign-timeout"),
+        CANCEL_KEYWORD("cancel-keyword"),
+        SIGN_CANCEL("sign-cancel"),
+        SIGN_SUCCESS("sign-success"),
+        SIGN_LIMIT("sign-limit"),
         DONE_RELOADING("done-reloading");
 
         private final String key;
