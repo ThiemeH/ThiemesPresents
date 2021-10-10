@@ -16,8 +16,10 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
 
-public class InvClickEvent implements Listener {
+import java.util.HashMap;
+import java.util.UUID;
 
+public class InvClickEvent implements Listener {
 
     @EventHandler
     public void onInventoryClick(InventoryClickEvent e) {
@@ -31,17 +33,17 @@ public class InvClickEvent implements Listener {
             e.setCancelled(true);
             return;
         }
-        MsgUtil.debugInfo(e.getEventName() + " 1");
+
+
+        MsgUtil.debugInfo("Clicked Slot: " + e.getSlot());
         if (!InvUtil.isPresentInventory(e.getView())) return;
         e.setCancelled(true);
 
         // Cancel own inventory clicks
         if (e.getClickedInventory() instanceof PlayerInventory) return;
-        MsgUtil.debugInfo(e.getEventName() + " 2");
 
         // Cancel blocked slots
         if (PresentInventory.blockedSlots.contains(e.getSlot())) return;
-        MsgUtil.debugInfo(e.getEventName() + " 3");
 
         ItemStack curItem = e.getCurrentItem();
         Inventory inv = e.getInventory();
@@ -56,7 +58,6 @@ public class InvClickEvent implements Listener {
                 }
             }
         }
-        MsgUtil.debugInfo(e.getEventName() + " 4");
 
         // Return air click if no item is selected
         if (curItem == null && inv.getItem(PresentInventory.toBeWrappedSlot) == null) {
@@ -70,14 +71,14 @@ public class InvClickEvent implements Listener {
                 return;
             }
         }
-        MsgUtil.debugInfo(e.getEventName() + " 5");
+        MsgUtil.debugInfo(e.getEventName() + " 4");
         updateSelected(inv, curItem, e.getWhoClicked(), e.getSlot());
     }
 
     private void updateSelected(Inventory inv, ItemStack is, HumanEntity he, int slot) {
         InvUtil.refreshInventory(inv, he);
         if (inv.getItem(PresentInventory.toBeWrappedSlot) == null || (is != null && slot != PresentInventory.toBeWrappedSlot)) {
-            select(inv, is, slot);
+            select(inv, is, slot, he);
         } else {
             unselect(inv);
         }
@@ -89,7 +90,8 @@ public class InvClickEvent implements Listener {
 
     }
 
-    private void select(Inventory inv, ItemStack is, int slot) {
+    private void select(Inventory inv, ItemStack is, int slot, HumanEntity he) {
+        InvUtil.lastClickedSlot.put(he.getUniqueId(), slot);
         inv.setItem(PresentInventory.confirmSlot, PresentInventory.confirmSlotItemStack);
         inv.setItem(PresentInventory.toBeWrappedSlot, is);
         inv.setItem(slot, null);

@@ -1,14 +1,17 @@
 package nl.thieme.tp.utils;
 
+import com.sun.jdi.InvalidStackFrameException;
 import nl.thieme.tp.Main;
 import nl.thieme.tp.configs.MessageConfig;
 import nl.thieme.tp.models.PresentNBT;
 import nl.thieme.tp.models.TPermission;
+import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.yaml.snakeyaml.external.biz.base64Coder.Base64Coder;
 
 import java.io.*;
+import java.util.UUID;
 
 
 public class PresentUtil {
@@ -87,7 +90,12 @@ public class PresentUtil {
         if (!TPermission.hasPermission(p, TPermission.NP_WRAP)) return;
 
         if (!p.getInventory().contains(present)) return; // item removed from inventory
-        p.getInventory().remove(present);
+
+
+        if(!removeItem(p, present)) { // fails to remove last clicked slot item
+            p.getInventory().remove(present);
+            MsgUtil.debugInfo("Couldnt remove InvStack");
+        }
         p.closeInventory();
 
         if (!isPresentItemStackWithNBT(is)) return; // if hotbar changed
@@ -103,5 +111,21 @@ public class PresentUtil {
 
         is.setItemMeta(setPresentMeta(is, presentNBT).getItemMeta());
     }
+
+    private static boolean removeItem(Player p, ItemStack is) {
+        if(!InvUtil.lastClickedSlot.containsKey(p.getUniqueId())) return false;
+        int cachedSlot = InvUtil.lastClickedSlot.get(p.getUniqueId());
+        InvUtil.lastClickedSlot.remove(p.getUniqueId());
+        int reversed = InvUtil.reverseSlotThiemeWay(cachedSlot);
+        MsgUtil.debugInfo("cachedSlot: " + cachedSlot);
+        MsgUtil.debugInfo("reversedSlot: " + reversed);
+        ItemStack invStack = p.getInventory().getItem(reversed);
+        if(invStack != null && invStack.isSimilar(is)) {
+            p.getInventory().setItem(reversed, null);
+            return true;
+        }
+        return false;
+    }
+
 
 }

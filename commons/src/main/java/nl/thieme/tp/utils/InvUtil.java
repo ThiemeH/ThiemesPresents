@@ -17,14 +17,25 @@ import java.util.UUID;
 public class InvUtil {
 
     private static final HashMap<UUID, ItemStack[]> backupInventory = new HashMap<>();
+    public static HashMap<UUID, Integer> lastClickedSlot = new HashMap<>();
 
+    // Puts hotbar underneath inventory items
     public static int getSlotThiemeWay(int i) {
         if (i < 9) {
             return 36 - 9 + i;
         } else {
             return i - 9;
         }
+    }
 
+    // Puts hotbar back above inventory items
+    public static int reverseSlotThiemeWay(int i) {
+        int size = 36;
+        if (i >= size - 9) {
+            return i - (size - 9);
+        } else {
+            return i + 9;
+        }
     }
 
     public static void openPresentPickInventory(HumanEntity p) {

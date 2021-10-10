@@ -5,12 +5,16 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryCloseEvent;
 
+import java.util.UUID;
+
 public class InvCloseEvent implements Listener {
 
     @EventHandler
     public void onInvClose(InventoryCloseEvent e) {
         if (InvUtil.isPresentInventory(e.getView())) {
-            InvUtil.removeBackup(e.getPlayer().getUniqueId());
+            UUID uuid = e.getPlayer().getUniqueId();
+            InvUtil.removeBackup(uuid);
+            if(InvUtil.lastClickedSlot.containsKey(uuid)) InvUtil.lastClickedSlot.remove(uuid);
         }
     }
 }
