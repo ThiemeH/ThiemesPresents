@@ -4,6 +4,7 @@ import nl.thieme.tp.Main;
 import nl.thieme.tp.models.FileConfig;
 import nl.thieme.tp.models.Present;
 import nl.thieme.tp.utils.MsgUtil;
+import nl.thieme.tp.utils.XMaterial;
 import org.bukkit.configuration.ConfigurationSection;
 
 import java.util.ArrayList;
@@ -29,7 +30,7 @@ public class PresentConfig extends FileConfig {
         for (String root : config.getKeys(false)) {
             if (Main.DEBUG) Main.LOGGER.info("Found present: " + root);
             ConfigurationSection base = config.getConfigurationSection(root);
-            Present present = new Present(root, Main.WRAPPER.getSkullItemStack());
+            Present present = new Present(root, XMaterial.PLAYER_HEAD.parseItem());
 
             // Load properties
             if (base.contains(headUrlKey)) present.setClosedHeadUrl(base.getString(headUrlKey));

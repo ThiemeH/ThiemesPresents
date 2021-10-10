@@ -22,7 +22,7 @@ public class FileConfig {
 
     private void getOrCreateConfig() {
         if (Main.DEBUG) {
-            if(file.exists()) file.delete(); // keep getting newest configs on debug
+            if (file.exists()) file.delete(); // keep getting newest configs on debug
         }
         if (!file.exists()) {
             if (!file.getParentFile().exists()) file.getParentFile().mkdirs();

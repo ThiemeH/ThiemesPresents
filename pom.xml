@@ -1,52 +1,21 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0"
-         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+<project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xmlns="http://maven.apache.org/POM/4.0.0"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
+
+    <groupId>nl.thiemespresents</groupId>
+    <artifactId>thiemespresents</artifactId>
+    <version>1.0</version>
+    <packaging>pom</packaging>
 
     <modules>
         <module>wrapper</module>
         <module>wrapper1_12</module>
         <module>commons</module>
+        <module>dist</module>
     </modules>
 
-    <groupId>nl.thiemespresents</groupId>
-    <artifactId>thiemespresents</artifactId>
-    <packaging>pom</packaging>
-    <version>1.0</version>
-    <name>ThiemesPresents</name>
-    <description>Present wraps for everyone!</description>
-
-    <properties>
-        <buildNo></buildNo>
-    </properties>
-    <build>
-        <finalName>${project.artifactId}-${project.version}${buildNo}</finalName>
-        <sourceDirectory>src/main/java</sourceDirectory>
-        <resources>
-            <resource>
-                <targetPath>.</targetPath>
-                <filtering>true</filtering>
-                <directory>${basedir}/src/main/resources/</directory>
-                <includes>
-                    <include>plugin.yml</include>
-                    <include>config.yml</include>
-                    <include>messages.yml</include>
-                    <include>presents.yml</include>
-                </includes>
-            </resource>
-        </resources>
-        <plugins>
-            <plugin>
-                <artifactId>maven-compiler-plugin</artifactId>
-                <version>3.7.0</version>
-                <configuration>
-                    <source>1.8</source>
-                    <target>1.8</target>
-                </configuration>
-            </plugin>
-        </plugins>
-    </build>
 
     <repositories>
         <repository>

@@ -9,7 +9,7 @@ public class StringUtil {
 
     public static String repeatSpace(int amount) {
         String result = "";
-        for(int i = 0; i < amount; i++) {
+        for (int i = 0; i < amount; i++) {
             result += " ";
         }
         return result;

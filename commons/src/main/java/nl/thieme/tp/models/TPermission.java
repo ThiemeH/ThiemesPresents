@@ -20,18 +20,18 @@ public enum TPermission {
         this.node = Constants.pluginId + "." + node;
     }
 
+    public static boolean hasPermission(CommandSender p, TPermission tp) {
+        if (tp == null) return true;
+        if (p.hasPermission(tp.getPermission())) return true;
+        MsgUtil.sendMessage(p, tp.getKey());
+        return false;
+    }
+
     public String getPermission() {
         return node;
     }
 
     public MessageConfig.MessageKey getKey() {
         return key;
-    }
-
-    public static boolean hasPermission(CommandSender p, TPermission tp) {
-        if(tp == null) return true;
-        if(p.hasPermission(tp.getPermission())) return true;
-        MsgUtil.sendMessage(p, tp.getKey());
-        return false;
     }
 }

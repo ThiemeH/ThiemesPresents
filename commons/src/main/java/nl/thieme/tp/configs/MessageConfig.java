@@ -47,7 +47,7 @@ public class MessageConfig extends FileConfig {
 
         public String get() {
             String msg = ConfigManager.getMsgConfig().get(key);
-            if(msg == null) return "";
+            if (msg == null) return "";
             return MsgUtil.replaceColors(msg);
         }
     }

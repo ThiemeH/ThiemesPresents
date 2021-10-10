@@ -4,6 +4,7 @@ import nl.thieme.tp.configs.MainConfig;
 import nl.thieme.tp.configs.MessageConfig;
 import nl.thieme.tp.models.PresentNBT;
 import nl.thieme.tp.utils.InvUtil;
+import nl.thieme.tp.utils.MsgUtil;
 import nl.thieme.tp.utils.PresentUtil;
 import org.bukkit.Material;
 import org.bukkit.event.EventHandler;
@@ -29,6 +30,7 @@ public class InteractEvent implements Listener {
             if (!ChatEvent.isSignCooldown(e.getPlayer())) ChatEvent.addForSigning(e.getPlayer(), is);
 
         } else if (isRightClick(e.getAction())) { // Right click for wrapping and opening
+            MsgUtil.debugInfo("NBT has present: " + nbt.hasPresent());
             e.setCancelled(true);
             if (!nbt.hasPresent()) {
                 InvUtil.openPresentPickInventory(e.getPlayer());

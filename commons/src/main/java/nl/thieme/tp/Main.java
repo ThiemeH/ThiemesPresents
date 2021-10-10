@@ -22,8 +22,8 @@ import java.util.logging.Logger;
 
 public class Main extends JavaPlugin {
 
-    public static final int SERVER_VERSION = Integer.parseInt(Bukkit.getBukkitVersion().split("-")[0].split(".")[1]);
-    public static ITPWrapper WRAPPER = SERVER_VERSION > 12 ? new TPWrapper_Up() : new TPWrapper_12();
+    public static int SERVER_VERSION;
+    public static ITPWrapper WRAPPER;
     public static Main INSTANCE;
     public static Logger LOGGER;
     public static boolean DEBUG = false;
@@ -34,8 +34,10 @@ public class Main extends JavaPlugin {
         INSTANCE = this;
         pluginFile = getDescription();
         LOGGER = getLogger();
+        SERVER_VERSION = Integer.parseInt(Bukkit.getBukkitVersion().split("-")[0].split("\\.")[1]);
         if (getDataFolder().exists() && new File(getDataFolder(), "debug").exists()) DEBUG = true;
         MsgUtil.debugInfo("Found server version: " + SERVER_VERSION);
+        WRAPPER = SERVER_VERSION > 12 ? new TPWrapper_Up() : new TPWrapper_12();
         loading(pluginFile.getFullName());
         if (DEBUG) loading("configs");
         new ConfigManager();
@@ -53,9 +55,9 @@ public class Main extends JavaPlugin {
     }
 
     private void registerPermissions() {
-        for(TPermission tp : TPermission.values()) {
+        for (TPermission tp : TPermission.values()) {
             Permission perm = new Permission(tp.getPermission());
-            if(Bukkit.getPluginManager().getPermission(tp.getPermission()) == null) {
+            if (Bukkit.getPluginManager().getPermission(tp.getPermission()) == null) {
                 Bukkit.getPluginManager().addPermission(perm);
             }
         }

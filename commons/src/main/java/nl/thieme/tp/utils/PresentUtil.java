@@ -4,7 +4,6 @@ import nl.thieme.tp.Main;
 import nl.thieme.tp.configs.MessageConfig;
 import nl.thieme.tp.models.PresentNBT;
 import nl.thieme.tp.models.TPermission;
-import org.bukkit.NamespacedKey;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.yaml.snakeyaml.external.biz.base64Coder.Base64Coder;
@@ -14,7 +13,7 @@ import java.io.*;
 
 public class PresentUtil {
 
-    public static NamespacedKey presentNBTKey = new NamespacedKey(Main.INSTANCE, "presentnbt");
+    public static final String presentNBTKey = "presentnbt";
 
     public static String presentNBTToString(PresentNBT nbt) throws IllegalStateException {
         try {
@@ -51,7 +50,7 @@ public class PresentUtil {
 
     public static ItemStack setPresentMeta(ItemStack is, PresentNBT nbt) {
         String nbtData = presentNBTToString(nbt);
-        return NBTEditor.set(is,nbtData,  presentNBTKey);
+        return NBTEditor.set(is, nbtData, presentNBTKey);
     }
 
     public static PresentNBT getPresentNBT(ItemStack is) {
@@ -85,7 +84,7 @@ public class PresentUtil {
     }
 
     public static void wrap(ItemStack is, ItemStack present, Player p) {
-        if(!TPermission.hasPermission(p, TPermission.NP_WRAP)) return;
+        if (!TPermission.hasPermission(p, TPermission.NP_WRAP)) return;
 
         if (!p.getInventory().contains(present)) return; // item removed from inventory
         p.getInventory().remove(present);
@@ -102,7 +101,7 @@ public class PresentUtil {
         if (loreAdd.length() > 0)
             is.setItemMeta(HeadUtil.addLore(is.getItemMeta(), loreAdd.replaceAll(MsgUtil.fromKey, p.getName())));
 
-        setPresentMeta(is, presentNBT);
+        is.setItemMeta(setPresentMeta(is, presentNBT).getItemMeta());
     }
 
 }

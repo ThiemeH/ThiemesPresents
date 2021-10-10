@@ -23,13 +23,13 @@ public class TPSHelpCmd extends SubCommand {
     public boolean onExecute(CommandSender commandSender, Command command, String s, String[] args) {
         commandSender.sendMessage(MsgUtil.replaceColorsAndVariables(Constants.dividerTop));
         int longestCommand = -1;
-        for(SubCommand sub : subCommands) {
-           if(sub.getMainCommand().length() < longestCommand) continue;
-           longestCommand = sub.getMainCommand().length();
+        for (SubCommand sub : subCommands) {
+            if (sub.getMainCommand().length() < longestCommand) continue;
+            longestCommand = sub.getMainCommand().length();
         }
 
-        for(SubCommand sub : subCommands) {
-            commandSender.sendMessage(MsgUtil.replaceColorsAndVariables(Constants.secondColor + "  " +StringUtil.fillSpace(sub.getMainCommand(), longestCommand+2) + " " + Constants.mainColor + "- " + StringUtil.repeatSpace(2) + Constants.secondColor + sub.getDescription()));
+        for (SubCommand sub : subCommands) {
+            commandSender.sendMessage(MsgUtil.replaceColorsAndVariables(Constants.secondColor + "  " + StringUtil.fillSpace(sub.getMainCommand(), longestCommand + 2) + " " + Constants.mainColor + "- " + StringUtil.repeatSpace(2) + Constants.secondColor + sub.getDescription()));
         }
         commandSender.sendMessage(MsgUtil.replaceColorsAndVariables(Constants.dividerBottom));
 

@@ -1,11 +1,11 @@
-name: ${project.name}
+name: ThiemesPresents
 main: nl.thieme.tp.Main
-version: ${project.version}
+version: 1.0
 api-version: 1.13
-authors: [ThiemeH]
-softdepend: [Essentials]
-description: ${project.description}
+authors: [ ThiemeH ]
+softdepend: [ Essentials ]
+description: Presents for everyone!
 commands:
   thiemespresents:
     description: Main command
-    aliases: [present, presents]
+    aliases: [ present, presents ]
