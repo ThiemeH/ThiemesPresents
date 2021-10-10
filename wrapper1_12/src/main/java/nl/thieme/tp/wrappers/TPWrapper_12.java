@@ -1,6 +1,6 @@
 package nl.thieme.tp.wrappers;
 
-import nl.thieme.tp.wrappers.ITPWrapper;
+import nl.thieme.tp.models.ITPWrapper;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;

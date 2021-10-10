@@ -1,10 +1,10 @@
-name: ThiemesPresents
+name: ${project.name}
 main: nl.thieme.tp.Main
-version: 1.0
+version: ${project.version}
 api-version: 1.13
 authors: [ThiemeH]
 softdepend: [Essentials]
-description: Present wraps for everyone!
+description: ${project.description}
 commands:
   thiemespresents:
     description: Main command
