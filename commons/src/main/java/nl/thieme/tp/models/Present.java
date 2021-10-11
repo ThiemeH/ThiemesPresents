@@ -1,10 +1,10 @@
 package nl.thieme.tp.models;
 
+import com.cryptomorin.xseries.XMaterial;
+import io.github.bananapuncher714.nbteditor.NBTEditor;
 import nl.thieme.tp.Main;
 import nl.thieme.tp.utils.MsgUtil;
-import nl.thieme.tp.utils.NBTEditor;
 import nl.thieme.tp.utils.PresentUtil;
-import nl.thieme.tp.utils.XMaterial;
 import org.bukkit.Bukkit;
 import org.bukkit.NamespacedKey;
 import org.bukkit.inventory.ItemStack;

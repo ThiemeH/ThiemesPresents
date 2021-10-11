@@ -1,5 +1,6 @@
 package nl.thieme.tp.utils;
 
+import io.github.bananapuncher714.nbteditor.NBTEditor;
 import nl.thieme.tp.Main;
 import nl.thieme.tp.configs.MessageConfig;
 import nl.thieme.tp.events.custom.PresentOpenEvent;

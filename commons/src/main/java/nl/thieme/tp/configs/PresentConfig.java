@@ -1,11 +1,11 @@
 package nl.thieme.tp.configs;
 
+import com.cryptomorin.xseries.XMaterial;
 import nl.thieme.tp.Main;
 import nl.thieme.tp.events.custom.PresentInitEvent;
 import nl.thieme.tp.models.FileConfig;
 import nl.thieme.tp.models.Present;
 import nl.thieme.tp.utils.MsgUtil;
-import nl.thieme.tp.utils.XMaterial;
 import org.bukkit.Bukkit;
 import org.bukkit.configuration.ConfigurationSection;
 
