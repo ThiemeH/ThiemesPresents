@@ -86,7 +86,7 @@ public class Present {
         return name;
     }
 
-    private void updatePresentNBT() {
+    public void updatePresentNBT() {
         presentStack = NBTEditor.set(presentStack, PresentUtil.presentNBTToString(presentNBT), PresentUtil.presentNBTKey);
     }
 

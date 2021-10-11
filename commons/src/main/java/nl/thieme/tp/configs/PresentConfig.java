@@ -1,10 +1,12 @@
 package nl.thieme.tp.configs;
 
 import nl.thieme.tp.Main;
+import nl.thieme.tp.events.custom.PresentInitEvent;
 import nl.thieme.tp.models.FileConfig;
 import nl.thieme.tp.models.Present;
 import nl.thieme.tp.utils.MsgUtil;
 import nl.thieme.tp.utils.XMaterial;
+import org.bukkit.Bukkit;
 import org.bukkit.configuration.ConfigurationSection;
 
 import java.util.ArrayList;
@@ -38,9 +40,9 @@ public class PresentConfig extends FileConfig {
             if (base.contains(itemNameKey)) present.setDisplayName(MsgUtil.replaceColors(base.getString(itemNameKey)));
             if (base.contains(loreKey)) present.setLore(base.getStringList(loreKey));
             if (base.contains(recipeKey)) loadRecipe(present, base.getConfigurationSection(recipeKey)); // recipe last
-
             presents.add(present);
         }
+        Bukkit.getPluginManager().callEvent(new PresentInitEvent(presents));
     }
 
     private void loadRecipe(Present present, ConfigurationSection section) {

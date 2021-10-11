@@ -1,8 +1,9 @@
 package nl.thieme.tp.utils;
 
-import com.sun.jdi.InvalidStackFrameException;
 import nl.thieme.tp.Main;
 import nl.thieme.tp.configs.MessageConfig;
+import nl.thieme.tp.events.custom.PresentOpenEvent;
+import nl.thieme.tp.events.custom.PresentWrapEvent;
 import nl.thieme.tp.models.PresentNBT;
 import nl.thieme.tp.models.TPermission;
 import org.bukkit.Bukkit;
@@ -11,7 +12,6 @@ import org.bukkit.inventory.ItemStack;
 import org.yaml.snakeyaml.external.biz.base64Coder.Base64Coder;
 
 import java.io.*;
-import java.util.UUID;
 
 
 public class PresentUtil {
@@ -69,9 +69,15 @@ public class PresentUtil {
 
 
     public static void open(ItemStack is, Player p) {
+        PresentOpenEvent.Pre poe = new PresentOpenEvent.Pre(is, p);
+        Bukkit.getPluginManager().callEvent(poe);
+        if (poe.isCancelled()) return;
+
         if (!isPresentItemStackWithNBT(is)) return;
         ItemStack present = getPresentNBT(is).getPresent().clone();
         addPresentToInventory(is, p, present);
+
+        Bukkit.getPluginManager().callEvent(new PresentOpenEvent.Post(is, present, p));
     }
 
     private static void addPresentToInventory(ItemStack is, Player p, ItemStack present) {
@@ -86,41 +92,47 @@ public class PresentUtil {
         }
     }
 
-    public static void wrap(ItemStack is, ItemStack present, Player p) {
+    public static void wrap(ItemStack present, ItemStack toBeWrapped, Player p) {
+        PresentWrapEvent.Pre pwe = new PresentWrapEvent.Pre(present, toBeWrapped, p);
+        Bukkit.getPluginManager().callEvent(pwe);
+        if (pwe.isCancelled()) return;
+
         if (!TPermission.hasPermission(p, TPermission.NP_WRAP)) return;
 
-        if (!p.getInventory().contains(present)) return; // item removed from inventory
+        if (!p.getInventory().contains(toBeWrapped)) return; // item removed from inventory
 
 
-        if(!removeItem(p, present)) { // fails to remove last clicked slot item
-            p.getInventory().remove(present);
+        if (!removeItem(p, toBeWrapped)) { // fails to remove last clicked slot item
+            p.getInventory().remove(toBeWrapped);
             MsgUtil.debugInfo("Couldnt remove InvStack");
         }
         p.closeInventory();
 
-        if (!isPresentItemStackWithNBT(is)) return; // if hotbar changed
-        PresentNBT presentNBT = getPresentNBT(is);
-        presentNBT.setPresent(present);
+        if (!isPresentItemStackWithNBT(present)) return; // if hotbar changed
+        PresentNBT presentNBT = getPresentNBT(present);
+        presentNBT.setPresent(toBeWrapped);
 
         if (presentNBT.closed_head != null)
-            is.setItemMeta(HeadUtil.setHeadUrl(presentNBT.closed_head, is.getItemMeta()));
+            present.setItemMeta(HeadUtil.setHeadUrl(presentNBT.closed_head, present.getItemMeta()));
         String loreAdd = MessageConfig.MessageKey.SIGN_FROM.get();
 
         if (loreAdd.length() > 0)
-            is.setItemMeta(HeadUtil.addLore(is.getItemMeta(), loreAdd.replaceAll(MsgUtil.fromKey, p.getName())));
+            present.setItemMeta(HeadUtil.addLore(present.getItemMeta(), loreAdd.replaceAll(MsgUtil.fromKey, p.getName())));
 
-        is.setItemMeta(setPresentMeta(is, presentNBT).getItemMeta());
+        present.setItemMeta(setPresentMeta(present, presentNBT).getItemMeta());
+
+        Bukkit.getPluginManager().callEvent(new PresentWrapEvent.Post(present, toBeWrapped, p));
     }
 
     private static boolean removeItem(Player p, ItemStack is) {
-        if(!InvUtil.lastClickedSlot.containsKey(p.getUniqueId())) return false;
+        if (!InvUtil.lastClickedSlot.containsKey(p.getUniqueId())) return false;
         int cachedSlot = InvUtil.lastClickedSlot.get(p.getUniqueId());
         InvUtil.lastClickedSlot.remove(p.getUniqueId());
         int reversed = InvUtil.reverseSlotThiemeWay(cachedSlot);
         MsgUtil.debugInfo("cachedSlot: " + cachedSlot);
         MsgUtil.debugInfo("reversedSlot: " + reversed);
         ItemStack invStack = p.getInventory().getItem(reversed);
-        if(invStack != null && invStack.isSimilar(is)) {
+        if (invStack != null && invStack.isSimilar(is)) {
             p.getInventory().setItem(reversed, null);
             return true;
         }

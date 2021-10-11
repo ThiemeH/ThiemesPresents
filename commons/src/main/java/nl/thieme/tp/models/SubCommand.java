@@ -10,9 +10,9 @@ import java.util.List;
 public abstract class SubCommand {
 
     private final String infoMessage;
-    private List<String> aliases;
     private final String mainCommand;
     private final TPermission permission;
+    private List<String> aliases;
 
 
     public SubCommand(String s, TPermission permission, String infoMessage, String... alias) {

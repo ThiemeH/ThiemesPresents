@@ -16,9 +16,6 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
 
-import java.util.HashMap;
-import java.util.UUID;
-
 public class InvClickEvent implements Listener {
 
     @EventHandler

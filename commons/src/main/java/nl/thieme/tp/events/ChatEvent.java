@@ -3,6 +3,7 @@ package nl.thieme.tp.events;
 import nl.thieme.tp.Main;
 import nl.thieme.tp.configs.MainConfig;
 import nl.thieme.tp.configs.MessageConfig;
+import nl.thieme.tp.events.custom.PresentSignEvent;
 import nl.thieme.tp.models.PresentNBT;
 import nl.thieme.tp.utils.HeadUtil;
 import nl.thieme.tp.utils.MsgUtil;
@@ -24,6 +25,10 @@ public class ChatEvent implements Listener {
     private static final HashMap<UUID, BukkitTask> taskMap = new HashMap<>();
 
     public static void addForSigning(Player p, ItemStack is) {
+        PresentSignEvent.Pre pse = new PresentSignEvent.Pre(p, is);
+        Bukkit.getPluginManager().callEvent(pse);
+        if (pse.isCancelled()) return;
+
         UUID uuid = p.getUniqueId();
         MsgUtil.sendMessage(p, MessageConfig.MessageKey.SIGN_NOW, false);
         signingList.put(uuid, is);
@@ -54,22 +59,23 @@ public class ChatEvent implements Listener {
             e.setCancelled(true);
             ItemStack is = signingList.get(e.getPlayer().getUniqueId());
             if (is == null || e.getMessage().equalsIgnoreCase(MessageConfig.MessageKey.CANCEL_KEYWORD.get())) {
-                cancelSigning(e.getPlayer(), MessageConfig.MessageKey.SIGN_CANCEL);
+                doneSigning(e.getPlayer(), MessageConfig.MessageKey.SIGN_CANCEL);
                 return;
             }
             if (e.getMessage().length() > MainConfig.ConfigKey.SIGN_CHARACTER_LIMIT.getInt()) {
-                cancelSigning(e.getPlayer(), MessageConfig.MessageKey.SIGN_LIMIT);
+                doneSigning(e.getPlayer(), MessageConfig.MessageKey.SIGN_LIMIT);
                 return;
             }
 
             String msg = MsgUtil.replaceColors(MessageConfig.MessageKey.SIGN_TO.get().replaceAll(MsgUtil.toKey, e.getMessage()));
             is.setItemMeta(HeadUtil.addLore(is.getItemMeta(), msg));
             addSignedNBT(is);
-            cancelSigning(e.getPlayer(), MessageConfig.MessageKey.SIGN_SUCCESS);
+            doneSigning(e.getPlayer(), MessageConfig.MessageKey.SIGN_SUCCESS);
+            Bukkit.getPluginManager().callEvent(new PresentSignEvent.Post(e.getPlayer(), is));
         }
     }
 
-    private void cancelSigning(Player p, MessageConfig.MessageKey key) {
+    private void doneSigning(Player p, MessageConfig.MessageKey key) {
         MsgUtil.sendMessage(p, key, false);
         signingList.remove(p.getUniqueId());
         removeTask(p);
