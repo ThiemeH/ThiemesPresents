@@ -35,6 +35,6 @@ Currently there are no plans on supporting versions < 1.12, but if there is many
 
 ## API Documentation
 
-Please see [Thieme's Presents API Example]("https://github.com/ThiemeH/ThiemesPresents-API-example/tree/master")
+Please see [Thieme's Presents API Example](https://github.com/ThiemeH/ThiemesPresents-API-example/tree/master)
 
 
