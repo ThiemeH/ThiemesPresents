@@ -16,40 +16,43 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.scheduler.BukkitTask;
 
 import java.util.HashMap;
+import java.util.UUID;
 
 public class ChatEvent implements Listener {
 
-    private static final HashMap<Player, ItemStack> signingList = new HashMap<>();
-    private static final HashMap<Player, BukkitTask> taskMap = new HashMap<>();
+    private static final HashMap<UUID, ItemStack> signingList = new HashMap<>();
+    private static final HashMap<UUID, BukkitTask> taskMap = new HashMap<>();
 
     public static void addForSigning(Player p, ItemStack is) {
+        UUID uuid = p.getUniqueId();
         MsgUtil.sendMessage(p, MessageConfig.MessageKey.SIGN_NOW, false);
-        signingList.put(p, is);
+        signingList.put(uuid, is);
         BukkitTask bukkitTask = Bukkit.getScheduler().runTaskLater(Main.INSTANCE, () -> {
-            if (signingList.containsKey(p)) {
-                signingList.remove(p);
+            if (signingList.containsKey(uuid)) {
+                signingList.remove(uuid);
                 MsgUtil.sendMessage(p, MessageConfig.MessageKey.SIGN_TIMEOUT, false);
             }
         }, MainConfig.ConfigKey.TIMEOUT_SECONDS.getInt() * 20L);
-        taskMap.put(p, bukkitTask);
+        taskMap.put(uuid, bukkitTask);
     }
 
     private static void removeTask(Player p) {
-        if (taskMap.containsKey(p)) {
-            taskMap.get(p).cancel();
-            taskMap.remove(p);
+        UUID uuid = p.getUniqueId();
+        if (taskMap.containsKey(uuid)) {
+            taskMap.get(uuid).cancel();
+            taskMap.remove(uuid);
         }
     }
 
     public static boolean isSignCooldown(Player p) {
-        return signingList.containsKey(p);
+        return signingList.containsKey(p.getUniqueId());
     }
 
     @EventHandler
     public void onChat(AsyncPlayerChatEvent e) {
-        if (signingList.containsKey(e.getPlayer())) {
+        if (signingList.containsKey(e.getPlayer().getUniqueId())) {
             e.setCancelled(true);
-            ItemStack is = signingList.get(e.getPlayer());
+            ItemStack is = signingList.get(e.getPlayer().getUniqueId());
             if (is == null || e.getMessage().equalsIgnoreCase(MessageConfig.MessageKey.CANCEL_KEYWORD.get())) {
                 cancelSigning(e.getPlayer(), MessageConfig.MessageKey.SIGN_CANCEL);
                 return;
@@ -68,7 +71,7 @@ public class ChatEvent implements Listener {
 
     private void cancelSigning(Player p, MessageConfig.MessageKey key) {
         MsgUtil.sendMessage(p, key, false);
-        signingList.remove(p);
+        signingList.remove(p.getUniqueId());
         removeTask(p);
     }
 
