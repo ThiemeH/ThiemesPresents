@@ -30,9 +30,17 @@ public class ThiemesPresents extends JavaPlugin {
     public static Logger LOGGER;
     public static boolean DEBUG = false;
     public static PluginDescriptionFile pluginFile;
-    public boolean hasEssentials = false;
     private static ConfigManager configManager;
     private static PresentManager presentManager;
+    public boolean hasEssentials = false;
+
+    public static ConfigManager getConfigManager() {
+        return configManager;
+    }
+
+    public static PresentManager getPresentManager() {
+        return presentManager;
+    }
 
     public void onEnable() {
         INSTANCE = this;
@@ -97,15 +105,6 @@ public class ThiemesPresents extends JavaPlugin {
         getCommand(Constants.pluginId).setTabCompleter(tpCommand);
     }
 
-    public static ConfigManager getConfigManager() {
-        return configManager;
-    }
-
-    public static PresentManager getPresentManager() {
-        return presentManager;
-    }
-
-
     private void loading(String s) {
         LOGGER.info("Loading " + s + "...");
     }
@@ -113,5 +112,4 @@ public class ThiemesPresents extends JavaPlugin {
     private void doneLoading(String s) {
         LOGGER.info("Done loading" + (s.length() == 0 ? "" : " " + s) + "!");
     }
-
 }

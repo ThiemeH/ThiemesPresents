@@ -1,7 +1,5 @@
 package nl.thieme.tp.events;
 
-import nl.thieme.tp.configs.MainConfig;
-import nl.thieme.tp.configs.MessageConfig;
 import nl.thieme.tp.models.PresentNBT;
 import nl.thieme.tp.utils.InvUtil;
 import nl.thieme.tp.utils.MsgUtil;
@@ -26,7 +24,7 @@ public class InteractEvent implements Listener {
         PresentNBT nbt = PresentUtil.getPresentNBT(is);
 
         if (isLeftClick(e.getAction()) && nbt.hasPresent()) { // Left click is only for writing messages
-           if(SigningUtil.canBeSigned(is, e.getPlayer())) SigningUtil.addForSigning(e.getPlayer(), is);
+            if (SigningUtil.canBeSigned(is, e.getPlayer())) SigningUtil.addForSigning(e.getPlayer(), is);
         } else if (isRightClick(e.getAction())) { // Right click for wrapping and opening
             MsgUtil.debugInfo("NBT has present: " + nbt.hasPresent());
             e.setCancelled(true);
@@ -36,7 +34,6 @@ public class InteractEvent implements Listener {
                 PresentUtil.open(is, e.getPlayer());
             }
         }
-
     }
 
     private boolean isRightClick(Action a) {
@@ -46,5 +43,4 @@ public class InteractEvent implements Listener {
     private boolean isLeftClick(Action a) {
         return a == Action.LEFT_CLICK_BLOCK || a == Action.LEFT_CLICK_AIR;
     }
-
 }

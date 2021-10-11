@@ -1,6 +1,5 @@
 package nl.thieme.tp.events.custom;
 
-
 import org.bukkit.entity.Player;
 import org.bukkit.event.Cancellable;
 import org.bukkit.event.Event;
@@ -18,6 +17,10 @@ public class PresentSignEvent extends Event implements Cancellable {
     public PresentSignEvent(Player player, ItemStack presentStack) {
         this.player = player;
         this.presentStack = presentStack;
+    }
+
+    public static HandlerList getHandlerList() {
+        return HANDLERS;
     }
 
     public ItemStack getPresentItemStack() {
@@ -40,10 +43,6 @@ public class PresentSignEvent extends Event implements Cancellable {
 
     @Override
     public HandlerList getHandlers() {
-        return HANDLERS;
-    }
-
-    public static HandlerList getHandlerList() {
         return HANDLERS;
     }
 

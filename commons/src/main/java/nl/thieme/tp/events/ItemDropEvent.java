@@ -11,10 +11,9 @@ public class ItemDropEvent implements Listener {
 
     @EventHandler
     public void onDrop(PlayerDropItemEvent e) {
-        if(SigningUtil.isSignCooldown(e.getPlayer())) {
-            if(!PresentUtil.isPresentItemStack(e.getItemDrop().getItemStack())) return;
+        if (SigningUtil.isSignCooldown(e.getPlayer())) {
+            if (!PresentUtil.isPresentItemStack(e.getItemDrop().getItemStack())) return;
             SigningUtil.doneSigning(e.getPlayer(), MessageConfig.MessageKey.SIGN_CANCEL);
         }
     }
-
 }

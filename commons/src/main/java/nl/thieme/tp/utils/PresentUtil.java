@@ -15,7 +15,6 @@ import org.yaml.snakeyaml.external.biz.base64Coder.Base64Coder;
 
 import java.io.*;
 
-
 public class PresentUtil {
 
     public static final String presentNBTKey = "presentnbt";
@@ -69,7 +68,6 @@ public class PresentUtil {
         return null;
     }
 
-
     public static void open(ItemStack is, Player p) {
 
         PresentOpenEvent.Pre poe = new PresentOpenEvent.Pre(is, p);
@@ -78,7 +76,7 @@ public class PresentUtil {
 
         if (!isPresentItemStackWithNBT(is)) return;
         PresentNBT presentNBT = getPresentNBT(is);
-        if(presentNBT == null) return;
+        if (presentNBT == null) return;
 
         ItemStack present = presentNBT.getPresent().clone();
         addPresentToInventory(is, p, present);
@@ -145,10 +143,9 @@ public class PresentUtil {
 
     public static boolean addSignedNBT(ItemStack is) {
         PresentNBT presentNBT = PresentUtil.getPresentNBT(is);
-        if(presentNBT == null) return false;
+        if (presentNBT == null) return false;
         presentNBT.isSigned = true;
         is.setItemMeta(setPresentMeta(is, presentNBT));
         return true;
     }
-
 }

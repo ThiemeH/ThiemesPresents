@@ -99,6 +99,4 @@ public class Present {
     public ItemStack getPresentStack() {
         return presentStack;
     }
-
-
 }

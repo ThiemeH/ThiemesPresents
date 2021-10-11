@@ -15,10 +15,8 @@ import java.util.UUID;
 
 public class SigningUtil {
 
-
     private static final HashMap<UUID, ItemStack> signingList = new HashMap<>();
     private static final HashMap<UUID, BukkitTask> taskMap = new HashMap<>();
-
 
     public static boolean canBeSigned(ItemStack is, Player p) {
         if (!MainConfig.ConfigKey.CAN_SIGN.getBoolean()) return false; // Check if signed or can be signed
@@ -61,7 +59,7 @@ public class SigningUtil {
     }
 
     public static void doneSigning(Player p, MessageConfig.MessageKey key) {
-        if(key != null) MsgUtil.sendMessage(p, key, false);
+        if (key != null) MsgUtil.sendMessage(p, key, false);
         signingList.remove(p.getUniqueId());
         removeTask(p);
     }
@@ -69,6 +67,4 @@ public class SigningUtil {
     public static void doneSigning(Player p) {
         doneSigning(p, MessageConfig.MessageKey.SIGN_UNKNOWN);
     }
-
-
 }

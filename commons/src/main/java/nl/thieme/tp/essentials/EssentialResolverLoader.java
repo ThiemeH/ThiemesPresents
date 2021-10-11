@@ -23,7 +23,6 @@ public class EssentialResolverLoader {
         } catch (Exception e) {
             e.printStackTrace();
         }
-
     }
 
     public static void removeItems(ThiemesPresents thiemesPresents) {

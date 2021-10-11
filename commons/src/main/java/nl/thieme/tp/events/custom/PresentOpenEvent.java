@@ -18,6 +18,10 @@ public class PresentOpenEvent extends Event {
         this.player = player;
     }
 
+    public static HandlerList getHandlerList() {
+        return HANDLERS;
+    }
+
     public Player getPlayer() {
         return player;
     }
@@ -26,16 +30,10 @@ public class PresentOpenEvent extends Event {
         return presentItemStack;
     }
 
-
     @Override
     public HandlerList getHandlers() {
         return HANDLERS;
     }
-
-    public static HandlerList getHandlerList() {
-        return HANDLERS;
-    }
-
 
     public static class Pre extends PresentOpenEvent implements Cancellable {
 
@@ -54,7 +52,6 @@ public class PresentOpenEvent extends Event {
         public void setCancelled(boolean cancel) {
             isCancelled = cancel;
         }
-
     }
 
     public static class Post extends PresentOpenEvent {
@@ -69,6 +66,5 @@ public class PresentOpenEvent extends Event {
         public ItemStack getItem() {
             return insidePresentStack;
         }
-
     }
 }

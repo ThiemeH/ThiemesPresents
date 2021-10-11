@@ -10,6 +10,4 @@ public class Constants {
 
     public static final String dividerTop = mainColor + "&l---------%PLUGIN_NAME%" + mainColor + "&l---------\n" + mainColor;
     public static final String dividerBottom = "\n" + mainColor + "&l----------------------------------";
-
-
 }

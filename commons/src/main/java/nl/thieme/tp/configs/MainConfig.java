@@ -13,7 +13,6 @@ public class MainConfig extends FileConfig {
         super(name);
     }
 
-
     public enum ConfigKey {
         RENAME_ANVIL("can-rename-in-anvil"),
         STORAGE_WRAPPING_LIMIT("storage-item-wrapping-limit"),
@@ -54,7 +53,5 @@ public class MainConfig extends FileConfig {
             XMaterial mat = XMaterial.matchXMaterial(getString()).get();
             return mat != null ? mat.parseItem() : (is != null ? is : new ItemStack(Material.AIR)); // Air to prevent nullpointer for non-material config types
         }
-
     }
-
 }

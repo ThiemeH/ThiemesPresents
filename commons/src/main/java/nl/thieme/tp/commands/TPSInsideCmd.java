@@ -33,7 +33,6 @@ public class TPSInsideCmd extends SubCommand {
                 return true;
             }
             p.openInventory(new PeekInventory(presentNBT).getInventory());
-
         }
         return true;
     }

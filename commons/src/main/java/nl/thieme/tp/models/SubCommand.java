@@ -14,7 +14,6 @@ public abstract class SubCommand {
     private final TPermission permission;
     private List<String> aliases;
 
-
     public SubCommand(String s, TPermission permission, String infoMessage, String... alias) {
         this.mainCommand = s;
         this.infoMessage = infoMessage;
@@ -44,6 +43,4 @@ public abstract class SubCommand {
     public String getDescription() {
         return infoMessage;
     }
-
-
 }

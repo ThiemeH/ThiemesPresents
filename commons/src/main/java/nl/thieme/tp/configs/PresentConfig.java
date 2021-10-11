@@ -58,7 +58,4 @@ public class PresentConfig extends FileConfig {
 
         present.setRecipe(shape, ingredientMap);
     }
-
-
-
 }

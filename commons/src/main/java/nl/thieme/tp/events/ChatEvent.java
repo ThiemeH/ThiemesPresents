@@ -9,7 +9,6 @@ import nl.thieme.tp.utils.MsgUtil;
 import nl.thieme.tp.utils.PresentUtil;
 import nl.thieme.tp.utils.SigningUtil;
 import org.bukkit.Bukkit;
-import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
@@ -17,8 +16,6 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 
 public class ChatEvent implements Listener {
-
-
 
     @EventHandler
     public void onChat(AsyncPlayerChatEvent e) {
@@ -49,7 +46,7 @@ public class ChatEvent implements Listener {
                 }
                 // Try to add signed meta data
                 ItemStack copy = inv.getItem(inv.first(is));
-                if(!PresentUtil.addSignedNBT(copy)) {
+                if (!PresentUtil.addSignedNBT(copy)) {
                     SigningUtil.doneSigning(e.getPlayer());
                     return;
                 }
@@ -57,8 +54,6 @@ public class ChatEvent implements Listener {
                 copy.setItemMeta(HeadUtil.addLore(copy.getItemMeta(), msg));
                 SigningUtil.doneSigning(e.getPlayer(), MessageConfig.MessageKey.SIGN_SUCCESS);
             });
-
         }
     }
-
 }

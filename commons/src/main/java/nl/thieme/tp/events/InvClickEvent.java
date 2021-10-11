@@ -80,7 +80,6 @@ public class InvClickEvent implements Listener {
     private void unselect(Inventory inv) {
         inv.setItem(PresentInventory.confirmSlot, PresentInventory.pendingSlotItemStack);
         inv.setItem(PresentInventory.toBeWrappedSlot, null);
-
     }
 
     private void select(Inventory inv, ItemStack is, int slot, HumanEntity he) {
@@ -89,7 +88,6 @@ public class InvClickEvent implements Listener {
         inv.setItem(PresentInventory.toBeWrappedSlot, is);
         inv.setItem(slot, null);
     }
-
 
     private boolean isAnvilScreenWithPresent(Inventory inv, ItemStack is) {
         if (inv instanceof AnvilInventory) {

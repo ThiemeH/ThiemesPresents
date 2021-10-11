@@ -33,6 +33,4 @@ public class ConfigManager {
         ThiemesPresents.INSTANCE.onDisable();
         ThiemesPresents.INSTANCE.onEnable();
     }
-
-
 }

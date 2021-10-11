@@ -21,11 +21,17 @@ public class PresentWrapEvent extends Event {
         this.player = player;
     }
 
+    public static HandlerList getHandlerList() {
+        return HANDLERS;
+    }
+
     public ItemStack getPresentItemStack() {
         return presentItemStack;
     }
 
-    public ItemStack getToBeWrappedStack() { return toBeWrappedStack; }
+    public ItemStack getToBeWrappedStack() {
+        return toBeWrappedStack;
+    }
 
     public Player getPlayer() {
         return player;
@@ -33,10 +39,6 @@ public class PresentWrapEvent extends Event {
 
     @Override
     public HandlerList getHandlers() {
-        return HANDLERS;
-    }
-
-    public static HandlerList getHandlerList() {
         return HANDLERS;
     }
 
@@ -57,7 +59,6 @@ public class PresentWrapEvent extends Event {
         public void setCancelled(boolean cancel) {
             isCancelled = cancel;
         }
-
     }
 
     public static class Post extends PresentWrapEvent {
@@ -72,7 +73,5 @@ public class PresentWrapEvent extends Event {
         public PresentNBT getPresentNBT() {
             return presentNBT;
         }
-
-
     }
 }

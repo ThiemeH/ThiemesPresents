@@ -21,5 +21,4 @@ public class TPSReloadCmd extends SubCommand {
         MsgUtil.sendMessage(commandSender, MessageConfig.MessageKey.DONE_RELOADING);
         return true;
     }
-
 }

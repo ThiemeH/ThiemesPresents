@@ -31,5 +31,4 @@ public class PresentItemResolver implements IItemDb.ItemResolver {
     public Collection<String> getNames() {
         return namePresentMap.keySet();
     }
-
 }

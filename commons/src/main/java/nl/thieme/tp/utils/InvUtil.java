@@ -52,7 +52,6 @@ public class InvUtil {
         }
     }
 
-
     public static void refreshInventory(Inventory inv, HumanEntity he) {
         if (hasBackup(he.getUniqueId())) {
             resetInventory(inv, backupInventory.get(he.getUniqueId()));
@@ -76,7 +75,6 @@ public class InvUtil {
     public static void createBackup(UUID uuid, ItemStack[] inv) {
         backupInventory.put(uuid, inv);
     }
-
 
     public static boolean isStorageItem(ItemStack is) {
         if (is.getItemMeta() instanceof BlockStateMeta) {

@@ -22,9 +22,11 @@ public class PresentManager {
     public void addPresent(Present present) {
         presents.add(present);
     }
+
     public void addPresents(List<Present> presentList) {
         presents.addAll(presentList);
     }
+
     public void clearPresents() {
         presents.clear();
     }
@@ -34,10 +36,9 @@ public class PresentManager {
     }
 
     public void reloadEssentialItems() {
-        if(ThiemesPresents.INSTANCE.hasEssentials) {
+        if (ThiemesPresents.INSTANCE.hasEssentials) {
             EssentialResolverLoader.removeItems(ThiemesPresents.INSTANCE);
             EssentialResolverLoader.addItemsToEssentials(ThiemesPresents.INSTANCE);
         }
     }
-
 }
