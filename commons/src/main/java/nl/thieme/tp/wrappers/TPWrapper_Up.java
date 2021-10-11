@@ -9,7 +9,7 @@ public class TPWrapper_Up implements ITPWrapper {
 
     @Override
     public void removeRecipe(ItemStack stack, NamespacedKey key) {
-        Bukkit.removeRecipe(key);
+        if(Bukkit.getRecipe(key) != null) Bukkit.removeRecipe(key);
     }
 
 }

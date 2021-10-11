@@ -1,6 +1,6 @@
 package nl.thieme.tp.configs;
 
-import nl.thieme.tp.managers.ConfigManager;
+import nl.thieme.tp.ThiemesPresents;
 import nl.thieme.tp.models.FileConfig;
 import nl.thieme.tp.utils.MsgUtil;
 
@@ -46,7 +46,7 @@ public class MessageConfig extends FileConfig {
         }
 
         public String get() {
-            String msg = ConfigManager.getMsgConfig().get(key);
+            String msg = ThiemesPresents.getConfigManager().getMsgConfig().get(key);
             if (msg == null) return "";
             return MsgUtil.replaceColors(msg);
         }

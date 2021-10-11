@@ -1,7 +1,7 @@
 package nl.thieme.tp.configs;
 
 import com.cryptomorin.xseries.XMaterial;
-import nl.thieme.tp.managers.ConfigManager;
+import nl.thieme.tp.ThiemesPresents;
 import nl.thieme.tp.models.FileConfig;
 import org.bukkit.Material;
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -27,7 +27,7 @@ public class MainConfig extends FileConfig {
 
         private final String key;
         private final ItemStack is; // Default
-        private final YamlConfiguration config = ConfigManager.getConfig().config;
+        private final YamlConfiguration config = ThiemesPresents.getConfigManager().getConfig().config;
 
         ConfigKey(String s) {
             this(s, null);

@@ -1,7 +1,7 @@
 package nl.thieme.tp.commands;
 
+import nl.thieme.tp.ThiemesPresents;
 import nl.thieme.tp.configs.MessageConfig;
-import nl.thieme.tp.managers.ConfigManager;
 import nl.thieme.tp.models.SubCommand;
 import nl.thieme.tp.models.TPermission;
 import nl.thieme.tp.utils.MsgUtil;
@@ -17,7 +17,7 @@ public class TPSReloadCmd extends SubCommand {
     @Override
     public boolean onExecute(CommandSender commandSender, Command command, String s, String[] args) {
         MsgUtil.sendMessage(commandSender, MessageConfig.MessageKey.RELOADING);
-        ConfigManager.reloadAll();
+        ThiemesPresents.getConfigManager().reloadAll();
         MsgUtil.sendMessage(commandSender, MessageConfig.MessageKey.DONE_RELOADING);
         return true;
     }

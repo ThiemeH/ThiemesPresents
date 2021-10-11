@@ -31,8 +31,6 @@ public class InvClickEvent implements Listener {
             return;
         }
 
-
-        MsgUtil.debugInfo("Clicked Slot: " + e.getSlot());
         if (!InvUtil.isPresentInventory(e.getView())) return;
         e.setCancelled(true);
 
@@ -68,7 +66,6 @@ public class InvClickEvent implements Listener {
                 return;
             }
         }
-        MsgUtil.debugInfo(e.getEventName() + " 4");
         updateSelected(inv, curItem, e.getWhoClicked(), e.getSlot());
     }
 

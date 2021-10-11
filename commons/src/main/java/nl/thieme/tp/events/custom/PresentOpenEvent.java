@@ -32,6 +32,10 @@ public class PresentOpenEvent extends Event {
         return HANDLERS;
     }
 
+    public static HandlerList getHandlerList() {
+        return HANDLERS;
+    }
+
 
     public static class Pre extends PresentOpenEvent implements Cancellable {
 

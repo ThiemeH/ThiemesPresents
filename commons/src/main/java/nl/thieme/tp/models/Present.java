@@ -2,7 +2,7 @@ package nl.thieme.tp.models;
 
 import com.cryptomorin.xseries.XMaterial;
 import io.github.bananapuncher714.nbteditor.NBTEditor;
-import nl.thieme.tp.Main;
+import nl.thieme.tp.ThiemesPresents;
 import nl.thieme.tp.utils.MsgUtil;
 import nl.thieme.tp.utils.PresentUtil;
 import org.bukkit.Bukkit;
@@ -45,7 +45,7 @@ public class Present {
 
             XMaterial m = XMaterial.matchXMaterial(ing).get();
             if (m == null) {
-                Main.LOGGER.warning(ing + " IS NOT A VALID MATERIAL! RECIPE DISABLED");
+                ThiemesPresents.LOGGER.warning(ing + " IS NOT A VALID MATERIAL! RECIPE DISABLED");
                 return;
             }
             recipe.setIngredient(key, m.parseItem().getData());
@@ -57,7 +57,7 @@ public class Present {
     }
 
     public void removeRecipe() {
-        Main.WRAPPER.removeRecipe(presentStack, namespacedKey);
+        ThiemesPresents.WRAPPER.removeRecipe(presentStack, namespacedKey);
     }
 
     public void setClosedHeadUrl(String endpoint) {

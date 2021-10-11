@@ -1,7 +1,7 @@
 package nl.thieme.tp.utils;
 
 import io.github.bananapuncher714.nbteditor.NBTEditor;
-import nl.thieme.tp.Main;
+import nl.thieme.tp.ThiemesPresents;
 import nl.thieme.tp.configs.MessageConfig;
 import nl.thieme.tp.events.custom.PresentOpenEvent;
 import nl.thieme.tp.events.custom.PresentWrapEvent;
@@ -89,7 +89,7 @@ public class PresentUtil {
             if (slot != -1) {
                 p.getInventory().clear(slot); // remove by slot
                 p.getInventory().addItem(present);
-            } else Main.LOGGER.warning("How did you even manage to get this error?!");
+            } else ThiemesPresents.LOGGER.warning("How did you even manage to get this error?!");
         }
     }
 
@@ -122,7 +122,7 @@ public class PresentUtil {
 
         present.setItemMeta(setPresentMeta(present, presentNBT).getItemMeta());
 
-        Bukkit.getPluginManager().callEvent(new PresentWrapEvent.Post(present, toBeWrapped, p));
+        Bukkit.getPluginManager().callEvent(new PresentWrapEvent.Post(present, toBeWrapped, p, presentNBT));
     }
 
     private static boolean removeItem(Player p, ItemStack is) {
@@ -130,8 +130,6 @@ public class PresentUtil {
         int cachedSlot = InvUtil.lastClickedSlot.get(p.getUniqueId());
         InvUtil.lastClickedSlot.remove(p.getUniqueId());
         int reversed = InvUtil.reverseSlotThiemeWay(cachedSlot);
-        MsgUtil.debugInfo("cachedSlot: " + cachedSlot);
-        MsgUtil.debugInfo("reversedSlot: " + reversed);
         ItemStack invStack = p.getInventory().getItem(reversed);
         if (invStack != null && invStack.isSimilar(is)) {
             p.getInventory().setItem(reversed, null);

@@ -10,8 +10,9 @@ pending-material: ORANGE_CONCRETE
 confirm-material: LIME_CONCRETE
 
 
-# Allow storage items (shulker boxes, chests) to be  wrapped
+# Allow storage items (shulker boxes, chests) to be wrapped
 allow-wrapping-storage-items: false
+
 # How many storage items can be wrapped inside a wrapped storage item
 storage-item-wrapping-limit: 2
 

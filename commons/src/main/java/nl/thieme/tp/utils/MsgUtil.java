@@ -1,6 +1,6 @@
 package nl.thieme.tp.utils;
 
-import nl.thieme.tp.Main;
+import nl.thieme.tp.ThiemesPresents;
 import nl.thieme.tp.configs.MainConfig;
 import nl.thieme.tp.configs.MessageConfig;
 import nl.thieme.tp.extra.Constants;
@@ -28,7 +28,7 @@ public class MsgUtil {
     }
 
     public static void debugInfo(String msg) {
-        if (Main.DEBUG) Main.LOGGER.info(msg);
+        if (ThiemesPresents.DEBUG) ThiemesPresents.LOGGER.info(msg);
     }
 
     public static void sendMessage(CommandSender s, MessageConfig.MessageKey key) {

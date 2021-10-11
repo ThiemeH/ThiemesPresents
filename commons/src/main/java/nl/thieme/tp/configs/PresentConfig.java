@@ -1,16 +1,15 @@
 package nl.thieme.tp.configs;
 
 import com.cryptomorin.xseries.XMaterial;
-import nl.thieme.tp.Main;
-import nl.thieme.tp.events.custom.PresentInitEvent;
+import nl.thieme.tp.ThiemesPresents;
 import nl.thieme.tp.models.FileConfig;
 import nl.thieme.tp.models.Present;
 import nl.thieme.tp.utils.MsgUtil;
-import org.bukkit.Bukkit;
 import org.bukkit.configuration.ConfigurationSection;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 public class PresentConfig extends FileConfig {
 
@@ -21,7 +20,6 @@ public class PresentConfig extends FileConfig {
     private final String recipeKey = "RECIPE";
     private final String shapeKey = "SHAPE";
     private final String ingredientsKey = "INGREDIENTS";
-    private final ArrayList<Present> presents = new ArrayList<>();
 
     public PresentConfig(String name) {
         super(name);
@@ -29,8 +27,9 @@ public class PresentConfig extends FileConfig {
     }
 
     private void loadPresents() {
+        List<Present> presentList = new ArrayList<>();
         for (String root : config.getKeys(false)) {
-            if (Main.DEBUG) Main.LOGGER.info("Found present: " + root);
+            if (ThiemesPresents.DEBUG) ThiemesPresents.LOGGER.info("Found present: " + root);
             ConfigurationSection base = config.getConfigurationSection(root);
             Present present = new Present(root, XMaterial.PLAYER_HEAD.parseItem());
 
@@ -40,14 +39,14 @@ public class PresentConfig extends FileConfig {
             if (base.contains(itemNameKey)) present.setDisplayName(MsgUtil.replaceColors(base.getString(itemNameKey)));
             if (base.contains(loreKey)) present.setLore(base.getStringList(loreKey));
             if (base.contains(recipeKey)) loadRecipe(present, base.getConfigurationSection(recipeKey)); // recipe last
-            presents.add(present);
+            presentList.add(present);
         }
-        Bukkit.getPluginManager().callEvent(new PresentInitEvent(presents));
+        ThiemesPresents.getPresentManager().addPresents(presentList);
     }
 
     private void loadRecipe(Present present, ConfigurationSection section) {
         if (!section.contains(shapeKey) && !section.contains(ingredientsKey)) {
-            Main.LOGGER.warning("Recipe is missing either ingredients or shape");
+            ThiemesPresents.LOGGER.warning("Recipe is missing either ingredients or shape");
             return;
         }
         String[] shape = section.getStringList(shapeKey).toArray(new String[0]);
@@ -60,8 +59,6 @@ public class PresentConfig extends FileConfig {
         present.setRecipe(shape, ingredientMap);
     }
 
-    public ArrayList<Present> getPresents() {
-        return presents;
-    }
+
 
 }
