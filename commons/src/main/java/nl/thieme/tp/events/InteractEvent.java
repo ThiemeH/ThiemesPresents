@@ -6,6 +6,7 @@ import nl.thieme.tp.models.PresentNBT;
 import nl.thieme.tp.utils.InvUtil;
 import nl.thieme.tp.utils.MsgUtil;
 import nl.thieme.tp.utils.PresentUtil;
+import nl.thieme.tp.utils.SigningUtil;
 import org.bukkit.Material;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -25,10 +26,7 @@ public class InteractEvent implements Listener {
         PresentNBT nbt = PresentUtil.getPresentNBT(is);
 
         if (isLeftClick(e.getAction()) && nbt.hasPresent()) { // Left click is only for writing messages
-            if (nbt.isSigned || !MainConfig.ConfigKey.CAN_SIGN.getBoolean()) return; // Check if signed or can be signed
-            if (MessageConfig.MessageKey.SIGN_TO.get().length() == 0) return; // In case no signing config is found
-            if (!ChatEvent.isSignCooldown(e.getPlayer())) ChatEvent.addForSigning(e.getPlayer(), is);
-
+           if(SigningUtil.canBeSigned(is, e.getPlayer())) SigningUtil.addForSigning(e.getPlayer(), is);
         } else if (isRightClick(e.getAction())) { // Right click for wrapping and opening
             MsgUtil.debugInfo("NBT has present: " + nbt.hasPresent());
             e.setCancelled(true);

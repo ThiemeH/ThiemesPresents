@@ -10,6 +10,7 @@ import nl.thieme.tp.models.TPermission;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
 import org.yaml.snakeyaml.external.biz.base64Coder.Base64Coder;
 
 import java.io.*;
@@ -45,21 +46,21 @@ public class PresentUtil {
     }
 
     public static boolean isPresentItemStack(ItemStack is) {
-        return NBTEditor.contains(is, presentNBTKey);
+        return is != null && NBTEditor.contains(is, presentNBTKey);
     }
 
     private static boolean isPresentItemStackWithNBT(ItemStack is) {
         return isPresentItemStack(is) && getPresentNBT(is) != null;
     }
 
-    public static ItemStack setPresentMeta(ItemStack is, PresentNBT nbt) {
+    public static ItemMeta setPresentMeta(ItemStack is, PresentNBT nbt) {
         String nbtData = presentNBTToString(nbt);
-        return NBTEditor.set(is, nbtData, presentNBTKey);
+        return NBTEditor.set(is, nbtData, presentNBTKey).getItemMeta();
     }
 
     public static PresentNBT getPresentNBT(ItemStack is) {
         String nbtData = NBTEditor.getString(is, presentNBTKey);
-        if (nbtData.length() == 0) return null;
+        if (nbtData == null || nbtData.length() == 0) return null;
         try {
             return stringToPresentNBT(nbtData);
         } catch (IOException e) {
@@ -70,12 +71,16 @@ public class PresentUtil {
 
 
     public static void open(ItemStack is, Player p) {
+
         PresentOpenEvent.Pre poe = new PresentOpenEvent.Pre(is, p);
         Bukkit.getPluginManager().callEvent(poe);
         if (poe.isCancelled()) return;
 
         if (!isPresentItemStackWithNBT(is)) return;
-        ItemStack present = getPresentNBT(is).getPresent().clone();
+        PresentNBT presentNBT = getPresentNBT(is);
+        if(presentNBT == null) return;
+
+        ItemStack present = presentNBT.getPresent().clone();
         addPresentToInventory(is, p, present);
 
         Bukkit.getPluginManager().callEvent(new PresentOpenEvent.Post(is, present, p));
@@ -120,7 +125,7 @@ public class PresentUtil {
         if (loreAdd.length() > 0)
             present.setItemMeta(HeadUtil.addLore(present.getItemMeta(), loreAdd.replaceAll(MsgUtil.fromKey, p.getName())));
 
-        present.setItemMeta(setPresentMeta(present, presentNBT).getItemMeta());
+        present.setItemMeta(setPresentMeta(present, presentNBT));
 
         Bukkit.getPluginManager().callEvent(new PresentWrapEvent.Post(present, toBeWrapped, p, presentNBT));
     }
@@ -138,5 +143,12 @@ public class PresentUtil {
         return false;
     }
 
+    public static boolean addSignedNBT(ItemStack is) {
+        PresentNBT presentNBT = PresentUtil.getPresentNBT(is);
+        if(presentNBT == null) return false;
+        presentNBT.isSigned = true;
+        is.setItemMeta(setPresentMeta(is, presentNBT));
+        return true;
+    }
 
 }

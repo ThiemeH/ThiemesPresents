@@ -29,6 +29,7 @@ public class MessageConfig extends FileConfig {
         SIGN_CANCEL("sign-cancel"),
         SIGN_SUCCESS("sign-success"),
         SIGN_LIMIT("sign-limit"),
+        SIGN_UNKNOWN("sign-unknown"),
         NO_STORAGE_ITEM("no-storage-wrapping"),
         PEEK_TITLE("present-peek-title"),
         NOT_A_PRESENT("not-a-present"),

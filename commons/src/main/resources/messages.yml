@@ -24,6 +24,7 @@ sign-timeout: "Timed out!"
 sign-cancel: "Cancelled signign"
 sign-success: "Successfully signed!"
 sign-limit: "Limit exceeded! Try again"
+sign-unknown: "Your present seem to have disappeared! Signing cancelled"
 
 cancel-keyword: "cancel"
 

@@ -20,8 +20,9 @@ public class InvClickEvent implements Listener {
 
     @EventHandler
     public void onInventoryClick(InventoryClickEvent e) {
+        if (!(e.getWhoClicked() instanceof Player)) return;
         // Anvil
-        if (!MainConfig.ConfigKey.RENAME_ANVIL.getBoolean() && isAnvilScreenWithPresent(e.getClickedInventory(), e.getCurrentItem())) {
+        if (!MainConfig.ConfigKey.RENAME_ANVIL.getBoolean() && isAnvilScreenWithPresent(e.getClickedInventory(), e.getCurrentItem()) && e.getSlot() == 2) {
             MsgUtil.sendMessage(e.getWhoClicked(), MessageConfig.MessageKey.NO_ANVIL_RENAME);
             e.setCancelled(true);
             return;
@@ -59,10 +60,8 @@ public class InvClickEvent implements Listener {
             return;
         } else {
             if (e.getSlot() == PresentInventory.confirmSlot) {
-                if (e.getWhoClicked() instanceof Player) {
-                    Player p = (Player) e.getWhoClicked();
-                    PresentUtil.wrap(p.getInventory().getItemInMainHand(), inv.getItem(PresentInventory.toBeWrappedSlot), p);
-                }
+                Player p = (Player) e.getWhoClicked();
+                PresentUtil.wrap(p.getInventory().getItemInMainHand(), inv.getItem(PresentInventory.toBeWrappedSlot), p);
                 return;
             }
         }
