@@ -19,8 +19,8 @@ import java.util.HashMap;
 
 public class ChatEvent implements Listener {
 
-    private static HashMap<Player, ItemStack> signingList = new HashMap<>();
-    private static HashMap<Player, BukkitTask> taskMap = new HashMap<>();
+    private static final HashMap<Player, ItemStack> signingList = new HashMap<>();
+    private static final HashMap<Player, BukkitTask> taskMap = new HashMap<>();
 
     public static void addForSigning(Player p, ItemStack is) {
         MsgUtil.sendMessage(p, MessageConfig.MessageKey.SIGN_NOW, false);

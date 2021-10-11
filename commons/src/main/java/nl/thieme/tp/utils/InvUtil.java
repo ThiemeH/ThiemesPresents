@@ -81,7 +81,7 @@ public class InvUtil {
     public static boolean isStorageItem(ItemStack is) {
         if (is.getItemMeta() instanceof BlockStateMeta) {
             BlockStateMeta bMeta = (BlockStateMeta) is.getItemMeta();
-            if (bMeta.getBlockState() instanceof Container) return true;
+            return bMeta.getBlockState() instanceof Container;
         }
         return false;
     }

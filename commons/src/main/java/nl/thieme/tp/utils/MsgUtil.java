@@ -13,7 +13,7 @@ public class MsgUtil {
     public static final String varBracket = "%";
     public static final String fromKey = genVar("FROM");
     public static final String toKey = genVar("TO");
-    private static HashMap<String, String> varMap = new HashMap<>();
+    private static final HashMap<String, String> varMap = new HashMap<>();
 
     public static void loadVariables() {
         varMap.put("SECONDS", String.valueOf(MainConfig.ConfigKey.TIMEOUT_SECONDS.getInt()));

@@ -3,6 +3,7 @@ package nl.thieme.tp.essentials;
 import com.earth2me.essentials.Essentials;
 import nl.thieme.tp.Main;
 import nl.thieme.tp.managers.ConfigManager;
+import nl.thieme.tp.utils.MsgUtil;
 import org.bukkit.plugin.Plugin;
 
 public class EssentialResolverLoader {
@@ -12,10 +13,10 @@ public class EssentialResolverLoader {
 
     public static void addItemsToEssentials(Main main) {
         if (main.getServer().getPluginManager().getPlugin("Essentials") == null) {
-            if (main.DEBUG) main.LOGGER.info("Essentials not installed!");
+            MsgUtil.debugInfo("Essentials not installed!");
             return;
         }
-        if (main.DEBUG) main.LOGGER.info("Found essentials!");
+        MsgUtil.debugInfo("Found essentials!");
         essentials = main.getServer().getPluginManager().getPlugin("Essentials");
         PresentItemResolver resolver = new PresentItemResolver(ConfigManager.getPresentConfig().getPresents());
         try {

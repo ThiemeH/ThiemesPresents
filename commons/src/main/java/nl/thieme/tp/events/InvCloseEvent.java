@@ -14,7 +14,7 @@ public class InvCloseEvent implements Listener {
         if (InvUtil.isPresentInventory(e.getView())) {
             UUID uuid = e.getPlayer().getUniqueId();
             InvUtil.removeBackup(uuid);
-            if(InvUtil.lastClickedSlot.containsKey(uuid)) InvUtil.lastClickedSlot.remove(uuid);
+            InvUtil.lastClickedSlot.remove(uuid);
         }
     }
 }

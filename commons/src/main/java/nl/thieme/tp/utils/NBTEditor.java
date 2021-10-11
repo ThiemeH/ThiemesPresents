@@ -1150,7 +1150,7 @@ public final class NBTEditor {
             if (key instanceof Integer) {
                 compound = ((List<?>) NBTListData.get(compound)).get((int) key);
             } else if (key != null) {
-                compound = getMethod("get").invoke(compound, (String) key);
+                compound = getMethod("get").invoke(compound, key);
             }
             if (compound == null || key == null) {
                 if (keys[index + 1] == null || keys[index + 1] instanceof Integer) {
@@ -1165,7 +1165,7 @@ public final class NBTEditor {
                         getMethod("add").invoke(oldCompound, compound);
                     }
                 } else {
-                    getMethod("set").invoke(oldCompound, (String) key, compound);
+                    getMethod("set").invoke(oldCompound, key, compound);
                 }
             }
         }
@@ -1179,15 +1179,15 @@ public final class NBTEditor {
                 }
             } else if (lastKey instanceof Integer) {
                 if (notCompound == null) {
-                    getMethod("listRemove").invoke(compound, (int) lastKey);
+                    getMethod("listRemove").invoke(compound, lastKey);
                 } else {
-                    getMethod("setIndex").invoke(compound, (int) lastKey, notCompound);
+                    getMethod("setIndex").invoke(compound, lastKey, notCompound);
                 }
             } else {
                 if (notCompound == null) {
-                    getMethod("remove").invoke(compound, (String) lastKey);
+                    getMethod("remove").invoke(compound, lastKey);
                 } else {
-                    getMethod("set").invoke(compound, (String) lastKey, notCompound);
+                    getMethod("set").invoke(compound, lastKey, notCompound);
                 }
             }
         } else {
@@ -1214,7 +1214,7 @@ public final class NBTEditor {
             if (compound == null) {
                 return null;
             } else if (getNMSClass("NBTTagCompound").isInstance(compound)) {
-                compound = getMethod("get").invoke(compound, (String) key);
+                compound = getMethod("get").invoke(compound, key);
             } else if (getNMSClass("NBTTagList").isInstance(compound)) {
                 compound = ((List<?>) NBTListData.get(compound)).get((int) key);
             }
@@ -1233,7 +1233,7 @@ public final class NBTEditor {
             if (notCompound == null) {
                 return null;
             } else if (getNMSClass("NBTTagCompound").isInstance(notCompound)) {
-                notCompound = getMethod("get").invoke(notCompound, (String) key);
+                notCompound = getMethod("get").invoke(notCompound, key);
             } else if (getNMSClass("NBTTagList").isInstance(notCompound)) {
                 notCompound = ((List<?>) NBTListData.get(notCompound)).get((int) key);
             } else {
@@ -1302,8 +1302,8 @@ public final class NBTEditor {
         v1_18("1_18", 10),
         v1_19("1_19", 11);
 
-        private int order;
-        private String key;
+        private final int order;
+        private final String key;
 
         MinecraftVersion(String key, int v) {
             this.key = key;
@@ -1385,11 +1385,8 @@ public final class NBTEditor {
                 return false;
             NBTCompound other = (NBTCompound) obj;
             if (tag == null) {
-                if (other.tag != null)
-                    return false;
-            } else if (!tag.equals(other.tag))
-                return false;
-            return true;
-        }
+				return other.tag == null;
+            } else return tag.equals(other.tag);
+		}
     }
 }
