@@ -27,14 +27,17 @@ If you find a feature is missing, please feel free to suggest it in the [Discord
 
 > The Spigot page, including a download link, can be found [here]().
 
+<br />
 
 ## Support
 As of right now, **Thieme's Presents** support **1.12** all the way up to **1.17.1**!
 
 Currently there are no plans on supporting versions < 1.12, but if there is many interest it might be considered.
 
+<br />
+
 ## API Documentation
 
-Please see [Thieme's Presents API Example](https://github.com/ThiemeH/ThiemesPresents-API-example/tree/master)
+The entire documentation, including examples, can be found here: [Thieme's Presents API Example](https://github.com/ThiemeH/ThiemesPresents-API-example/tree/master)
 
 
