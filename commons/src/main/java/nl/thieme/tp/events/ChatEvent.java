@@ -20,7 +20,8 @@ public class ChatEvent implements Listener {
     @EventHandler
     public void onChat(AsyncPlayerChatEvent e) {
         if (SigningUtil.isSignCooldown(e.getPlayer())) {
-            e.setCancelled(true);
+            // clearing recipients instead of cancelling event, so the player can get its message back in case it fails signing
+            e.getRecipients().clear();
             ItemStack is = SigningUtil.getItemSigning(e.getPlayer());
 
             if (is == null || e.getMessage().equalsIgnoreCase(MessageConfig.MessageKey.CANCEL_KEYWORD.get())) {

@@ -22,7 +22,7 @@ public class PresentItemResolver implements IItemDb.ItemResolver {
     public ItemStack apply(String name) {
         name = name.toLowerCase();
         if (namePresentMap.containsKey(name)) {
-            return namePresentMap.get(name);
+            return namePresentMap.get(name).getPresentItemStack();
         }
         return null;
     }
