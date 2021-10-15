@@ -5,6 +5,7 @@ import nl.thieme.tp.ThiemesPresents;
 import nl.thieme.tp.models.FileConfig;
 import nl.thieme.tp.models.Present;
 import nl.thieme.tp.utils.MsgUtil;
+import org.bukkit.Material;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.material.MaterialData;
 
@@ -52,7 +53,7 @@ public class PresentConfig extends FileConfig {
         }
         String[] shape = section.getStringList(shapeKey).toArray(new String[0]);
         ConfigurationSection ingredientSection = section.getConfigurationSection(ingredientsKey);
-        HashMap<Character, MaterialData> ingredientMap = new HashMap<>();
+        HashMap<Character, Material> ingredientMap = new HashMap<>();
         for (String ingredient : ingredientSection.getKeys(false)) {
             String ing = ingredientSection.getString(ingredient);
             XMaterial m = XMaterial.matchXMaterial(ing).get();
@@ -60,7 +61,7 @@ public class PresentConfig extends FileConfig {
                 ThiemesPresents.LOGGER.warning(ing + " IS NOT A VALID MATERIAL! RECIPE DISABLED");
                 return;
             }
-            ingredientMap.put(ingredient.charAt(0), m.parseItem().getData());
+            ingredientMap.put(ingredient.charAt(0), m.parseMaterial());
         }
 
         present.setRecipe(shape, ingredientMap);

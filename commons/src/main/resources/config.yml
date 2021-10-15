@@ -22,3 +22,10 @@ can-rename-in-anvil: false
 sign-character-limit: 200
 
 signing-timeout-seconds: 30
+
+presents-can-be-placed-on-head: false
+
+disabled-worlds:
+  - world
+  - world_nether
+  - world_the_end

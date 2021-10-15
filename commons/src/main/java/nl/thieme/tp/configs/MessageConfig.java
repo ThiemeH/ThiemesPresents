@@ -38,7 +38,8 @@ public class MessageConfig extends FileConfig {
         NP_SIGN("no-permission-sign"),
         NP_WRAP("no-permission-wrap"),
         NP_OPEN("no-permission-open"),
-        NP_CMD("no-permission-command");
+        NP_CMD("no-permission-command"),
+        DISABLED_WORLD("disabled-world-message");
 
         private final String key;
 

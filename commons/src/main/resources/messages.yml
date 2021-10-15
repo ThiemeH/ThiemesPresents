@@ -37,3 +37,5 @@ no-permission-sign: "&cYou don't have permission to sign a present!"
 no-permission-wrap: "&cYou don't have permission to wrap an item!"
 no-permission-open: "&cYou don't have permission to open a present!"
 no-permission-command: "&cYou don't have permission to execute this command!"
+
+disabled-world-message: "&cPresents are disabled in this world!"

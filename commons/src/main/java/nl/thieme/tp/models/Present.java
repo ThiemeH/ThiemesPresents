@@ -6,6 +6,7 @@ import nl.thieme.tp.ThiemesPresents;
 import nl.thieme.tp.utils.MsgUtil;
 import nl.thieme.tp.utils.PresentUtil;
 import org.bukkit.Bukkit;
+import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.ShapedRecipe;
@@ -34,7 +35,7 @@ public class Present {
         updatePresentNBT();
     }
 
-    public void setRecipe(String[] shape, HashMap<Character, MaterialData> ingredients) {
+    public void setRecipe(String[] shape, HashMap<Character, Material> ingredients) {
         recipe = new ShapedRecipe(namespacedKey, presentItemStack);
         recipe.shape(shape);
         for (String s : shape) {

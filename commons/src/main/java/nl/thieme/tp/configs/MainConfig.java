@@ -7,6 +7,8 @@ import org.bukkit.Material;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.inventory.ItemStack;
 
+import java.util.List;
+
 public class MainConfig extends FileConfig {
 
     public MainConfig(String name) {
@@ -22,7 +24,9 @@ public class MainConfig extends FileConfig {
         CAN_SIGN("can-sign"),
         TIMEOUT_SECONDS("signing-timeout-seconds"),
         SIGN_CHARACTER_LIMIT("sign-character-limit"),
-        ALLOW_STORAGE_WRAPPING("allow-wrapping-storage-items");
+        ALLOW_STORAGE_WRAPPING("allow-wrapping-storage-items"),
+        PLACE_ON_HEAD("presents-can-be-placed-on-head"),
+        DISABLED_WORLDS("disabled-worlds");
 
         private final String key;
         private final ItemStack is; // Default
@@ -47,6 +51,10 @@ public class MainConfig extends FileConfig {
 
         public int getInt() {
             return config.getInt(key);
+        }
+
+        public List<String> getStringList() {
+            return config.getStringList(key);
         }
 
         public ItemStack getItemStack() {

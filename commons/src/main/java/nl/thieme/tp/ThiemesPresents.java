@@ -91,6 +91,7 @@ public class ThiemesPresents extends JavaPlugin {
 
     private void registerEvents() {
         Bukkit.getPluginManager().registerEvents(new ChatEvent(), this);
+        Bukkit.getPluginManager().registerEvents(new CraftEvent(), this);
         Bukkit.getPluginManager().registerEvents(new ItemDropEvent(), this);
         Bukkit.getPluginManager().registerEvents(new InvClickEvent(), this);
         Bukkit.getPluginManager().registerEvents(new InvCloseEvent(), this);
