@@ -34,11 +34,9 @@ sign-character-limit: 200
 
 signing-timeout-seconds: 30
 
+# Disables crafting of recipes in the following worlds
 disabled-worlds:
-  - world
-  - world_nether
-  - world_the_end
-
+  - disabled-world
 
 # Coming soon:
 

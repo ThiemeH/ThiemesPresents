@@ -71,6 +71,7 @@ public class PresentUtil {
     }
 
     public static void open(ItemStack is, Player p) {
+        if (!TPermission.hasPermission(p, TPermission.NP_OPEN)) return;
 
         PresentOpenEvent.Pre poe = new PresentOpenEvent.Pre(is, p);
         Bukkit.getPluginManager().callEvent(poe);
@@ -107,8 +108,6 @@ public class PresentUtil {
     }
 
     public static void wrap(ItemStack present, ItemStack toBeWrapped, Player p) {
-        if (!TPermission.hasPermission(p, TPermission.NP_WRAP)) return;
-
         if (!p.getInventory().contains(toBeWrapped)) return; // item removed from inventory
 
         // Custom event

@@ -1,6 +1,8 @@
 package nl.thieme.tp.events;
 
+import nl.thieme.tp.configs.MessageConfig;
 import nl.thieme.tp.models.PresentNBT;
+import nl.thieme.tp.models.TPermission;
 import nl.thieme.tp.utils.InvUtil;
 import nl.thieme.tp.utils.MsgUtil;
 import nl.thieme.tp.utils.PresentUtil;
@@ -29,6 +31,12 @@ public class InteractEvent implements Listener {
         } else if (isRightClick(e.getAction())) { // Right click for wrapping and opening
             MsgUtil.debugInfo("NBT has present: " + nbt.hasPresent());
             e.setCancelled(true);
+
+            if(is.getAmount() > 1) {
+                MsgUtil.sendMessage(e.getPlayer(), MessageConfig.MessageKey.ONE_PRESENT);
+                return;
+            }
+
             if (!nbt.hasPresent()) {
                 InvUtil.openPresentPickInventory(e.getPlayer());
             } else {

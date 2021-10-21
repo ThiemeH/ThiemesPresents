@@ -45,6 +45,8 @@ public class MessageConfig extends FileConfig {
         DISABLED_WORLD("disabled-world-message"),
         LORE_OPEN("lore-open-present"),
         LORE_WRAPPED("lore-wrapped-present"),
+        NOT_YOUR_PRESENT("not-your-present"),
+        ONE_PRESENT("one-present"),
         LORE_SIGNED("lore-signed-present");
 
         private final String key;

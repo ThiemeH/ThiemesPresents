@@ -2,6 +2,7 @@ package nl.thieme.tp.utils;
 
 import nl.thieme.tp.configs.MessageConfig;
 import nl.thieme.tp.inventories.PickPresentRegularInv;
+import nl.thieme.tp.models.TPermission;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.block.Container;
@@ -39,6 +40,7 @@ public class InvUtil {
     }
 
     public static void openPresentPickInventory(HumanEntity p) {
+        if (!TPermission.hasPermission(p, TPermission.NP_WRAP)) return;
         // Later possible add multiple inventories
         p.openInventory(new PickPresentRegularInv(p).getInventory());
     }

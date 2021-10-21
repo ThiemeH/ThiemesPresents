@@ -5,6 +5,7 @@ import nl.thieme.tp.configs.MainConfig;
 import nl.thieme.tp.configs.MessageConfig;
 import nl.thieme.tp.events.custom.PresentSignEvent;
 import nl.thieme.tp.models.PresentNBT;
+import nl.thieme.tp.models.TPermission;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
@@ -20,7 +21,12 @@ public class SigningUtil {
 
     public static boolean canBeSigned(ItemStack is, Player p) {
         if (!MainConfig.ConfigKey.CAN_SIGN.getBoolean()) return false; // Check if signed or can be signed
+        if (!TPermission.hasPermission(p, TPermission.NP_SIGN)) return false;
         PresentNBT nbt = PresentUtil.getPresentNBT(is);
+        if(!nbt.fromPlayerName.equalsIgnoreCase(p.getName())) {
+            MsgUtil.sendMessage(p, MessageConfig.MessageKey.NOT_YOUR_PRESENT);
+            return false;
+        }
         if (!nbt.isSigned && !SigningUtil.isSignCooldown(p)) return true;
         return false;
     }
