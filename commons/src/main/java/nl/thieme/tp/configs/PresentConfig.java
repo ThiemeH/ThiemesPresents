@@ -31,15 +31,16 @@ public class PresentConfig extends FileConfig {
     private void loadPresents() {
         List<Present> presentList = new ArrayList<>();
         for (String root : config.getKeys(false)) {
-            if (ThiemesPresents.DEBUG) ThiemesPresents.LOGGER.info("Found present: " + root);
+            MsgUtil.debugInfo("Found present: " + root);
             ConfigurationSection base = config.getConfigurationSection(root);
             Present present = new Present(root, XMaterial.PLAYER_HEAD.parseItem());
+            if(MessageConfig.MessageKey.LORE_OPEN.get() != null) present.addLore(MessageConfig.MessageKey.LORE_OPEN.get());
 
             // Load properties
             if (base.contains(headUrlKey)) present.setClosedHeadUrl(base.getString(headUrlKey));
             if (base.contains(openHeadUrlKey)) present.setOpenHeadUrl(base.getString(openHeadUrlKey));
             if (base.contains(itemNameKey)) present.setDisplayName(MsgUtil.replaceColors(base.getString(itemNameKey)));
-            if (base.contains(loreKey)) present.setLore(base.getStringList(loreKey));
+            if (base.contains(loreKey)) present.addLore(base.getStringList(loreKey));
             if (base.contains(recipeKey)) loadRecipe(present, base.getConfigurationSection(recipeKey)); // recipe last
             presentList.add(present);
         }

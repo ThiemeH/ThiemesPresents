@@ -22,6 +22,7 @@ public class InteractEvent implements Listener {
 
         // Handle present
         PresentNBT nbt = PresentUtil.getPresentNBT(is);
+        if(nbt == null) return;
 
         if (isLeftClick(e.getAction()) && nbt.hasPresent()) { // Left click is only for writing messages
             if (SigningUtil.canBeSigned(is, e.getPlayer())) SigningUtil.addForSigning(e.getPlayer(), is);

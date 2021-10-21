@@ -12,25 +12,31 @@ choose-an-item: "&6Choose an item to wrap!"
 
 no-storage-wrapping: "&cYou're not allowed to wrap storage items!"
 
-lore-from: "&fF&lROM&f: &a%FROM%"
-lore-to: "TO: %TO%"
+inventory-full: "&cPlease free a spot in your inventory to open this present!"
+
+lore-open-present: "&7Right click to wrap!\n "
+lore-wrapped-present: "&7Right click to open!\n&7Left click to sign!\n "
+lore-signed-present: "&7Right click to open!\n "
+
+lore-from: "&f&lFrom&7: &3%FROM%"
+lore-to: "&f&lTo&7: &6%TO%"
 
 # No prefix messages
 sign-now: "&c---------------\n
-You have %SECONDS% to sign!\n
-Type %KEYWORD% to cancel!\n
+You have %SECONDS% seconds to sign!\n
+Type &6%KEYWORD% &cto cancel!\n
 --------------"
-sign-timeout: "Timed out!"
-sign-cancel: "Cancelled signign"
-sign-success: "Successfully signed!"
-sign-limit: "Limit exceeded! Try again"
-sign-unknown: "Your present seem to have disappeared! Signing cancelled"
+sign-timeout: "&cTimed out!"
+sign-cancel: "&cCancelled signing!"
+sign-success: "&aSuccessfully signed!"
+sign-limit: "&cLimit exceeded! Try again"
+sign-unknown: "&cYour present seem to have disappeared! Signing cancelled!"
 
 cancel-keyword: "cancel"
 
 present-peek-title: "Peeking"
-not-a-present: "This isn't a present item!"
-no-present-inside: "There is no item inside this present"
+not-a-present: "&cThis isn't a present item!"
+no-present-inside: "&cThere is no item inside this present"
 
 
 no-permission-sign: "&cYou don't have permission to sign a present!"

@@ -21,20 +21,27 @@ public class InvClickEvent implements Listener {
     @EventHandler
     public void onInventoryClick(InventoryClickEvent e) {
         if (!(e.getWhoClicked() instanceof Player)) return;
+
         // Anvil
         if (!MainConfig.ConfigKey.RENAME_ANVIL.getBoolean() && isAnvilScreenWithPresent(e.getClickedInventory(), e.getCurrentItem()) && e.getSlot() == 2) {
             MsgUtil.sendMessage(e.getWhoClicked(), MessageConfig.MessageKey.NO_ANVIL_RENAME);
             e.setCancelled(true);
             return;
         }
+
+        // Present Peek Inventory
         if (InvUtil.isPresentPeekInventory(e.getView())) {
             e.setCancelled(true);
             return;
         }
 
+        // Present Inventory
         if (!InvUtil.isPresentInventory(e.getView())) return;
         e.setCancelled(true);
+        handlePresentInventoryClick(e);
+    }
 
+    private void handlePresentInventoryClick(InventoryClickEvent e) {
         // Cancel own inventory clicks
         if (e.getClickedInventory() instanceof PlayerInventory) return;
 

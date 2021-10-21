@@ -46,13 +46,11 @@ public class ChatEvent implements Listener {
                     return;
                 }
                 // Try to add signed meta data
-                ItemStack copy = inv.getItem(inv.first(is));
-                if (!PresentUtil.addSignedNBT(copy)) {
-                    SigningUtil.doneSigning(e.getPlayer());
+                ItemStack item = inv.getItem(inv.first(is));
+                if (!PresentUtil.addSignedNBT(item, e.getMessage())) {
+                    SigningUtil.doneSigning(e.getPlayer()); // removes timer
                     return;
                 }
-                String msg = MsgUtil.replaceColors(MessageConfig.MessageKey.SIGN_TO.get().replaceAll(MsgUtil.toKey, e.getMessage()));
-                copy.setItemMeta(HeadUtil.addLore(copy.getItemMeta(), msg));
                 SigningUtil.doneSigning(e.getPlayer(), MessageConfig.MessageKey.SIGN_SUCCESS);
             });
         }

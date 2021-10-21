@@ -4,6 +4,8 @@ import nl.thieme.tp.ThiemesPresents;
 import nl.thieme.tp.models.FileConfig;
 import nl.thieme.tp.utils.MsgUtil;
 
+import java.util.List;
+
 public class MessageConfig extends FileConfig {
 
     public MessageConfig(String name) {
@@ -39,7 +41,11 @@ public class MessageConfig extends FileConfig {
         NP_WRAP("no-permission-wrap"),
         NP_OPEN("no-permission-open"),
         NP_CMD("no-permission-command"),
-        DISABLED_WORLD("disabled-world-message");
+        INV_FULL("inventory-full"),
+        DISABLED_WORLD("disabled-world-message"),
+        LORE_OPEN("lore-open-present"),
+        LORE_WRAPPED("lore-wrapped-present"),
+        LORE_SIGNED("lore-signed-present");
 
         private final String key;
 
@@ -52,5 +58,6 @@ public class MessageConfig extends FileConfig {
             if (msg == null) return "";
             return MsgUtil.replaceColors(msg);
         }
+
     }
 }

@@ -1,6 +1,5 @@
 package nl.thieme.tp.models;
 
-import com.cryptomorin.xseries.XMaterial;
 import io.github.bananapuncher714.nbteditor.NBTEditor;
 import nl.thieme.tp.ThiemesPresents;
 import nl.thieme.tp.utils.MsgUtil;
@@ -11,9 +10,9 @@ import org.bukkit.NamespacedKey;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.ShapedRecipe;
 import org.bukkit.inventory.meta.ItemMeta;
-import org.bukkit.material.MaterialData;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 
@@ -77,6 +76,31 @@ public class Present {
         presentItemStack.setItemMeta(im);
     }
 
+    public void addLore(List<String> list) {
+        ItemMeta im = presentItemStack.getItemMeta();
+        List<String> result = new ArrayList<>();
+        for (String s : list) {
+            result.add(MsgUtil.replaceColors(s));
+        }
+        if (im.getLore() != null) {
+            im.getLore().addAll(result);
+        } else {
+            im.setLore(result);
+        }
+        presentItemStack.setItemMeta(im);
+    }
+
+    public void addLore(String line) {
+        ItemMeta im = presentItemStack.getItemMeta();
+        line = MsgUtil.replaceColors(line);
+        if (im.getLore() != null) {
+            im.getLore().add(line);
+        } else {
+            im.setLore(Collections.singletonList(line));
+        }
+        presentItemStack.setItemMeta(im);
+    }
+
     public String getName() {
         return name;
     }
@@ -94,5 +118,4 @@ public class Present {
     public ItemStack getPresentItemStack() {
         return presentItemStack;
     }
-
 }

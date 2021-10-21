@@ -55,6 +55,7 @@ public class ThiemesPresents extends JavaPlugin {
         if (DEBUG) loading("configs");
         presentManager = new PresentManager();
         configManager = new ConfigManager();
+        configManager.loadConfigs();
         PresentInventory.initConfigItemStacks();
         MsgUtil.loadVariables();
         if (DEBUG) doneLoading("configs");

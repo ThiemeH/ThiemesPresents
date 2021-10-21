@@ -1,9 +1,13 @@
 package nl.thieme.tp.configs;
 
 import com.cryptomorin.xseries.XMaterial;
+import com.cryptomorin.xseries.XSound;
 import nl.thieme.tp.ThiemesPresents;
 import nl.thieme.tp.models.FileConfig;
+import nl.thieme.tp.models.FullSound;
 import org.bukkit.Material;
+import org.bukkit.Sound;
+import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.inventory.ItemStack;
 
@@ -26,6 +30,8 @@ public class MainConfig extends FileConfig {
         SIGN_CHARACTER_LIMIT("sign-character-limit"),
         ALLOW_STORAGE_WRAPPING("allow-wrapping-storage-items"),
         PLACE_ON_HEAD("presents-can-be-placed-on-head"),
+        OPEN_SOUND("open-sound"),
+        WRAP_SOUND("wrap-sound"),
         DISABLED_WORLDS("disabled-worlds");
 
         private final String key;
@@ -55,6 +61,15 @@ public class MainConfig extends FileConfig {
 
         public List<String> getStringList() {
             return config.getStringList(key);
+        }
+
+        public FullSound getFullSound() {
+            if(!config.isConfigurationSection(key)) return null;
+            ConfigurationSection section = config.getConfigurationSection(key);
+            String sound = section.getString("sound");
+            double pitch = section.getDouble("pitch");
+            double volume = section.getDouble("volume");
+            return new FullSound(XSound.valueOf(sound), (float) volume, (float) pitch);
         }
 
         public ItemStack getItemStack() {

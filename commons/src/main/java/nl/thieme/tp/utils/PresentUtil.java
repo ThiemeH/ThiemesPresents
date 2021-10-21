@@ -2,9 +2,11 @@ package nl.thieme.tp.utils;
 
 import io.github.bananapuncher714.nbteditor.NBTEditor;
 import nl.thieme.tp.ThiemesPresents;
+import nl.thieme.tp.configs.MainConfig;
 import nl.thieme.tp.configs.MessageConfig;
 import nl.thieme.tp.events.custom.PresentOpenEvent;
 import nl.thieme.tp.events.custom.PresentWrapEvent;
+import nl.thieme.tp.models.FullSound;
 import nl.thieme.tp.models.PresentNBT;
 import nl.thieme.tp.models.TPermission;
 import org.bukkit.Bukkit;
@@ -79,32 +81,40 @@ public class PresentUtil {
         if (presentNBT == null) return;
 
         ItemStack present = presentNBT.getPresent().clone();
-        addPresentToInventory(is, p, present);
-
+        if (!tryAddPresentToInventory(is, p, present)) {
+            MsgUtil.sendMessage(p, MessageConfig.MessageKey.INV_FULL);
+            return;
+        }
+        FullSound fs = MainConfig.ConfigKey.OPEN_SOUND.getFullSound();
+        if(fs != null) p.playSound(p.getLocation(), fs.getXSound().parseSound(), fs.getVolume(), fs.getPitch());
         Bukkit.getPluginManager().callEvent(new PresentOpenEvent.Post(is, present, p));
     }
 
-    private static void addPresentToInventory(ItemStack is, Player p, ItemStack present) {
+    private static boolean tryAddPresentToInventory(ItemStack is, Player p, ItemStack present) {
         if (p.getInventory().getItemInMainHand().equals(is)) {
             p.getInventory().setItemInMainHand(present);
-        } else {
-            int slot = p.getInventory().first(is);
-            if (slot != -1) {
-                p.getInventory().clear(slot); // remove by slot
-                p.getInventory().addItem(present);
-            } else ThiemesPresents.LOGGER.warning("How did you even manage to get this error?!");
+            return true;
         }
+
+        int slot = p.getInventory().first(is);
+        if (slot != -1) {
+            p.getInventory().clear(slot); // remove by slot
+            p.getInventory().addItem(present);
+            return true;
+        }
+
+        return false;
     }
 
     public static void wrap(ItemStack present, ItemStack toBeWrapped, Player p) {
-        PresentWrapEvent.Pre pwe = new PresentWrapEvent.Pre(present, toBeWrapped, p);
-        Bukkit.getPluginManager().callEvent(pwe);
-        if (pwe.isCancelled()) return;
-
         if (!TPermission.hasPermission(p, TPermission.NP_WRAP)) return;
 
         if (!p.getInventory().contains(toBeWrapped)) return; // item removed from inventory
 
+        // Custom event
+        PresentWrapEvent.Pre pwe = new PresentWrapEvent.Pre(present, toBeWrapped, p);
+        Bukkit.getPluginManager().callEvent(pwe);
+        if (pwe.isCancelled()) return;
 
         if (!removeItem(p, toBeWrapped)) { // fails to remove last clicked slot item
             p.getInventory().remove(toBeWrapped);
@@ -118,12 +128,20 @@ public class PresentUtil {
 
         if (presentNBT.closed_head != null)
             present.setItemMeta(HeadUtil.setHeadUrl(presentNBT.closed_head, present.getItemMeta()));
-        String loreAdd = MessageConfig.MessageKey.SIGN_FROM.get();
 
-        if (loreAdd.length() > 0)
-            present.setItemMeta(HeadUtil.addLore(present.getItemMeta(), loreAdd.replaceAll(MsgUtil.fromKey, p.getName())));
+        String loreBase = MessageConfig.MessageKey.LORE_WRAPPED.get();
+        if(loreBase.length() > 0) present.setItemMeta(HeadUtil.setLore(present.getItemMeta(), loreBase));
+
+        String loreAdd = MessageConfig.MessageKey.SIGN_FROM.get();
+        if (loreAdd.length() > 0) {
+            presentNBT.fromPlayerName = p.getName();
+            present.setItemMeta(HeadUtil.addLore(present.getItemMeta(), getFromFormat(p.getName())));
+        }
 
         present.setItemMeta(setPresentMeta(present, presentNBT));
+
+        FullSound fs = MainConfig.ConfigKey.WRAP_SOUND.getFullSound();
+        if(fs != null) p.playSound(p.getLocation(), fs.getXSound().parseSound(), fs.getVolume(), fs.getPitch());
 
         Bukkit.getPluginManager().callEvent(new PresentWrapEvent.Post(present, toBeWrapped, p, presentNBT));
     }
@@ -141,11 +159,27 @@ public class PresentUtil {
         return false;
     }
 
-    public static boolean addSignedNBT(ItemStack is) {
+    public static boolean addSignedNBT(ItemStack is, String msgRaw) {
         PresentNBT presentNBT = PresentUtil.getPresentNBT(is);
         if (presentNBT == null) return false;
         presentNBT.isSigned = true;
+
+        String loreBase = MessageConfig.MessageKey.LORE_SIGNED.get();
+        if(loreBase.length() > 0) is.setItemMeta(HeadUtil.setLore(is.getItemMeta(), loreBase));
+
+        if(presentNBT.fromPlayerName.length() > 0) is.setItemMeta(HeadUtil.addLore(is.getItemMeta(), getFromFormat(presentNBT.fromPlayerName)));
+
+        String msg = MsgUtil.replaceColors(getToFormat(msgRaw));
+        is.setItemMeta(HeadUtil.addLore(is.getItemMeta(), MsgUtil.replaceColors(msg)));
         is.setItemMeta(setPresentMeta(is, presentNBT));
         return true;
+    }
+
+    public static String getToFormat(String s) {
+        return MessageConfig.MessageKey.SIGN_TO.get().replaceAll(MsgUtil.toKey, s);
+    }
+
+    public static String getFromFormat(String s) {
+        return MessageConfig.MessageKey.SIGN_FROM.get().replaceAll(MsgUtil.fromKey, s);
     }
 }

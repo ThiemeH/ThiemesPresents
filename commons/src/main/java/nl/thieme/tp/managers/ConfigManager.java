@@ -11,10 +11,10 @@ public class ConfigManager {
     private static MessageConfig messageConfig;
     private static MainConfig mainConfig;
 
-    public ConfigManager() {
+    public void loadConfigs() {
+        messageConfig = new MessageConfig("messages");
         mainConfig = new MainConfig("config");
         presentConfig = new PresentConfig("presents");
-        messageConfig = new MessageConfig("messages");
     }
 
     public PresentConfig getPresentConfig() {

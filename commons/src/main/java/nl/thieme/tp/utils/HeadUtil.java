@@ -13,8 +13,7 @@ import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.lang.reflect.Field;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 
 public class HeadUtil {
 
@@ -68,6 +67,15 @@ public class HeadUtil {
     public static ItemMeta addLore(ItemMeta im, String line) {
         List<String> lore = im.getLore();
         lore.add(MsgUtil.replaceColors(line));
+        im.setLore(lore);
+        return im;
+    }
+    public static ItemMeta setLore(ItemMeta im, String line) {
+        String lines[] = line.split("\\r?\\n");
+        List<String> lore = new ArrayList<>();
+        for(String s : lines) {
+            lore.add(MsgUtil.replaceColors(s));
+        }
         im.setLore(lore);
         return im;
     }

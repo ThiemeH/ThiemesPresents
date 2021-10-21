@@ -20,6 +20,8 @@ public class PresentNBT implements Serializable {
     // open head url
     public String open_head = null;
 
+    public String fromPlayerName = null;
+
     public boolean hasPresent() {
         return presentBase64 != null;
     }
