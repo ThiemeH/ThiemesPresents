@@ -4,8 +4,6 @@ import nl.thieme.tp.ThiemesPresents;
 import nl.thieme.tp.configs.MainConfig;
 import nl.thieme.tp.configs.MessageConfig;
 import nl.thieme.tp.events.custom.PresentSignEvent;
-import nl.thieme.tp.utils.HeadUtil;
-import nl.thieme.tp.utils.MsgUtil;
 import nl.thieme.tp.utils.PresentUtil;
 import nl.thieme.tp.utils.SigningUtil;
 import org.bukkit.Bukkit;

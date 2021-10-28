@@ -6,7 +6,6 @@ import nl.thieme.tp.ThiemesPresents;
 import nl.thieme.tp.models.FileConfig;
 import nl.thieme.tp.models.FullSound;
 import org.bukkit.Material;
-import org.bukkit.Sound;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.inventory.ItemStack;
@@ -64,7 +63,7 @@ public class MainConfig extends FileConfig {
         }
 
         public FullSound getFullSound() {
-            if(!config.isConfigurationSection(key)) return null;
+            if (!config.isConfigurationSection(key)) return null;
             ConfigurationSection section = config.getConfigurationSection(key);
             String sound = section.getString("sound");
             double pitch = section.getDouble("pitch");

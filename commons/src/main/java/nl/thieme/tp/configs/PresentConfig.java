@@ -7,7 +7,6 @@ import nl.thieme.tp.models.Present;
 import nl.thieme.tp.utils.MsgUtil;
 import org.bukkit.Material;
 import org.bukkit.configuration.ConfigurationSection;
-import org.bukkit.material.MaterialData;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -34,7 +33,8 @@ public class PresentConfig extends FileConfig {
             MsgUtil.debugInfo("Found present: " + root);
             ConfigurationSection base = config.getConfigurationSection(root);
             Present present = new Present(root, XMaterial.PLAYER_HEAD.parseItem());
-            if(MessageConfig.MessageKey.LORE_OPEN.get() != null) present.addLore(MessageConfig.MessageKey.LORE_OPEN.get());
+            if (MessageConfig.MessageKey.LORE_OPEN.get().length() > 0)
+                present.addLore(MessageConfig.MessageKey.LORE_OPEN.get());
 
             // Load properties
             if (base.contains(headUrlKey)) present.setClosedHeadUrl(base.getString(headUrlKey));

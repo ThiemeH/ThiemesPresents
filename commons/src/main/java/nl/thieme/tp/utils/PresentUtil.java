@@ -1,14 +1,12 @@
 package nl.thieme.tp.utils;
 
 import io.github.bananapuncher714.nbteditor.NBTEditor;
-import nl.thieme.tp.ThiemesPresents;
 import nl.thieme.tp.configs.MainConfig;
 import nl.thieme.tp.configs.MessageConfig;
 import nl.thieme.tp.events.custom.PresentOpenEvent;
 import nl.thieme.tp.events.custom.PresentWrapEvent;
 import nl.thieme.tp.models.FullSound;
 import nl.thieme.tp.models.PresentNBT;
-import nl.thieme.tp.models.TPermission;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
@@ -71,8 +69,7 @@ public class PresentUtil {
     }
 
     public static void open(ItemStack is, Player p) {
-        if (!TPermission.hasPermission(p, TPermission.NP_OPEN)) return;
-
+        // Custom event call
         PresentOpenEvent.Pre poe = new PresentOpenEvent.Pre(is, p);
         Bukkit.getPluginManager().callEvent(poe);
         if (poe.isCancelled()) return;
@@ -87,7 +84,7 @@ public class PresentUtil {
             return;
         }
         FullSound fs = MainConfig.ConfigKey.OPEN_SOUND.getFullSound();
-        if(fs != null) p.playSound(p.getLocation(), fs.getXSound().parseSound(), fs.getVolume(), fs.getPitch());
+        if (fs != null) p.playSound(p.getLocation(), fs.getXSound().parseSound(), fs.getVolume(), fs.getPitch());
         Bukkit.getPluginManager().callEvent(new PresentOpenEvent.Post(is, present, p));
     }
 
@@ -129,7 +126,7 @@ public class PresentUtil {
             present.setItemMeta(HeadUtil.setHeadUrl(presentNBT.closed_head, present.getItemMeta()));
 
         String loreBase = MessageConfig.MessageKey.LORE_WRAPPED.get();
-        if(loreBase.length() > 0) present.setItemMeta(HeadUtil.setLore(present.getItemMeta(), loreBase));
+        if (loreBase.length() > 0) present.setItemMeta(HeadUtil.setLore(present.getItemMeta(), loreBase));
 
         String loreAdd = MessageConfig.MessageKey.SIGN_FROM.get();
         if (loreAdd.length() > 0) {
@@ -140,7 +137,7 @@ public class PresentUtil {
         present.setItemMeta(setPresentMeta(present, presentNBT));
 
         FullSound fs = MainConfig.ConfigKey.WRAP_SOUND.getFullSound();
-        if(fs != null) p.playSound(p.getLocation(), fs.getXSound().parseSound(), fs.getVolume(), fs.getPitch());
+        if (fs != null) p.playSound(p.getLocation(), fs.getXSound().parseSound(), fs.getVolume(), fs.getPitch());
 
         Bukkit.getPluginManager().callEvent(new PresentWrapEvent.Post(present, toBeWrapped, p, presentNBT));
     }
@@ -164,9 +161,10 @@ public class PresentUtil {
         presentNBT.isSigned = true;
 
         String loreBase = MessageConfig.MessageKey.LORE_SIGNED.get();
-        if(loreBase.length() > 0) is.setItemMeta(HeadUtil.setLore(is.getItemMeta(), loreBase));
+        if (loreBase.length() > 0) is.setItemMeta(HeadUtil.setLore(is.getItemMeta(), loreBase));
 
-        if(presentNBT.fromPlayerName.length() > 0) is.setItemMeta(HeadUtil.addLore(is.getItemMeta(), getFromFormat(presentNBT.fromPlayerName)));
+        if (presentNBT.fromPlayerName.length() > 0)
+            is.setItemMeta(HeadUtil.addLore(is.getItemMeta(), getFromFormat(presentNBT.fromPlayerName)));
 
         String msg = MsgUtil.replaceColors(getToFormat(msgRaw));
         is.setItemMeta(HeadUtil.addLore(is.getItemMeta(), MsgUtil.replaceColors(msg)));

@@ -1,7 +1,6 @@
 package nl.thieme.tp.models;
 
 import com.cryptomorin.xseries.XSound;
-import org.bukkit.Sound;
 
 public class FullSound {
 

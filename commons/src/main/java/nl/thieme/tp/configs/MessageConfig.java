@@ -4,8 +4,6 @@ import nl.thieme.tp.ThiemesPresents;
 import nl.thieme.tp.models.FileConfig;
 import nl.thieme.tp.utils.MsgUtil;
 
-import java.util.List;
-
 public class MessageConfig extends FileConfig {
 
     public MessageConfig(String name) {
@@ -60,6 +58,5 @@ public class MessageConfig extends FileConfig {
             if (msg == null) return "";
             return MsgUtil.replaceColors(msg);
         }
-
     }
 }
