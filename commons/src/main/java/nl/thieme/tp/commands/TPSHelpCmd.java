@@ -35,5 +35,4 @@ public class TPSHelpCmd extends SubCommand {
 
         return true;
     }
-
 }

@@ -1,6 +1,5 @@
 package nl.thieme.tp.utils;
 
-
 import com.mojang.authlib.GameProfile;
 import com.mojang.authlib.properties.Property;
 import org.bukkit.inventory.ItemStack;
@@ -14,6 +13,7 @@ import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.lang.reflect.Field;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -32,12 +32,12 @@ public class HeadUtil {
         Field profileField = null;
         try {
             profileField = headMeta.getClass().getDeclaredField("profile");
-        } catch (Exception exception) {
+        } catch (Exception ignored) {
         }
         profileField.setAccessible(true);
         try {
             profileField.set(headMeta, profile);
-        } catch (Exception exception) {
+        } catch (Exception ignored) {
         }
         return headMeta;
     }
@@ -68,7 +68,18 @@ public class HeadUtil {
 
     public static ItemMeta addLore(ItemMeta im, String line) {
         List<String> lore = im.getLore();
+        if(lore == null) lore = new ArrayList<>();
         lore.add(MsgUtil.replaceColors(line));
+        im.setLore(lore);
+        return im;
+    }
+
+    public static ItemMeta setLore(ItemMeta im, String line) {
+        String[] lines = line.split("\\r?\\n");
+        List<String> lore = new ArrayList<>();
+        for (String s : lines) {
+            lore.add(MsgUtil.replaceColors(s));
+        }
         im.setLore(lore);
         return im;
     }

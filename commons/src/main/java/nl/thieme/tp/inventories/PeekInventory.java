@@ -25,5 +25,4 @@ public class PeekInventory {
         inventory.setItem(13, presentNBT.getPresent());
         return inventory;
     }
-
 }

@@ -1,89 +1,56 @@
 package nl.thieme.tp.events;
 
-import nl.thieme.tp.Main;
+import nl.thieme.tp.ThiemesPresents;
 import nl.thieme.tp.configs.MainConfig;
 import nl.thieme.tp.configs.MessageConfig;
 import nl.thieme.tp.events.custom.PresentSignEvent;
-import nl.thieme.tp.models.PresentNBT;
-import nl.thieme.tp.utils.HeadUtil;
-import nl.thieme.tp.utils.MsgUtil;
 import nl.thieme.tp.utils.PresentUtil;
+import nl.thieme.tp.utils.SigningUtil;
 import org.bukkit.Bukkit;
-import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
+import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.scheduler.BukkitTask;
-
-import java.util.HashMap;
-import java.util.UUID;
 
 public class ChatEvent implements Listener {
 
-    private static final HashMap<UUID, ItemStack> signingList = new HashMap<>();
-    private static final HashMap<UUID, BukkitTask> taskMap = new HashMap<>();
-
-    public static void addForSigning(Player p, ItemStack is) {
-        PresentSignEvent.Pre pse = new PresentSignEvent.Pre(p, is);
-        Bukkit.getPluginManager().callEvent(pse);
-        if (pse.isCancelled()) return;
-
-        UUID uuid = p.getUniqueId();
-        MsgUtil.sendMessage(p, MessageConfig.MessageKey.SIGN_NOW, false);
-        signingList.put(uuid, is);
-        BukkitTask bukkitTask = Bukkit.getScheduler().runTaskLater(Main.INSTANCE, () -> {
-            if (signingList.containsKey(uuid)) {
-                signingList.remove(uuid);
-                MsgUtil.sendMessage(p, MessageConfig.MessageKey.SIGN_TIMEOUT, false);
-            }
-        }, MainConfig.ConfigKey.TIMEOUT_SECONDS.getInt() * 20L);
-        taskMap.put(uuid, bukkitTask);
-    }
-
-    private static void removeTask(Player p) {
-        UUID uuid = p.getUniqueId();
-        if (taskMap.containsKey(uuid)) {
-            taskMap.get(uuid).cancel();
-            taskMap.remove(uuid);
-        }
-    }
-
-    public static boolean isSignCooldown(Player p) {
-        return signingList.containsKey(p.getUniqueId());
-    }
-
     @EventHandler
     public void onChat(AsyncPlayerChatEvent e) {
-        if (signingList.containsKey(e.getPlayer().getUniqueId())) {
-            e.setCancelled(true);
-            ItemStack is = signingList.get(e.getPlayer().getUniqueId());
+        if (SigningUtil.isSignCooldown(e.getPlayer())) {
+            // clearing recipients instead of cancelling event, so the player can get its message back in case it fails signing
+            e.getRecipients().clear();
+            ItemStack is = SigningUtil.getItemSigning(e.getPlayer());
+
             if (is == null || e.getMessage().equalsIgnoreCase(MessageConfig.MessageKey.CANCEL_KEYWORD.get())) {
-                doneSigning(e.getPlayer(), MessageConfig.MessageKey.SIGN_CANCEL);
+                SigningUtil.doneSigning(e.getPlayer(), MessageConfig.MessageKey.SIGN_CANCEL);
                 return;
             }
+
             if (e.getMessage().length() > MainConfig.ConfigKey.SIGN_CHARACTER_LIMIT.getInt()) {
-                doneSigning(e.getPlayer(), MessageConfig.MessageKey.SIGN_LIMIT);
+                SigningUtil.doneSigning(e.getPlayer(), MessageConfig.MessageKey.SIGN_LIMIT);
                 return;
             }
 
-            String msg = MsgUtil.replaceColors(MessageConfig.MessageKey.SIGN_TO.get().replaceAll(MsgUtil.toKey, e.getMessage()));
-            is.setItemMeta(HeadUtil.addLore(is.getItemMeta(), msg));
-            addSignedNBT(is);
-            doneSigning(e.getPlayer(), MessageConfig.MessageKey.SIGN_SUCCESS);
-            Bukkit.getPluginManager().callEvent(new PresentSignEvent.Post(e.getPlayer(), is));
+            Bukkit.getScheduler().runTask(ThiemesPresents.INSTANCE, task -> { // Back to main thread
+                PresentSignEvent pse = new PresentSignEvent.Post(e.getPlayer(), is, e.getMessage());
+                Bukkit.getPluginManager().callEvent(pse);
+
+                Inventory inv = e.getPlayer().getInventory();
+                // if item is still in inventory or event is cancelled
+                if (pse.isCancelled() || inv.first(is) == -1 || inv.getItem(inv.first(is)) == null) {
+                    SigningUtil.doneSigning(e.getPlayer());
+                    task.cancel();
+                    return;
+                }
+                // Try to add signed meta data
+                ItemStack item = inv.getItem(inv.first(is));
+                if (!PresentUtil.addSignedNBT(item, e.getMessage())) {
+                    SigningUtil.doneSigning(e.getPlayer()); // removes timer
+                    return;
+                }
+                SigningUtil.doneSigning(e.getPlayer(), MessageConfig.MessageKey.SIGN_SUCCESS);
+            });
         }
-    }
-
-    private void doneSigning(Player p, MessageConfig.MessageKey key) {
-        MsgUtil.sendMessage(p, key, false);
-        signingList.remove(p.getUniqueId());
-        removeTask(p);
-    }
-
-    private ItemStack addSignedNBT(ItemStack is) {
-        PresentNBT presentNBT = PresentUtil.getPresentNBT(is);
-        presentNBT.isSigned = true;
-        return PresentUtil.setPresentMeta(is, presentNBT);
     }
 }

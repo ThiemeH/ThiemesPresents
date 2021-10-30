@@ -23,7 +23,6 @@ public abstract class PresentInventory {
     protected Inventory inventory;
     protected HumanEntity whoOpened;
 
-
     public PresentInventory(Inventory inv, HumanEntity p) {
         inventory = inv;
         whoOpened = p;
@@ -58,7 +57,7 @@ public abstract class PresentInventory {
             blocked.remove(Integer.valueOf(itemToBeWrappedSlot()));
 
             // Set blocked slots
-            for (int i : blocked) {
+            for (Integer i : blocked) {
                 inventory.setItem(i, blockedSlotItemStack);
             }
         }
@@ -83,10 +82,8 @@ public abstract class PresentInventory {
         return -1;
     }
 
-
     public Inventory getInventory() {
         initializeInventoryItems();
         return inventory;
     }
-
 }

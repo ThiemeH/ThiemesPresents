@@ -1,19 +1,19 @@
 package nl.thieme.tp.utils;
 
 import io.github.bananapuncher714.nbteditor.NBTEditor;
-import nl.thieme.tp.Main;
+import nl.thieme.tp.configs.MainConfig;
 import nl.thieme.tp.configs.MessageConfig;
 import nl.thieme.tp.events.custom.PresentOpenEvent;
 import nl.thieme.tp.events.custom.PresentWrapEvent;
+import nl.thieme.tp.models.FullSound;
 import nl.thieme.tp.models.PresentNBT;
-import nl.thieme.tp.models.TPermission;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
 import org.yaml.snakeyaml.external.biz.base64Coder.Base64Coder;
 
 import java.io.*;
-
 
 public class PresentUtil {
 
@@ -45,21 +45,21 @@ public class PresentUtil {
     }
 
     public static boolean isPresentItemStack(ItemStack is) {
-        return NBTEditor.contains(is, presentNBTKey);
+        return is != null && NBTEditor.contains(is, presentNBTKey);
     }
 
     private static boolean isPresentItemStackWithNBT(ItemStack is) {
         return isPresentItemStack(is) && getPresentNBT(is) != null;
     }
 
-    public static ItemStack setPresentMeta(ItemStack is, PresentNBT nbt) {
+    public static ItemMeta setPresentMeta(ItemStack is, PresentNBT nbt) {
         String nbtData = presentNBTToString(nbt);
-        return NBTEditor.set(is, nbtData, presentNBTKey);
+        return NBTEditor.set(is, nbtData, presentNBTKey).getItemMeta();
     }
 
     public static PresentNBT getPresentNBT(ItemStack is) {
         String nbtData = NBTEditor.getString(is, presentNBTKey);
-        if (nbtData.length() == 0) return null;
+        if (nbtData == null || nbtData.length() == 0) return null;
         try {
             return stringToPresentNBT(nbtData);
         } catch (IOException e) {
@@ -68,40 +68,49 @@ public class PresentUtil {
         return null;
     }
 
-
     public static void open(ItemStack is, Player p) {
+        // Custom event call
         PresentOpenEvent.Pre poe = new PresentOpenEvent.Pre(is, p);
         Bukkit.getPluginManager().callEvent(poe);
         if (poe.isCancelled()) return;
 
         if (!isPresentItemStackWithNBT(is)) return;
-        ItemStack present = getPresentNBT(is).getPresent().clone();
-        addPresentToInventory(is, p, present);
+        PresentNBT presentNBT = getPresentNBT(is);
+        if (presentNBT == null) return;
 
+        ItemStack present = presentNBT.getPresent().clone();
+        if (!tryAddPresentToInventory(is, p, present)) {
+            MsgUtil.sendMessage(p, MessageConfig.MessageKey.INV_FULL);
+            return;
+        }
+        FullSound fs = MainConfig.ConfigKey.OPEN_SOUND.getFullSound();
+        if (fs != null) p.playSound(p.getLocation(), fs.getXSound().parseSound(), fs.getVolume(), fs.getPitch());
         Bukkit.getPluginManager().callEvent(new PresentOpenEvent.Post(is, present, p));
     }
 
-    private static void addPresentToInventory(ItemStack is, Player p, ItemStack present) {
+    private static boolean tryAddPresentToInventory(ItemStack is, Player p, ItemStack present) {
         if (p.getInventory().getItemInMainHand().equals(is)) {
             p.getInventory().setItemInMainHand(present);
-        } else {
-            int slot = p.getInventory().first(is);
-            if (slot != -1) {
-                p.getInventory().clear(slot); // remove by slot
-                p.getInventory().addItem(present);
-            } else Main.LOGGER.warning("How did you even manage to get this error?!");
+            return true;
         }
+
+        int slot = p.getInventory().first(is);
+        if (slot != -1) {
+            p.getInventory().clear(slot); // remove by slot
+            p.getInventory().addItem(present);
+            return true;
+        }
+
+        return false;
     }
 
     public static void wrap(ItemStack present, ItemStack toBeWrapped, Player p) {
+        if (!p.getInventory().contains(toBeWrapped)) return; // item removed from inventory
+
+        // Custom event
         PresentWrapEvent.Pre pwe = new PresentWrapEvent.Pre(present, toBeWrapped, p);
         Bukkit.getPluginManager().callEvent(pwe);
         if (pwe.isCancelled()) return;
-
-        if (!TPermission.hasPermission(p, TPermission.NP_WRAP)) return;
-
-        if (!p.getInventory().contains(toBeWrapped)) return; // item removed from inventory
-
 
         if (!removeItem(p, toBeWrapped)) { // fails to remove last clicked slot item
             p.getInventory().remove(toBeWrapped);
@@ -113,16 +122,24 @@ public class PresentUtil {
         PresentNBT presentNBT = getPresentNBT(present);
         presentNBT.setPresent(toBeWrapped);
 
-        if (presentNBT.closed_head != null)
-            present.setItemMeta(HeadUtil.setHeadUrl(presentNBT.closed_head, present.getItemMeta()));
+        if (presentNBT.closedHead != null)
+            present.setItemMeta(HeadUtil.setHeadUrl(presentNBT.closedHead, present.getItemMeta()));
+
+        String loreBase = MainConfig.ConfigKey.CAN_SIGN.getBoolean() ? MessageConfig.MessageKey.LORE_WRAPPED.get() : MessageConfig.MessageKey.LORE_SIGNED.get();
+        if (loreBase.length() > 0) present.setItemMeta(HeadUtil.setLore(present.getItemMeta(), loreBase));
+
         String loreAdd = MessageConfig.MessageKey.SIGN_FROM.get();
+        if (loreAdd.length() > 0) {
+            presentNBT.fromPlayerName = p.getName();
+            present.setItemMeta(HeadUtil.addLore(present.getItemMeta(), getFromFormat(p.getName())));
+        }
 
-        if (loreAdd.length() > 0)
-            present.setItemMeta(HeadUtil.addLore(present.getItemMeta(), loreAdd.replaceAll(MsgUtil.fromKey, p.getName())));
+        present.setItemMeta(setPresentMeta(present, presentNBT));
 
-        present.setItemMeta(setPresentMeta(present, presentNBT).getItemMeta());
+        FullSound fs = MainConfig.ConfigKey.WRAP_SOUND.getFullSound();
+        if (fs != null) p.playSound(p.getLocation(), fs.getXSound().parseSound(), fs.getVolume(), fs.getPitch());
 
-        Bukkit.getPluginManager().callEvent(new PresentWrapEvent.Post(present, toBeWrapped, p));
+        Bukkit.getPluginManager().callEvent(new PresentWrapEvent.Post(present, toBeWrapped, p, presentNBT));
     }
 
     private static boolean removeItem(Player p, ItemStack is) {
@@ -130,8 +147,6 @@ public class PresentUtil {
         int cachedSlot = InvUtil.lastClickedSlot.get(p.getUniqueId());
         InvUtil.lastClickedSlot.remove(p.getUniqueId());
         int reversed = InvUtil.reverseSlotThiemeWay(cachedSlot);
-        MsgUtil.debugInfo("cachedSlot: " + cachedSlot);
-        MsgUtil.debugInfo("reversedSlot: " + reversed);
         ItemStack invStack = p.getInventory().getItem(reversed);
         if (invStack != null && invStack.isSimilar(is)) {
             p.getInventory().setItem(reversed, null);
@@ -140,5 +155,28 @@ public class PresentUtil {
         return false;
     }
 
+    public static boolean addSignedNBT(ItemStack is, String msgRaw) {
+        PresentNBT presentNBT = PresentUtil.getPresentNBT(is);
+        if (presentNBT == null) return false;
+        presentNBT.isSigned = true;
 
+        String loreBase = MessageConfig.MessageKey.LORE_SIGNED.get();
+        if (loreBase.length() > 0) is.setItemMeta(HeadUtil.setLore(is.getItemMeta(), loreBase));
+
+        if (presentNBT.fromPlayerName.length() > 0)
+            is.setItemMeta(HeadUtil.addLore(is.getItemMeta(), getFromFormat(presentNBT.fromPlayerName)));
+
+        String msg = MsgUtil.replaceColors(getToFormat(msgRaw));
+        is.setItemMeta(HeadUtil.addLore(is.getItemMeta(), MsgUtil.replaceColors(msg)));
+        is.setItemMeta(setPresentMeta(is, presentNBT));
+        return true;
+    }
+
+    public static String getToFormat(String s) {
+        return MessageConfig.MessageKey.SIGN_TO.get().replaceAll(MsgUtil.toKey, s);
+    }
+
+    public static String getFromFormat(String s) {
+        return MessageConfig.MessageKey.SIGN_FROM.get().replaceAll(MsgUtil.fromKey, s);
+    }
 }

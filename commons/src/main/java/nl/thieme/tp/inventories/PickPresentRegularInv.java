@@ -3,6 +3,7 @@ package nl.thieme.tp.inventories;
 import nl.thieme.tp.configs.MessageConfig;
 import nl.thieme.tp.models.PresentInventory;
 import nl.thieme.tp.utils.InvUtil;
+import nl.thieme.tp.utils.MsgUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.HumanEntity;
 

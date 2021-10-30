@@ -5,8 +5,10 @@ import nl.thieme.tp.essentials.EssentialResolverLoader;
 import nl.thieme.tp.events.*;
 import nl.thieme.tp.extra.Constants;
 import nl.thieme.tp.managers.ConfigManager;
+import nl.thieme.tp.managers.PresentManager;
 import nl.thieme.tp.models.ITPWrapper;
 import nl.thieme.tp.models.Present;
+import nl.thieme.tp.models.PresentInventory;
 import nl.thieme.tp.models.TPermission;
 import nl.thieme.tp.utils.InvUtil;
 import nl.thieme.tp.utils.MsgUtil;
@@ -20,15 +22,26 @@ import org.bukkit.plugin.java.JavaPlugin;
 import java.io.File;
 import java.util.logging.Logger;
 
-public class Main extends JavaPlugin {
+public class ThiemesPresents extends JavaPlugin {
 
     public static int SERVER_VERSION;
     public static ITPWrapper WRAPPER;
-    public static Main INSTANCE;
+    public static ThiemesPresents INSTANCE;
     public static Logger LOGGER;
     public static boolean DEBUG = false;
     public static PluginDescriptionFile pluginFile;
-    private boolean hasEssentials = false;
+    private static ConfigManager configManager;
+    private static PresentManager presentManager;
+    public boolean hasEssentials = false;
+    public static boolean isFirstRun = true;
+
+    public static ConfigManager getConfigManager() {
+        return configManager;
+    }
+
+    public static PresentManager getPresentManager() {
+        return presentManager;
+    }
 
     public void onEnable() {
         INSTANCE = this;
@@ -38,20 +51,29 @@ public class Main extends JavaPlugin {
         if (getDataFolder().exists() && new File(getDataFolder(), "debug").exists()) DEBUG = true;
         MsgUtil.debugInfo("Found server version: " + SERVER_VERSION);
         WRAPPER = SERVER_VERSION > 12 ? new TPWrapper_Up() : new TPWrapper_12();
+
         loading(pluginFile.getFullName());
         if (DEBUG) loading("configs");
-        new ConfigManager();
+        presentManager = new PresentManager();
+        configManager = new ConfigManager();
+        configManager.loadConfigs();
+        PresentInventory.initConfigItemStacks();
         MsgUtil.loadVariables();
         if (DEBUG) doneLoading("configs");
 
-        registerEvents();
-        registerCommands();
-        registerPermissions();
+        // Reloading via command shouldn't double register events
+        if(isFirstRun) {
+            registerEvents();
+            registerCommands();
+            registerPermissions();
+        }
 
+        // Essentials
         if (getServer().getPluginManager().getPlugin("Essentials") != null) hasEssentials = true;
         if (hasEssentials) EssentialResolverLoader.addItemsToEssentials(this);
 
         doneLoading("");
+        isFirstRun = false;
     }
 
     private void registerPermissions() {
@@ -66,16 +88,17 @@ public class Main extends JavaPlugin {
     public void onDisable() {
         if (hasEssentials) EssentialResolverLoader.removeItems(this);
         InvUtil.removeAllBackups();
-        if (ConfigManager.getPresentConfig() != null) {
-            for (Present present : ConfigManager.getPresentConfig().getPresents()) {
+        if (getConfigManager().getPresentConfig() != null) {
+            for (Present present : getPresentManager().getPresents()) {
                 present.removeRecipe();
             }
         }
-
     }
 
     private void registerEvents() {
         Bukkit.getPluginManager().registerEvents(new ChatEvent(), this);
+        Bukkit.getPluginManager().registerEvents(new CraftEvent(), this);
+        Bukkit.getPluginManager().registerEvents(new ItemDropEvent(), this);
         Bukkit.getPluginManager().registerEvents(new InvClickEvent(), this);
         Bukkit.getPluginManager().registerEvents(new InvCloseEvent(), this);
         Bukkit.getPluginManager().registerEvents(new InvOpenEvent(), this);
@@ -89,7 +112,6 @@ public class Main extends JavaPlugin {
         getCommand(Constants.pluginId).setTabCompleter(tpCommand);
     }
 
-
     private void loading(String s) {
         LOGGER.info("Loading " + s + "...");
     }
@@ -97,5 +119,4 @@ public class Main extends JavaPlugin {
     private void doneLoading(String s) {
         LOGGER.info("Done loading" + (s.length() == 0 ? "" : " " + s) + "!");
     }
-
 }

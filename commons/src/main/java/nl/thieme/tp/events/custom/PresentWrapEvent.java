@@ -1,5 +1,6 @@
 package nl.thieme.tp.events.custom;
 
+import nl.thieme.tp.models.PresentNBT;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Cancellable;
 import org.bukkit.event.Event;
@@ -18,6 +19,22 @@ public class PresentWrapEvent extends Event {
         this.presentItemStack = presentItemStack;
         this.toBeWrappedStack = toBeWrappedStack;
         this.player = player;
+    }
+
+    public static HandlerList getHandlerList() {
+        return HANDLERS;
+    }
+
+    public ItemStack getPresentItemStack() {
+        return presentItemStack;
+    }
+
+    public ItemStack getToBeWrappedStack() {
+        return toBeWrappedStack;
+    }
+
+    public Player getPlayer() {
+        return player;
     }
 
     @Override
@@ -42,15 +59,19 @@ public class PresentWrapEvent extends Event {
         public void setCancelled(boolean cancel) {
             isCancelled = cancel;
         }
-
     }
 
     public static class Post extends PresentWrapEvent {
 
+        private final PresentNBT presentNBT;
 
-        public Post(ItemStack presentItemStack, ItemStack toBeWrappedStack, Player player) {
+        public Post(ItemStack presentItemStack, ItemStack toBeWrappedStack, Player player, PresentNBT presentNBT) {
             super(presentItemStack, toBeWrappedStack, player);
+            this.presentNBT = presentNBT;
         }
 
+        public PresentNBT getPresentNBT() {
+            return presentNBT;
+        }
     }
 }

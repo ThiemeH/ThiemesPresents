@@ -1,5 +1,5 @@
 name: ThiemesPresents
-main: nl.thieme.tp.Main
+main: nl.thieme.tp.ThiemesPresents
 version: 1.0
 api-version: 1.13
 authors: [ ThiemeH ]

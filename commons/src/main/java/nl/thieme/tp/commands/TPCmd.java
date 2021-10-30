@@ -21,7 +21,6 @@ public class TPCmd implements CommandExecutor, TabCompleter {
         subCommands.add(new TPSHelpCmd(subCommands, "help", null, "Displays this message"));
     }
 
-
     @Override
     public boolean onCommand(CommandSender commandSender, Command command, String s, String[] args) {
         for (SubCommand sc : subCommands) {
@@ -31,7 +30,7 @@ public class TPCmd implements CommandExecutor, TabCompleter {
                 }
             }
         }
-        return false;
+        return true;
     }
 
     @Override
@@ -39,11 +38,10 @@ public class TPCmd implements CommandExecutor, TabCompleter {
         if (args.length == 1) {
             ArrayList<String> tabCompletion = new ArrayList<>();
             for (SubCommand sc : subCommands) {
-                if (TPermission.hasPermission(commandSender, sc.getPermission()))
+                if (TPermission.hasPermission(commandSender, sc.getPermission(), false))
                     tabCompletion.addAll(sc.getCommands());
             }
             return tabCompletion;
-
         }
         return null;
     }

@@ -1,6 +1,6 @@
 package nl.thieme.tp.models;
 
-import nl.thieme.tp.Main;
+import nl.thieme.tp.ThiemesPresents;
 import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.configuration.file.YamlConfiguration;
 
@@ -15,18 +15,18 @@ public class FileConfig {
 
     public FileConfig(String name) {
         this.name = name + ".yml";
-        this.file = new File(Main.INSTANCE.getDataFolder(), this.name);
+        this.file = new File(ThiemesPresents.INSTANCE.getDataFolder(), this.name);
         this.config = new YamlConfiguration();
         getOrCreateConfig();
     }
 
     private void getOrCreateConfig() {
-        if (Main.DEBUG) {
+        if (ThiemesPresents.DEBUG) {
             if (file.exists()) file.delete(); // keep getting newest configs on debug
         }
         if (!file.exists()) {
             if (!file.getParentFile().exists()) file.getParentFile().mkdirs();
-            Main.INSTANCE.saveResource(name, false);
+            ThiemesPresents.INSTANCE.saveResource(name, false);
         }
         try {
             config.load(file);
@@ -34,5 +34,4 @@ public class FileConfig {
             e.printStackTrace();
         }
     }
-
 }

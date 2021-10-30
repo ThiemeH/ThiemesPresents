@@ -9,7 +9,7 @@
         <version>1.0</version>
     </parent>
     <artifactId>dist</artifactId>
-    <version>${project.parent.version}</version>
+    <version>1.0</version>
     <packaging>jar</packaging>
 
     <build>
@@ -32,8 +32,31 @@
                                     <include>nl.thiemespresents:wrapper</include>
                                     <include>nl.thiemespresents:wrapper1_12</include>
                                     <include>nl.thiemespresents:commons</include>
+                                    <include>io.github.bananapuncher714:nbteditor</include>
+                                    <include>com.github.cryptomorin:XSeries</include>
                                 </includes>
                             </artifactSet>
+                            <filters>
+                                <filter>
+                                    <artifact>com.github.cryptomorin:*</artifact>
+                                    <excludes>
+                                        <exclude>com/cryptomorin/xseries/NMSExtras*</exclude>
+                                        <exclude>com/cryptomorin/xseries/NoteBlockMusic*</exclude>
+                                        <exclude>com/cryptomorin/xseries/ReflectionUtils*</exclude>
+                                        <exclude>com/cryptomorin/xseries/SkullCacheListener*</exclude>
+                                        <exclude>com/cryptomorin/xseries/SkullUtils*</exclude>
+                                        <exclude>com/cryptomorin/xseries/XBiome*</exclude>
+                                        <exclude>com/cryptomorin/xseries/XBlock*</exclude>
+                                        <exclude>com/cryptomorin/xseries/XEnchantment*</exclude>
+                                        <exclude>com/cryptomorin/xseries/XEntity*</exclude>
+                                        <exclude>com/cryptomorin/xseries/XItemStack*</exclude>
+                                        <exclude>com/cryptomorin/xseries/XMaterialUtil*</exclude>
+                                        <exclude>com/cryptomorin/xseries/XPotion*</exclude>
+                                        <exclude>com/cryptomorin/xseries/particles/*</exclude>
+                                        <exclude>com/cryptomorin/xseries/messages/*</exclude>
+                                    </excludes>
+                                </filter>
+                            </filters>
                         </configuration>
                     </execution>
                 </executions>

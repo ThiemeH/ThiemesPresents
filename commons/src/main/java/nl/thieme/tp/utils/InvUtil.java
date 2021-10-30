@@ -39,7 +39,7 @@ public class InvUtil {
     }
 
     public static void openPresentPickInventory(HumanEntity p) {
-        // Later possible add multiple inventories
+        // Later possibly add multiple types of inventories
         p.openInventory(new PickPresentRegularInv(p).getInventory());
     }
 
@@ -51,7 +51,6 @@ public class InvUtil {
             }
         }
     }
-
 
     public static void refreshInventory(Inventory inv, HumanEntity he) {
         if (hasBackup(he.getUniqueId())) {
@@ -77,13 +76,12 @@ public class InvUtil {
         backupInventory.put(uuid, inv);
     }
 
-
     public static boolean isStorageItem(ItemStack is) {
         if (is.getItemMeta() instanceof BlockStateMeta) {
             BlockStateMeta bMeta = (BlockStateMeta) is.getItemMeta();
             return bMeta.getBlockState() instanceof Container;
         }
-        return false;
+        return is.getType() == Material.CHEST_MINECART;
     }
 
     public static boolean isPresentPeekInventory(InventoryView view) {
@@ -99,5 +97,6 @@ public class InvUtil {
                 Bukkit.getPlayer(uuid).closeInventory();
             }
         }
+        backupInventory.clear();
     }
 }

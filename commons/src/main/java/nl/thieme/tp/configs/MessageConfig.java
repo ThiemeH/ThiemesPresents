@@ -1,6 +1,6 @@
 package nl.thieme.tp.configs;
 
-import nl.thieme.tp.managers.ConfigManager;
+import nl.thieme.tp.ThiemesPresents;
 import nl.thieme.tp.models.FileConfig;
 import nl.thieme.tp.utils.MsgUtil;
 
@@ -29,6 +29,7 @@ public class MessageConfig extends FileConfig {
         SIGN_CANCEL("sign-cancel"),
         SIGN_SUCCESS("sign-success"),
         SIGN_LIMIT("sign-limit"),
+        SIGN_UNKNOWN("sign-unknown"),
         NO_STORAGE_ITEM("no-storage-wrapping"),
         PEEK_TITLE("present-peek-title"),
         NOT_A_PRESENT("not-a-present"),
@@ -37,7 +38,14 @@ public class MessageConfig extends FileConfig {
         NP_SIGN("no-permission-sign"),
         NP_WRAP("no-permission-wrap"),
         NP_OPEN("no-permission-open"),
-        NP_CMD("no-permission-command");
+        NP_CMD("no-permission-command"),
+        INV_FULL("inventory-full"),
+        DISABLED_WORLD("disabled-world-message"),
+        LORE_OPEN("lore-open-present"),
+        LORE_WRAPPED("lore-wrapped-present"),
+        NOT_YOUR_PRESENT("not-your-present"),
+        ONE_PRESENT("one-present"),
+        LORE_SIGNED("lore-signed-present");
 
         private final String key;
 
@@ -46,7 +54,7 @@ public class MessageConfig extends FileConfig {
         }
 
         public String get() {
-            String msg = ConfigManager.getMsgConfig().get(key);
+            String msg = ThiemesPresents.getConfigManager().getMsgConfig().get(key);
             if (msg == null) return "";
             return MsgUtil.replaceColors(msg);
         }

@@ -8,6 +8,8 @@ import java.io.Serializable;
 
 public class PresentNBT implements Serializable {
 
+    private static final long serialVersionUID = 2008090501305L;
+
     // is signed
     public boolean isSigned = false;
 
@@ -15,11 +17,12 @@ public class PresentNBT implements Serializable {
     public String presentBase64 = null;
 
     // closed head url
-    public String closed_head = null;
+    public String closedHead = null;
 
     // open head url
-    public String open_head = null;
+    public String openHead = null;
 
+    public String fromPlayerName = null;
 
     public boolean hasPresent() {
         return presentBase64 != null;
