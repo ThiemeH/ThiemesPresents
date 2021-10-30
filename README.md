@@ -13,7 +13,7 @@
     <img alt="Lines of Code" src="https://tokei.rs/b1/github/ThiemeH/ThiemesPresents?category=code">
   </a>
   <a href="SPIGOT_DOWNLOAD_LINK">
-    <img alt="Downloads" src="http://badge.henrya.org/spigotbukkit/downloads?spigot=XXXX&bukkit=XXXX&color=green"/>
+    <img alt="Downloads" src="http://badge.henrya.org/spigotbukkit/downloads?spigot=97273&color=green"/>
   </a>
 </p>
 
