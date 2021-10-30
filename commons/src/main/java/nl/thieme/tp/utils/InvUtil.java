@@ -81,7 +81,7 @@ public class InvUtil {
             BlockStateMeta bMeta = (BlockStateMeta) is.getItemMeta();
             return bMeta.getBlockState() instanceof Container;
         }
-        return false;
+        return is.getType() == Material.CHEST_MINECART;
     }
 
     public static boolean isPresentPeekInventory(InventoryView view) {
@@ -97,5 +97,6 @@ public class InvUtil {
                 Bukkit.getPlayer(uuid).closeInventory();
             }
         }
+        backupInventory.clear();
     }
 }

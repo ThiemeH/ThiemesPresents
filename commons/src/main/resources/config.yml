@@ -1,18 +1,15 @@
 # Presents can be signed (= custom text in lore)
 can-sign: true
+sign-character-limit: 200
+signing-timeout-seconds: 30
 
-
-# Please use 1.13+ item names!
-# Blocked Slot Item
-blocked-slot-material: GRAY_STAINED_GLASS_PANE
-# Material when waiting for item to be selected
-pending-material: ORANGE_CONCRETE
-# Material for click to confirm
-confirm-material: LIME_CONCRETE
-
-
+# WARNING: enabling this could allow players to wrap presents inside presents
+# for an infinite amount of times. Recommended to keep this disabled!
 # Allow storage items (shulker boxes, chests) to be wrapped
 allow-wrapping-storage-items: false
+
+# Presents can get a different name in anvil
+can-rename-in-anvil: false
 
 # Sounds
 open-sound:
@@ -25,22 +22,14 @@ wrap-sound:
   volume: 0.4
   pitch: 2.0
 
-
-
-# Presents can get a different name in anvil
-can-rename-in-anvil: false
-
-sign-character-limit: 200
-
-signing-timeout-seconds: 30
+# Please use 1.13+ item names!
+# Blocked Slot Item
+blocked-slot-material: GRAY_STAINED_GLASS_PANE
+# Material when waiting for item to be selected
+pending-material: ORANGE_CONCRETE
+# Material for click to confirm
+confirm-material: LIME_CONCRETE
 
 # Disables crafting of recipes in the following worlds
 disabled-worlds:
   - disabled-world
-
-# Coming soon:
-
-# presents-can-be-placed-on-head: false
-
-# How many storage items can be wrapped inside a wrapped storage item
-# storage-item-wrapping-limit: 2

@@ -33,6 +33,7 @@ public class ThiemesPresents extends JavaPlugin {
     private static ConfigManager configManager;
     private static PresentManager presentManager;
     public boolean hasEssentials = false;
+    public static boolean isFirstRun = true;
 
     public static ConfigManager getConfigManager() {
         return configManager;
@@ -60,15 +61,19 @@ public class ThiemesPresents extends JavaPlugin {
         MsgUtil.loadVariables();
         if (DEBUG) doneLoading("configs");
 
-        registerEvents();
-        registerCommands();
-        registerPermissions();
+        // Reloading via command shouldn't double register events
+        if(isFirstRun) {
+            registerEvents();
+            registerCommands();
+            registerPermissions();
+        }
 
         // Essentials
         if (getServer().getPluginManager().getPlugin("Essentials") != null) hasEssentials = true;
         if (hasEssentials) EssentialResolverLoader.addItemsToEssentials(this);
 
         doneLoading("");
+        isFirstRun = false;
     }
 
     private void registerPermissions() {

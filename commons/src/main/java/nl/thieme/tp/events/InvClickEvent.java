@@ -42,6 +42,7 @@ public class InvClickEvent implements Listener {
     }
 
     private void handlePresentInventoryClick(InventoryClickEvent e) {
+
         // Cancel own inventory clicks
         if (e.getClickedInventory() instanceof PlayerInventory) return;
 
@@ -51,9 +52,14 @@ public class InvClickEvent implements Listener {
         ItemStack curItem = e.getCurrentItem();
         Inventory inv = e.getInventory();
 
+        // Return air click if no item is selected
+        if (curItem == null && inv.getItem(PresentInventory.toBeWrappedSlot) == null) return;
+
         // Cancel presents
         if (curItem != null) {
             if (PresentUtil.isPresentItemStack(curItem)) return;
+
+            // Storage
             if (!MainConfig.ConfigKey.ALLOW_STORAGE_WRAPPING.getBoolean()) {
                 if (InvUtil.isStorageItem(curItem)) {
                     MsgUtil.sendMessage(e.getWhoClicked(), MessageConfig.MessageKey.NO_STORAGE_ITEM);
@@ -61,17 +67,13 @@ public class InvClickEvent implements Listener {
                 }
             }
         }
-
-        // Return air click if no item is selected
-        if (curItem == null && inv.getItem(PresentInventory.toBeWrappedSlot) == null) {
+        // Confirm click
+        if (e.getSlot() == PresentInventory.confirmSlot) {
+            Player p = (Player) e.getWhoClicked();
+            PresentUtil.wrap(p.getInventory().getItemInMainHand(), inv.getItem(PresentInventory.toBeWrappedSlot), p);
             return;
-        } else {
-            if (e.getSlot() == PresentInventory.confirmSlot) {
-                Player p = (Player) e.getWhoClicked();
-                PresentUtil.wrap(p.getInventory().getItemInMainHand(), inv.getItem(PresentInventory.toBeWrappedSlot), p);
-                return;
-            }
         }
+        // Update Inventory
         updateSelected(inv, curItem, e.getWhoClicked(), e.getSlot());
     }
 
@@ -79,8 +81,10 @@ public class InvClickEvent implements Listener {
         InvUtil.refreshInventory(inv, he);
         if (inv.getItem(PresentInventory.toBeWrappedSlot) == null || (is != null && slot != PresentInventory.toBeWrappedSlot)) {
             select(inv, is, slot, he);
+            MsgUtil.debugInfo("select");
         } else {
             unselect(inv);
+            MsgUtil.debugInfo("unselect");
         }
     }
 
