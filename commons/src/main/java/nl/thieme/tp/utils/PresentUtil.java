@@ -122,8 +122,8 @@ public class PresentUtil {
         PresentNBT presentNBT = getPresentNBT(present);
         presentNBT.setPresent(toBeWrapped);
 
-        if (presentNBT.closed_head != null)
-            present.setItemMeta(HeadUtil.setHeadUrl(presentNBT.closed_head, present.getItemMeta()));
+        if (presentNBT.closedHead != null)
+            present.setItemMeta(HeadUtil.setHeadUrl(presentNBT.closedHead, present.getItemMeta()));
 
         String loreBase = MessageConfig.MessageKey.LORE_WRAPPED.get();
         if (loreBase.length() > 0) present.setItemMeta(HeadUtil.setLore(present.getItemMeta(), loreBase));

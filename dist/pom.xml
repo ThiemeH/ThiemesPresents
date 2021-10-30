@@ -9,7 +9,7 @@
         <version>1.0</version>
     </parent>
     <artifactId>dist</artifactId>
-    <version>${project.parent.version}</version>
+    <version>1.0</version>
     <packaging>jar</packaging>
 
     <build>
@@ -38,7 +38,7 @@
                             </artifactSet>
                             <filters>
                                 <filter>
-                                    <artifact>*:*</artifact>
+                                    <artifact>com.github.cryptomorin:*</artifact>
                                     <excludes>
                                         <exclude>com/cryptomorin/xseries/NMSExtras*</exclude>
                                         <exclude>com/cryptomorin/xseries/NoteBlockMusic*</exclude>
