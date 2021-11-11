@@ -1,6 +1,7 @@
 package nl.thieme.tp.utils;
 
 import com.google.gson.Gson;
+import com.google.gson.JsonSyntaxException;
 import io.github.bananapuncher714.nbteditor.NBTEditor;
 import nl.thieme.tp.configs.MainConfig;
 import nl.thieme.tp.configs.MessageConfig;
@@ -14,7 +15,8 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.yaml.snakeyaml.external.biz.base64Coder.Base64Coder;
 
-import java.io.*;
+import java.io.ByteArrayInputStream;
+import java.io.ObjectInputStream;
 
 public class PresentUtil {
 
@@ -23,7 +25,7 @@ public class PresentUtil {
     public static String presentNBTToString(PresentNBT nbt) {
         try {
             return new Gson().toJson(nbt);
-        } catch (Exception e) {
+        } catch (IllegalStateException e) {
             throw new IllegalStateException("Unable to save item stacks.", e);
         }
     }
@@ -31,8 +33,17 @@ public class PresentUtil {
     public static PresentNBT stringToPresentNBT(String data) {
         try {
             return new Gson().fromJson(data, PresentNBT.class);
-        } catch(Exception e) {
-            throw new IllegalStateException("Unable to read item stacks. Using data: " + data, e);
+        } catch (JsonSyntaxException e) {
+            // Version 1.0
+            try {
+                ByteArrayInputStream inputStream = new ByteArrayInputStream(Base64Coder.decodeLines(data));
+                ObjectInputStream dataInput = new ObjectInputStream(inputStream);
+                PresentNBT item = (PresentNBT) dataInput.readObject();
+                dataInput.close();
+                return item;
+            } catch (Exception ex) {
+                throw new IllegalStateException("Unable to read item stacks. Using data: " + data, e);
+            }
         }
     }
 
