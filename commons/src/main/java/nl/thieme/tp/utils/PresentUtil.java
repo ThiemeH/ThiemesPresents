@@ -1,5 +1,6 @@
 package nl.thieme.tp.utils;
 
+import com.google.gson.Gson;
 import io.github.bananapuncher714.nbteditor.NBTEditor;
 import nl.thieme.tp.configs.MainConfig;
 import nl.thieme.tp.configs.MessageConfig;
@@ -19,28 +20,19 @@ public class PresentUtil {
 
     public static final String presentNBTKey = "presentnbt";
 
-    public static String presentNBTToString(PresentNBT nbt) throws IllegalStateException {
+    public static String presentNBTToString(PresentNBT nbt) {
         try {
-            ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
-            ObjectOutputStream dataOutput = new ObjectOutputStream(outputStream);
-            dataOutput.writeObject(nbt);
-            dataOutput.flush();
-            dataOutput.close();
-            return Base64Coder.encodeLines(outputStream.toByteArray());
+            return new Gson().toJson(nbt);
         } catch (Exception e) {
             throw new IllegalStateException("Unable to save item stacks.", e);
         }
     }
 
-    public static PresentNBT stringToPresentNBT(String data) throws IOException {
+    public static PresentNBT stringToPresentNBT(String data) {
         try {
-            ByteArrayInputStream inputStream = new ByteArrayInputStream(Base64Coder.decodeLines(data));
-            ObjectInputStream dataInput = new ObjectInputStream(inputStream);
-            PresentNBT item = (PresentNBT) dataInput.readObject();
-            dataInput.close();
-            return item;
-        } catch (ClassNotFoundException e) {
-            throw new IOException("Unable to decode class type.", e);
+            return new Gson().fromJson(data, PresentNBT.class);
+        } catch(Exception e) {
+            throw new IllegalStateException("Unable to read item stacks. Using data: " + data, e);
         }
     }
 
@@ -60,12 +52,7 @@ public class PresentUtil {
     public static PresentNBT getPresentNBT(ItemStack is) {
         String nbtData = NBTEditor.getString(is, presentNBTKey);
         if (nbtData == null || nbtData.length() == 0) return null;
-        try {
-            return stringToPresentNBT(nbtData);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return null;
+        return stringToPresentNBT(nbtData);
     }
 
     public static void open(ItemStack is, Player p) {
