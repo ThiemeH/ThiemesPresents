@@ -39,7 +39,7 @@ not-a-present: "&cThis isn't a present item!"
 no-present-inside: "&cThere is no item inside this present"
 
 not-your-present: "&cYou're trying to sign a gift that is not wrapped by you!"
-one-present: "&cPlease only use one present!"
+one-present: "&cPlease use only one present!"
 
 no-permission-sign: "&cYou don't have permission to sign a present!"
 no-permission-wrap: "&cYou don't have permission to wrap an item!"

@@ -109,10 +109,10 @@ public class PresentUtil {
         PresentNBT presentNBT = getPresentNBT(present);
         presentNBT.setPresent(toBeWrapped);
 
-        if (presentNBT.closed_head != null)
-            present.setItemMeta(HeadUtil.setHeadUrl(presentNBT.closed_head, present.getItemMeta()));
+        if (presentNBT.closedHead != null)
+            present.setItemMeta(HeadUtil.setHeadUrl(presentNBT.closedHead, present.getItemMeta()));
 
-        String loreBase = MessageConfig.MessageKey.LORE_WRAPPED.get();
+        String loreBase = MainConfig.ConfigKey.CAN_SIGN.getBoolean() ? MessageConfig.MessageKey.LORE_WRAPPED.get() : MessageConfig.MessageKey.LORE_SIGNED.get();
         if (loreBase.length() > 0) present.setItemMeta(HeadUtil.setLore(present.getItemMeta(), loreBase));
 
         String loreAdd = MessageConfig.MessageKey.SIGN_FROM.get();

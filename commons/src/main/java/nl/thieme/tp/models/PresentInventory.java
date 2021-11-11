@@ -57,7 +57,7 @@ public abstract class PresentInventory {
             blocked.remove(Integer.valueOf(itemToBeWrappedSlot()));
 
             // Set blocked slots
-            for (int i : blocked) {
+            for (Integer i : blocked) {
                 inventory.setItem(i, blockedSlotItemStack);
             }
         }

@@ -55,7 +55,7 @@ public class Present {
     }
 
     public void setClosedHeadUrl(String endpoint) {
-        presentNBT.closed_head = endpoint;
+        presentNBT.closedHead = endpoint;
         updatePresentNBT();
         presentItemStack.setItemMeta(setHeadUrl(endpoint, presentItemStack.getItemMeta()));
     }
@@ -110,7 +110,7 @@ public class Present {
     }
 
     public void setOpenHeadUrl(String endpoint) {
-        presentNBT.open_head = endpoint; // open is optional
+        presentNBT.openHead = endpoint; // open is optional
         updatePresentNBT();
         presentItemStack.setItemMeta(setHeadUrl(endpoint, presentItemStack.getItemMeta()));
     }

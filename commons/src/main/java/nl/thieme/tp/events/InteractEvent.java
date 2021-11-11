@@ -31,6 +31,7 @@ public class InteractEvent implements Listener {
         if (isLeftClick(e.getAction())) { // Left click is only for writing messages
             handleLeftClick(e.getPlayer(), is, nbt);
         } else if (isRightClick(e.getAction())) { // Right click for wrapping and opening
+            e.setCancelled(true);
             MsgUtil.debugInfo("NBT has present: " + nbt.hasPresent());
             handleRightClick(e.getPlayer(), is, nbt);
         }
