@@ -25,7 +25,7 @@ The plugin contains highly customizable configuration files, and therefore can b
 
 If you find a feature is missing, please feel free to suggest it in the [Discord](https://discord.gg/U55dwsGPTn)
 
-> The Spigot page, including a download link, can be found [here]().
+> The Spigot page, including a download link, can be found [here](https://www.spigotmc.org/resources/thiemes-presents-a-happier-world-through-gift-giving-1-12-1-17-1.97273/).
 
 <br />
 
